@@ -5,7 +5,7 @@
 **Status:** Validated · Tested · Reproducible  
 **Target File:** [`ml-work/data/processed/real_baltic_multivariate.csv`](file:///c:/Users/win11/Downloads/sih/ml-work/data/processed/real_baltic_multivariate.csv)  
 **Raw Source File:** [`ml-work/data/raw/mendeley_baltic_subindices_2012_2019.csv`](file:///c:/Users/win11/Downloads/sih/ml-work/data/raw/mendeley_baltic_subindices_2012_2019.csv)  
-**Authoritative Blueprint:** [`SIH26006_Blueprint (1).md`](file:///c:/Users/win11/Downloads/sih/SIH26006_Blueprint%20(1).md)
+**Authoritative Blueprint:** [`SIH26006_Blueprint.md`](file:///c:/Users/win11/Downloads/sih/SIH26006_Blueprint.md)
 
 ---
 

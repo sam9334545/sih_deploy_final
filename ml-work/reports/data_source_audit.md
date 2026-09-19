@@ -3,7 +3,7 @@
 **Phase:** Phase 1 — Real Data Acquisition & Provenance Audit  
 **Date:** 19 September 2026  
 **Status:** Audit Complete · Category A Verified Datasets Acquired  
-**Authoritative Source:** [`SIH26006_Blueprint (1).md`](file:///c:/Users/win11/Downloads/sih/SIH26006_Blueprint%20(1).md)
+**Authoritative Source:** [`SIH26006_Blueprint.md`](file:///c:/Users/win11/Downloads/sih/SIH26006_Blueprint.md)
 
 ---
 
@@ -65,7 +65,7 @@ We investigated 14 primary candidate sources across academic repositories, finan
 11. **Yahoo Finance (`^BDI` / `BDRY`):** BDI direct ticker unlisted; direct CSV endpoint blocked by authentication crumb requirement.
 12. **Open-Meteo Marine API:** Free reanalysis and forecast API for Bay of Bengal wave and wind conditions.
 13. **Paradip Port Authority (PPA) Daily Traffic PDFs:** Official Indian port operational turnaround reports.
-14. **Internal Demo Generator (`sih/scripts/generate_demo_series.py`):** Calibrated Ornstein–Uhlenbeck mean-reverting simulation.
+14. **Internal Demo Generator (`backend-work/scripts/generate_demo_series.py`):** Calibrated Ornstein–Uhlenbeck mean-reverting simulation.
 
 ---
 

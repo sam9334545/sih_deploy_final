@@ -32,3 +32,9 @@ __MACOSX/
 *.db
 *.sqlite
 *.sqlite3
+
+# Frontend build & dependencies
+node_modules/
+dist/
+.vite/
+

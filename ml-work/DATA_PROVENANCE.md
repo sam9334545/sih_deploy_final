@@ -3,7 +3,7 @@
 **System:** Intelligent Freight Forecasting System (SIH26006)  
 **Last Updated:** 19 September 2026  
 **Status:** Audit Verified · Category A Real Datasets Acquired  
-**Authoritative Reference:** [`SIH26006_Blueprint (1).md`](file:///c:/Users/win11/Downloads/sih/SIH26006_Blueprint%20(1).md)
+**Authoritative Reference:** [`SIH26006_Blueprint.md`](file:///c:/Users/win11/Downloads/sih/SIH26006_Blueprint.md)
 
 ---
 
@@ -127,7 +127,7 @@
 The following files exist in the repository strictly for end-to-end software integration and hackathon testing:
 
 1. **`ml-work/data/raw/original_dataset.csv` & `backend-work/data/reference/demo/freight_index.csv`:**
-   * **Generator:** `sih/scripts/generate_demo_series.py` (Ornstein–Uhlenbeck mean-reversion, seed `26006`, $L=1650, \kappa=0.010, \sigma=0.020, A=0.15$).
+   * **Generator:** `backend-work/scripts/generate_demo_series.py` (Ornstein–Uhlenbeck mean-reversion, seed `26006`, $L=1650, \kappa=0.010, \sigma=0.020, A=0.15$).
    * **Classification:** **D — SYNTHETIC/DEMO**
    * **Why NOT final training data:** Generated mathematically by formula. Models trained exclusively on it would memorize the synthetic generator's parameters rather than real shipping market dynamics.
 2. **`backend-work/data/reference/demo/commodity_price.csv`:**

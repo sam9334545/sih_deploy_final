@@ -38,7 +38,7 @@ class PipelineConfig:
     real_raw_path: Path = field(default_factory=lambda: BASE_DIR / "data" / "raw" / "mendeley_baltic_subindices_2012_2019.csv")
     real_processed_path: Path = field(default_factory=lambda: BASE_DIR / "data" / "processed" / "real_baltic_multivariate.csv")
     
-    default_source_url: str = "local://sih/scripts/generate_demo_series.py"
+    default_source_url: str = "local://backend-work/scripts/generate_demo_series.py"
     default_provenance_tag: str = "synthetic_calibrated_demo"
     
     # Audit thresholds
