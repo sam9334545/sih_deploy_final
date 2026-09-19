@@ -1,0 +1,20 @@
+{
+  "dataset_name": "U.S. Dollars to Indian Rupee Spot Exchange Rate",
+  "series_id": "DEXINUS",
+  "source": "FRED (Federal Reserve Bank of St. Louis)",
+  "provider": "Board of Governors of the Federal Reserve System via FRED",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXINUS",
+  "retrieval_date": "2026-09-19",
+  "variables": [
+    "observation_date",
+    "DEXINUS"
+  ],
+  "units": "Indian Rupee to 1 USD",
+  "frequency": "Daily",
+  "date_range": "1973-01-02 to 2026-09-11",
+  "licence": "U.S. Government Work / Public Domain / Open IMF Data (Unrestricted public redistribution)",
+  "access_method": "Direct automated CSV download",
+  "classification": "A \u2014 VERIFIED AND USABLE",
+  "transformations": "None (Raw original FRED download)",
+  "sha256_hash": "039420cec0d8f55d94ceb9d8ca4043641496b4e8ed97f0156b766f3c82fe8384"
+}

@@ -416,9 +416,9 @@ For the hackathon, the simulator must do at least: 5 strategies × 1,000 Monte-C
     ┌──────────────────┬──────────────────┬──────────────────┐
     │  FREIGHT         │  PORT / VESSEL   │  RISK SIGNALS    │
     │  FORECASTING     │  CONSTRAINTS     │  / CONGESTION    │
-    │  (LightGBM +     │  (rules engine + │  (waiting model, │
-    │   quantiles)     │   compatibility  │   weather, vol)  │
-    │                  │   scores)        │                  │
+    │  (LightGBM +     │  (rules engine + │  (waitineather, vol)  │
+    │                  │   scores)        │                g model, │
+    │   quantiles)     │   compatibility  │   w  │
     └────────┬─────────┴─────────┬────────┴────────┬─────────┘
              └──────────────────┬┴─────────────────┘
                                 ▼

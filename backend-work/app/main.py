@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.db import Base, engine
 from app.errors import ApiError, api_error_handler, unhandled_handler, validation_handler
-from app.routers import forecast, health, market, optimize, ports, risks, sources, vessels
+from app.routers import forecast, health, historical, market, optimize, ports, risks, sources, vessels
 
 DESCRIPTION = """
 Decision-support API for chartering bulk carriers into India's East Coast ports.
@@ -76,7 +76,7 @@ app.add_exception_handler(Exception, unhandled_handler)
 
 API_V1 = "/api/v1"
 for r in (forecast.router, ports.router, vessels.router, optimize.router,
-          market.router, risks.router, sources.router, health.router):
+          market.router, risks.router, sources.router, health.router, historical.router):
     app.include_router(r, prefix=API_V1)
 
 

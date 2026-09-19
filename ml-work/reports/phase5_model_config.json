@@ -1,0 +1,51 @@
+{
+  "phase5_timestamp": "2026-09-19T16:23:00.516015",
+  "runtime_seconds": 70.29,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "package_versions": {
+    "pandas": "3.0.6",
+    "numpy": "2.5.3",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0"
+  },
+  "target_indices": [
+    "BPI",
+    "BCI",
+    "BSI",
+    "BHSI"
+  ],
+  "horizons_trading_sessions": [
+    7,
+    14,
+    28,
+    60,
+    90,
+    180
+  ],
+  "quantiles": [
+    0.1,
+    0.5,
+    0.9
+  ],
+  "target_coverage_nominal": 0.8,
+  "conformal_method": "split_conformal_two_sided",
+  "conformal_score_formula": "max(L - y, y - U, 0)",
+  "lightgbm_params": {
+    "objective": "regression",
+    "n_estimators": 300,
+    "learning_rate": 0.03,
+    "num_leaves": 15,
+    "max_depth": 5,
+    "min_child_samples": 20,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "random_state": 42,
+    "n_jobs": 1,
+    "verbose": -1
+  },
+  "splits": {
+    "train": "2012-12-11 to 2017-07-31",
+    "val": "2017-08-01 to 2018-07-31",
+    "test": "2018-08-01 to 2019-07-31"
+  }
+}

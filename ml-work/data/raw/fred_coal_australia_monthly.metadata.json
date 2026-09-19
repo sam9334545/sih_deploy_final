@@ -1,0 +1,20 @@
+{
+  "dataset_name": "Global price of Coal, Australia",
+  "series_id": "PCOALAUUSDM",
+  "source": "FRED (Federal Reserve Bank of St. Louis)",
+  "provider": "International Monetary Fund (IMF) via FRED",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCOALAUUSDM",
+  "retrieval_date": "2026-09-19",
+  "variables": [
+    "observation_date",
+    "PCOALAUUSDM"
+  ],
+  "units": "USD per Metric Ton",
+  "frequency": "Monthly",
+  "date_range": "1992-01-01 to 2026-07-01",
+  "licence": "U.S. Government Work / Public Domain / Open IMF Data (Unrestricted public redistribution)",
+  "access_method": "Direct automated CSV download",
+  "classification": "A \u2014 VERIFIED AND USABLE",
+  "transformations": "None (Raw original FRED download)",
+  "sha256_hash": "e25d40ed41139a7377c8e0acce3ed80e6d44d23e966f7db40037376c20510c21"
+}

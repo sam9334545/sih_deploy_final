@@ -23,7 +23,7 @@ def validate_series(df: pd.DataFrame, config: PipelineConfig = None) -> Dict[str
     expected_b_days = pd.date_range(start=min_date, end=max_date, freq="B")
     missing_b_days = expected_b_days.difference(dates)
     
-    # 2. Statistical Outliers via IQR
+    # Compute metrics for BPI (primary baseline)
     q25 = np.percentile(values, 25)
     q75 = np.percentile(values, 75)
     iqr = q75 - q25
@@ -32,7 +32,7 @@ def validate_series(df: pd.DataFrame, config: PipelineConfig = None) -> Dict[str
     
     iqr_outliers = df[(df["bpi_value"] < lower_bound) | (df["bpi_value"] > upper_bound)]
     
-    # 3. Daily Jump Discontinuities
+    # Daily Jump Discontinuities for BPI
     daily_returns = pd.Series(values).pct_change()
     jumps_mask = daily_returns.abs() > config.max_jump_pct_warning
     jump_indices = jumps_mask[jumps_mask].index
@@ -45,6 +45,22 @@ def validate_series(df: pd.DataFrame, config: PipelineConfig = None) -> Dict[str
             "curr_value": float(df.iloc[idx]["bpi_value"]),
             "pct_change": float(round(daily_returns.iloc[idx] * 100, 2))
         })
+        
+    # Multivariate metrics for other sub-indices if present
+    subindex_stats: Dict[str, Any] = {}
+    for col in ["bpi_value", "bci_value", "bsi_value", "bhsi_value"]:
+        if col in df.columns:
+            s_vals = df[col].values
+            s_q25 = float(np.percentile(s_vals, 25))
+            s_q75 = float(np.percentile(s_vals, 75))
+            s_iqr = s_q75 - s_q25
+            subindex_stats[col] = {
+                "min": float(s_vals.min()),
+                "max": float(s_vals.max()),
+                "mean": float(round(s_vals.mean(), 2)),
+                "std": float(round(s_vals.std(), 2)),
+                "iqr_outliers_count": int(((s_vals < s_q25 - 1.5 * s_iqr) | (s_vals > s_q75 + 1.5 * s_iqr)).sum())
+            }
         
     return {
         "min_date": str(min_date.date()),
@@ -64,5 +80,6 @@ def validate_series(df: pd.DataFrame, config: PipelineConfig = None) -> Dict[str
         "iqr_outliers_count": len(iqr_outliers),
         "iqr_outliers_retained": True,
         "jump_events_count": len(jump_events),
-        "jump_events": jump_events
+        "jump_events": jump_events,
+        "subindex_stats": subindex_stats
     }

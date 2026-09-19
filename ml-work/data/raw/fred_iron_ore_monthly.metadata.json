@@ -1,0 +1,20 @@
+{
+  "dataset_name": "Global price of Iron Ore",
+  "series_id": "PIORECRUSDM",
+  "source": "FRED (Federal Reserve Bank of St. Louis)",
+  "provider": "International Monetary Fund (IMF) via FRED",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PIORECRUSDM",
+  "retrieval_date": "2026-09-19",
+  "variables": [
+    "observation_date",
+    "PIORECRUSDM"
+  ],
+  "units": "USD per Dry Metric Ton",
+  "frequency": "Monthly",
+  "date_range": "1992-01-01 to 2026-07-01",
+  "licence": "U.S. Government Work / Public Domain / Open IMF Data (Unrestricted public redistribution)",
+  "access_method": "Direct automated CSV download",
+  "classification": "A \u2014 VERIFIED AND USABLE",
+  "transformations": "None (Raw original FRED download)",
+  "sha256_hash": "94f2e617c942cd5e04b16cc39a4bb3cf2518c101a901fc9e79cd66d3d4848328"
+}

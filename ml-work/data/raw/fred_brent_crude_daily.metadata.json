@@ -1,0 +1,20 @@
+{
+  "dataset_name": "Crude Oil Prices: Brent - Europe",
+  "series_id": "DCOILBRENTEU",
+  "source": "FRED (Federal Reserve Bank of St. Louis)",
+  "provider": "U.S. Energy Information Administration (EIA) via FRED",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU",
+  "retrieval_date": "2026-09-19",
+  "variables": [
+    "observation_date",
+    "DCOILBRENTEU"
+  ],
+  "units": "USD per barrel",
+  "frequency": "Daily",
+  "date_range": "1987-05-20 to 2026-09-15",
+  "licence": "U.S. Government Work / Public Domain / Open IMF Data (Unrestricted public redistribution)",
+  "access_method": "Direct automated CSV download",
+  "classification": "A \u2014 VERIFIED AND USABLE",
+  "transformations": "None (Raw original FRED download)",
+  "sha256_hash": "29783075f33251bfa2789e0895aa384cbd2e4926618e467f6e84551f562fd8da"
+}

@@ -1,0 +1,26 @@
+{
+  "dataset_name": "baltic dry index freight rates47 (Sub-indices: BPI, BCI, BSI, BHSI)",
+  "source": "Mendeley Data",
+  "provider": "Dr. Bangar Raju (University of Petroleum and Energy Studies, India)",
+  "url": "https://doi.org/10.17632/t76ckh2ygg.1",
+  "direct_download_url": "https://data.mendeley.com/public-files/datasets/t76ckh2ygg/files/9824e3e8-9e88-40e0-a27d-d8cc5e913f4b/file_downloaded",
+  "retrieval_date": "2026-09-19",
+  "variables": [
+    "Date",
+    "HSI (BHSI)",
+    "SI (BSI)",
+    "PI (BPI)",
+    "CI (BCI)",
+    "DTI (BDTI)",
+    "CTI (BCTI)"
+  ],
+  "units": "Baltic index points",
+  "frequency": "Daily (Trading days)",
+  "date_range": "2012-08-01 to 2019-07-31",
+  "licence": "CC BY 4.0 (Creative Commons Attribution 4.0 International)",
+  "access_method": "Direct public API download via Mendeley Data",
+  "classification": "A \u2014 VERIFIED AND USABLE",
+  "transformations": "Extracted sheet 'MASTER EXCEL SHEET BDI ' from original .xls to raw CSV without filtering, sorting, or modification",
+  "sha256_hash_csv": "62fbf4b9511f6ca0159d2e9d227a1a68af96e5a37e96e34afdfe546e01c8f393",
+  "sha256_hash_original_xls": "0689b716f21a10d9510bb6f1739a18c296c1efb8a8c5e4450788e480a15791d4"
+}
