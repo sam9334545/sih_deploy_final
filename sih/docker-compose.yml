@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: sih
+      POSTGRES_PASSWORD: sih
+      POSTGRES_DB: charter
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sih -d charter"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      # Swap to the Postgres URL once psycopg is added to requirements.txt;
+      # SQLite keeps the demo path free of a database dependency.
+      DATABASE_URL: sqlite:////app/backend/charter.db
+      DEMO_MODE: "true"
+      DEMO_AS_OF: "2026-09-15"
+      CORS_ORIGINS: "http://localhost:5173,http://localhost:3000"
+    ports: ["8000:8000"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

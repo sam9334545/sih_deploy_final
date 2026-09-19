@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+charter.db
+data/raw/
+.pytest_cache/

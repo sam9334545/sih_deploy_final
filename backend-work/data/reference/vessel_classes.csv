@@ -1,0 +1,5 @@
+vessel_class,index_code,ref_dwt,ref_draft_m,ref_loa_m,ref_beam_m,tpc,speed_laden_kn,speed_ballast_kn,cons_laden_mt_day,cons_ballast_mt_day,geared,dwt_min,dwt_max,constants_t,demurrage_usd_day,grt,source_url,retrieved_at
+Handysize,BHSI,38200,10.538,180.0,29.80,49.0,14.0,14.0,26.0,18.0,true,20000,42000,1800,9000,24000,https://www.balticexchange.com/en/data-services/market-information0/dry-services.html,2026-09-10
+Supramax,BSI,63000,13.35,199.0,32.26,58.0,14.0,14.0,29.0,25.0,true,45000,65000,2400,14000,35000,https://www.balticexchange.com/en/data-services/market-information0/dry-services.html,2026-09-10
+Panamax,BPI,82500,14.43,229.0,32.25,70.5,13.5,14.0,33.0,31.0,false,65000,100000,3000,18000,44000,https://www.balticexchange.com/en/data-services/market-information0/dry-services.html,2026-09-10
+Capesize,BCI,180000,18.20,290.0,45.00,125.0,13.0,13.0,52.0,45.0,false,100000,210000,6000,28000,93000,https://www.balticexchange.com/en/data-services/market-information0/dry-services.html,2026-09-10

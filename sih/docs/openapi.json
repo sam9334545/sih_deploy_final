@@ -1,0 +1,3234 @@
+{
+  "components": {
+    "schemas": {
+      "BerthOut": {
+        "properties": {
+          "berth_id": {
+            "title": "Berth Id",
+            "type": "string"
+          },
+          "cargo_types": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Cargo Types",
+            "type": "array"
+          },
+          "coupling_constraint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coupling Constraint"
+          },
+          "daylight_only": {
+            "title": "Daylight Only",
+            "type": "boolean"
+          },
+          "effective_from": {
+            "format": "date",
+            "title": "Effective From",
+            "type": "string"
+          },
+          "effective_to": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective To"
+          },
+          "handling_rate_tpd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Handling Rate Tpd"
+          },
+          "max_beam_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Beam M"
+          },
+          "max_draft_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Draft M"
+          },
+          "max_loa_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Loa M"
+          },
+          "mechanised": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mechanised"
+          },
+          "min_loa_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Loa M"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "source_url": {
+            "title": "Source Url",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "tide_allowance_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tide Allowance M"
+          },
+          "verification": {
+            "title": "Verification",
+            "type": "string"
+          }
+        },
+        "required": [
+          "berth_id",
+          "name",
+          "cargo_types",
+          "max_loa_m",
+          "min_loa_m",
+          "max_beam_m",
+          "max_draft_m",
+          "tide_allowance_m",
+          "handling_rate_tpd",
+          "mechanised",
+          "daylight_only",
+          "coupling_constraint",
+          "status",
+          "effective_from",
+          "effective_to",
+          "source_url",
+          "verification"
+        ],
+        "title": "BerthOut",
+        "type": "object"
+      },
+      "Cargo": {
+        "properties": {
+          "quantity_t": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 2000000.0,
+            "title": "Quantity T",
+            "type": "number"
+          },
+          "type": {
+            "enum": [
+              "thermal_coal",
+              "coking_coal",
+              "iron_ore"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "quantity_t"
+        ],
+        "title": "Cargo",
+        "type": "object"
+      },
+      "CharterWindow": {
+        "properties": {
+          "end": {
+            "format": "date",
+            "title": "End",
+            "type": "string"
+          },
+          "start": {
+            "format": "date",
+            "title": "Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "title": "CharterWindow",
+        "type": "object"
+      },
+      "CongestionOut": {
+        "properties": {
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "expected_wait_hours_p50": {
+            "title": "Expected Wait Hours P50",
+            "type": "number"
+          },
+          "p90": {
+            "title": "P90",
+            "type": "number"
+          },
+          "sample_size": {
+            "title": "Sample Size",
+            "type": "integer"
+          },
+          "strata": {
+            "title": "Strata",
+            "type": "string"
+          }
+        },
+        "required": [
+          "expected_wait_hours_p50",
+          "p90",
+          "strata",
+          "sample_size",
+          "as_of"
+        ],
+        "title": "CongestionOut",
+        "type": "object"
+      },
+      "Driver": {
+        "properties": {
+          "contribution_log": {
+            "title": "Contribution Log",
+            "type": "number"
+          },
+          "direction": {
+            "title": "Direction",
+            "type": "string"
+          },
+          "feature": {
+            "title": "Feature",
+            "type": "string"
+          }
+        },
+        "required": [
+          "feature",
+          "direction",
+          "contribution_log"
+        ],
+        "title": "Driver",
+        "type": "object"
+      },
+      "ForecastRequest": {
+        "properties": {
+          "as_of": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "horizon_days": {
+            "default": 28,
+            "enum": [
+              7,
+              14,
+              28,
+              60,
+              90,
+              180
+            ],
+            "title": "Horizon Days",
+            "type": "integer"
+          },
+          "refresh": {
+            "default": false,
+            "title": "Refresh",
+            "type": "boolean"
+          },
+          "route": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PortRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "vessel_class": {
+            "enum": [
+              "Handysize",
+              "Supramax",
+              "Panamax",
+              "Capesize"
+            ],
+            "title": "Vessel Class",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vessel_class"
+        ],
+        "title": "ForecastRequest",
+        "type": "object"
+      },
+      "ForecastResponse": {
+        "properties": {
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "number"
+          },
+          "drivers": {
+            "items": {
+              "$ref": "#/components/schemas/Driver"
+            },
+            "title": "Drivers",
+            "type": "array"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/HistoryPoint"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "horizon_days": {
+            "title": "Horizon Days",
+            "type": "integer"
+          },
+          "index": {
+            "title": "Index",
+            "type": "string"
+          },
+          "index_forecast": {
+            "$ref": "#/components/schemas/Interval"
+          },
+          "model_meta": {
+            "$ref": "#/components/schemas/ModelMeta"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "enum": [
+                "measured",
+                "derived",
+                "estimated",
+                "simulated_demo",
+                "expert_set"
+              ],
+              "type": "string"
+            },
+            "title": "Provenance",
+            "type": "object"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "target_date": {
+            "format": "date",
+            "title": "Target Date",
+            "type": "string"
+          },
+          "tc_avg_usd_day": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Interval"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "trend": {
+            "title": "Trend",
+            "type": "string"
+          },
+          "usd_per_tonne": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UsdPerTonne"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "vessel_class": {
+            "title": "Vessel Class",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vessel_class",
+          "index",
+          "as_of",
+          "horizon_days",
+          "target_date",
+          "index_forecast",
+          "confidence",
+          "trend",
+          "history",
+          "model_meta",
+          "drivers",
+          "provenance",
+          "assumptions",
+          "request_id"
+        ],
+        "title": "ForecastResponse",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HistoryPoint": {
+        "properties": {
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "value"
+        ],
+        "title": "HistoryPoint",
+        "type": "object"
+      },
+      "Interval": {
+        "properties": {
+          "interval_80": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Interval 80",
+            "type": "array"
+          },
+          "point": {
+            "title": "Point",
+            "type": "number"
+          }
+        },
+        "required": [
+          "point",
+          "interval_80"
+        ],
+        "title": "Interval",
+        "type": "object"
+      },
+      "MarketResponse": {
+        "properties": {
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "availability_signal": {
+            "title": "Availability Signal",
+            "type": "object"
+          },
+          "bunker": {
+            "title": "Bunker",
+            "type": "object"
+          },
+          "charter_opportunity_score_generic": {
+            "title": "Charter Opportunity Score Generic",
+            "type": "object"
+          },
+          "commodities": {
+            "title": "Commodities",
+            "type": "object"
+          },
+          "fx": {
+            "title": "Fx",
+            "type": "object"
+          },
+          "indices": {
+            "title": "Indices",
+            "type": "object"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "enum": [
+                "measured",
+                "derived",
+                "estimated",
+                "simulated_demo",
+                "expert_set"
+              ],
+              "type": "string"
+            },
+            "title": "Provenance",
+            "type": "object"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "as_of",
+          "indices",
+          "bunker",
+          "commodities",
+          "fx",
+          "availability_signal",
+          "charter_opportunity_score_generic",
+          "provenance",
+          "request_id"
+        ],
+        "title": "MarketResponse",
+        "type": "object"
+      },
+      "ModelMeta": {
+        "properties": {
+          "interval_coverage_80": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Coverage 80"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "trained_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trained On"
+          },
+          "validation_mase": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validation Mase"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "version",
+          "method"
+        ],
+        "title": "ModelMeta",
+        "type": "object"
+      },
+      "OpportunityRequest": {
+        "properties": {
+          "as_of": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "cargo": {
+            "$ref": "#/components/schemas/Cargo"
+          },
+          "destination_port": {
+            "title": "Destination Port",
+            "type": "string"
+          },
+          "n_simulations": {
+            "default": 300,
+            "maximum": 2000.0,
+            "minimum": 100.0,
+            "title": "N Simulations",
+            "type": "integer"
+          },
+          "origin_port": {
+            "title": "Origin Port",
+            "type": "string"
+          },
+          "required_by": {
+            "format": "date",
+            "title": "Required By",
+            "type": "string"
+          },
+          "risk_aversion": {
+            "anyOf": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Risk Aversion"
+          },
+          "vessel_class": {
+            "anyOf": [
+              {
+                "enum": [
+                  "Handysize",
+                  "Supramax",
+                  "Panamax",
+                  "Capesize"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vessel Class"
+          }
+        },
+        "required": [
+          "cargo",
+          "origin_port",
+          "destination_port",
+          "required_by"
+        ],
+        "title": "OpportunityRequest",
+        "type": "object"
+      },
+      "OptimizeCharterRequest": {
+        "properties": {
+          "as_of": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "cargo": {
+            "$ref": "#/components/schemas/Cargo"
+          },
+          "contract_horizon_voyages": {
+            "anyOf": [
+              {
+                "maximum": 12.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Horizon Voyages"
+          },
+          "deadline_miss_penalty_usd": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline Miss Penalty Usd"
+          },
+          "destination_port": {
+            "title": "Destination Port",
+            "type": "string"
+          },
+          "include_milp_crosscheck": {
+            "default": false,
+            "title": "Include Milp Crosscheck",
+            "type": "boolean"
+          },
+          "include_opportunity_score": {
+            "default": true,
+            "title": "Include Opportunity Score",
+            "type": "boolean"
+          },
+          "n_simulations": {
+            "anyOf": [
+              {
+                "maximum": 5000.0,
+                "minimum": 100.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "N Simulations"
+          },
+          "origin_port": {
+            "title": "Origin Port",
+            "type": "string"
+          },
+          "required_by": {
+            "format": "date",
+            "title": "Required By",
+            "type": "string"
+          },
+          "risk_aversion": {
+            "anyOf": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Risk Aversion"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          }
+        },
+        "required": [
+          "cargo",
+          "origin_port",
+          "destination_port",
+          "required_by"
+        ],
+        "title": "OptimizeCharterRequest",
+        "type": "object"
+      },
+      "OptimizeResponse": {
+        "properties": {
+          "alternatives": {
+            "items": {
+              "type": "object"
+            },
+            "title": "Alternatives",
+            "type": "array"
+          },
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "cost_breakdown_usd": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Cost Breakdown Usd",
+            "type": "object"
+          },
+          "explanation": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Explanation",
+            "type": "array"
+          },
+          "idle": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Idle",
+            "type": "object"
+          },
+          "infeasible": {
+            "items": {
+              "type": "object"
+            },
+            "title": "Infeasible",
+            "type": "array"
+          },
+          "milp_crosscheck": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Milp Crosscheck"
+          },
+          "opportunity": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opportunity"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "enum": [
+                "measured",
+                "derived",
+                "estimated",
+                "simulated_demo",
+                "expert_set"
+              ],
+              "type": "string"
+            },
+            "title": "Provenance",
+            "type": "object"
+          },
+          "recommendation": {
+            "$ref": "#/components/schemas/Recommendation"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "risk": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Risk"
+          },
+          "runtime_ms": {
+            "title": "Runtime Ms",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "recommendation",
+          "cost_breakdown_usd",
+          "idle",
+          "alternatives",
+          "infeasible",
+          "explanation",
+          "assumptions",
+          "provenance",
+          "as_of",
+          "runtime_ms",
+          "request_id"
+        ],
+        "title": "OptimizeResponse",
+        "type": "object"
+      },
+      "PortDetail": {
+        "properties": {
+          "approach_channel_depth_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approach Channel Depth M"
+          },
+          "authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authority"
+          },
+          "authority_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authority Type"
+          },
+          "berths": {
+            "items": {
+              "$ref": "#/components/schemas/BerthOut"
+            },
+            "title": "Berths",
+            "type": "array"
+          },
+          "congestion": {
+            "$ref": "#/components/schemas/CongestionOut"
+          },
+          "constraints_as_of": {
+            "format": "date",
+            "title": "Constraints As Of",
+            "type": "string"
+          },
+          "country": {
+            "title": "Country",
+            "type": "string"
+          },
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lat"
+          },
+          "lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lon"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "port_id": {
+            "title": "Port Id",
+            "type": "string"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "retrieved_at": {
+            "format": "date",
+            "title": "Retrieved At",
+            "type": "string"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          },
+          "seasonal_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seasonal Notes"
+          },
+          "source_url": {
+            "title": "Source Url",
+            "type": "string"
+          },
+          "tidal_range_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tidal Range M"
+          },
+          "verification": {
+            "title": "Verification",
+            "type": "string"
+          },
+          "vessel_compatibility": {
+            "items": {
+              "type": "object"
+            },
+            "title": "Vessel Compatibility",
+            "type": "array"
+          },
+          "weather": {
+            "items": {
+              "type": "object"
+            },
+            "title": "Weather",
+            "type": "array"
+          }
+        },
+        "required": [
+          "port_id",
+          "name",
+          "country",
+          "role",
+          "lat",
+          "lon",
+          "authority",
+          "authority_type",
+          "approach_channel_depth_m",
+          "tidal_range_m",
+          "seasonal_notes",
+          "berths",
+          "congestion",
+          "weather",
+          "vessel_compatibility",
+          "source_url",
+          "retrieved_at",
+          "verification",
+          "constraints_as_of",
+          "request_id"
+        ],
+        "title": "PortDetail",
+        "type": "object"
+      },
+      "PortRef": {
+        "properties": {
+          "destination_port": {
+            "title": "Destination Port",
+            "type": "string"
+          },
+          "origin_port": {
+            "title": "Origin Port",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin_port",
+          "destination_port"
+        ],
+        "title": "PortRef",
+        "type": "object"
+      },
+      "PortSummary": {
+        "properties": {
+          "authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authority"
+          },
+          "authority_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authority Type"
+          },
+          "berth_count": {
+            "title": "Berth Count",
+            "type": "integer"
+          },
+          "country": {
+            "title": "Country",
+            "type": "string"
+          },
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lat"
+          },
+          "lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lon"
+          },
+          "max_draft_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Draft M"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "port_id": {
+            "title": "Port Id",
+            "type": "string"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          },
+          "verification": {
+            "title": "Verification",
+            "type": "string"
+          }
+        },
+        "required": [
+          "port_id",
+          "name",
+          "country",
+          "role",
+          "lat",
+          "lon",
+          "authority",
+          "authority_type",
+          "berth_count",
+          "max_draft_m",
+          "verification"
+        ],
+        "title": "PortSummary",
+        "type": "object"
+      },
+      "RecommendVesselRequest": {
+        "properties": {
+          "as_of": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "cargo": {
+            "$ref": "#/components/schemas/Cargo"
+          },
+          "destination_port": {
+            "title": "Destination Port",
+            "type": "string"
+          },
+          "origin_port": {
+            "title": "Origin Port",
+            "type": "string"
+          },
+          "required_by": {
+            "format": "date",
+            "title": "Required By",
+            "type": "string"
+          }
+        },
+        "required": [
+          "cargo",
+          "origin_port",
+          "destination_port",
+          "required_by"
+        ],
+        "title": "RecommendVesselRequest",
+        "type": "object"
+      },
+      "RecommendVesselResponse": {
+        "properties": {
+          "alternatives": {
+            "items": {
+              "$ref": "#/components/schemas/VesselOption"
+            },
+            "title": "Alternatives",
+            "type": "array"
+          },
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "constraints_as_of": {
+            "format": "date",
+            "title": "Constraints As Of",
+            "type": "string"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "enum": [
+                "measured",
+                "derived",
+                "estimated",
+                "simulated_demo",
+                "expert_set"
+              ],
+              "type": "string"
+            },
+            "title": "Provenance",
+            "type": "object"
+          },
+          "recommended": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VesselOption"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rejected": {
+            "items": {
+              "$ref": "#/components/schemas/Rejection"
+            },
+            "title": "Rejected",
+            "type": "array"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "recommended",
+          "alternatives",
+          "rejected",
+          "constraints_as_of",
+          "as_of",
+          "assumptions",
+          "provenance",
+          "request_id"
+        ],
+        "title": "RecommendVesselResponse",
+        "type": "object"
+      },
+      "Recommendation": {
+        "properties": {
+          "charter_opportunity_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Charter Opportunity Score"
+          },
+          "charter_window": {
+            "$ref": "#/components/schemas/CharterWindow"
+          },
+          "contract_structure": {
+            "title": "Contract Structure",
+            "type": "string"
+          },
+          "cvar_90_usd": {
+            "title": "Cvar 90 Usd",
+            "type": "number"
+          },
+          "execution": {
+            "title": "Execution",
+            "type": "string"
+          },
+          "expected_cost_inr": {
+            "title": "Expected Cost Inr",
+            "type": "number"
+          },
+          "expected_cost_usd": {
+            "title": "Expected Cost Usd",
+            "type": "number"
+          },
+          "expected_usd_per_tonne": {
+            "title": "Expected Usd Per Tonne",
+            "type": "number"
+          },
+          "fx_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fx Date"
+          },
+          "fx_rate": {
+            "title": "Fx Rate",
+            "type": "number"
+          },
+          "interval_80_usd": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Interval 80 Usd",
+            "type": "array"
+          },
+          "p_deadline_miss": {
+            "title": "P Deadline Miss",
+            "type": "number"
+          },
+          "risk": {
+            "title": "Risk",
+            "type": "string"
+          },
+          "risk_adjusted_cost_usd": {
+            "title": "Risk Adjusted Cost Usd",
+            "type": "number"
+          },
+          "vessel_class": {
+            "title": "Vessel Class",
+            "type": "string"
+          },
+          "voyages": {
+            "title": "Voyages",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "vessel_class",
+          "voyages",
+          "execution",
+          "contract_structure",
+          "charter_window",
+          "expected_cost_usd",
+          "expected_cost_inr",
+          "expected_usd_per_tonne",
+          "fx_rate",
+          "fx_date",
+          "interval_80_usd",
+          "cvar_90_usd",
+          "p_deadline_miss",
+          "risk_adjusted_cost_usd",
+          "risk"
+        ],
+        "title": "Recommendation",
+        "type": "object"
+      },
+      "Rejection": {
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "port_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Port Id"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "vessel_class": {
+            "title": "Vessel Class",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vessel_class",
+          "reason",
+          "detail"
+        ],
+        "title": "Rejection",
+        "type": "object"
+      },
+      "RiskResponse": {
+        "properties": {
+          "alerts": {
+            "items": {
+              "type": "object"
+            },
+            "title": "Alerts",
+            "type": "array"
+          },
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "components": {
+            "items": {
+              "type": "object"
+            },
+            "title": "Components",
+            "type": "array"
+          },
+          "main_driver": {
+            "title": "Main Driver",
+            "type": "string"
+          },
+          "overall": {
+            "title": "Overall",
+            "type": "string"
+          },
+          "overall_raw": {
+            "title": "Overall Raw",
+            "type": "number"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "weights_method": {
+            "title": "Weights Method",
+            "type": "string"
+          },
+          "what_would_change": {
+            "items": {
+              "type": "string"
+            },
+            "title": "What Would Change",
+            "type": "array"
+          }
+        },
+        "required": [
+          "overall",
+          "overall_raw",
+          "components",
+          "main_driver",
+          "what_would_change",
+          "alerts",
+          "weights_method",
+          "as_of",
+          "request_id"
+        ],
+        "title": "RiskResponse",
+        "type": "object"
+      },
+      "SimulateResponse": {
+        "properties": {
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "distributions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Distributions",
+            "type": "object"
+          },
+          "infeasible": {
+            "items": {
+              "type": "object"
+            },
+            "title": "Infeasible",
+            "type": "array"
+          },
+          "n_simulations": {
+            "title": "N Simulations",
+            "type": "integer"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "enum": [
+                "measured",
+                "derived",
+                "estimated",
+                "simulated_demo",
+                "expert_set"
+              ],
+              "type": "string"
+            },
+            "title": "Provenance",
+            "type": "object"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/StrategyResult"
+            },
+            "title": "Results",
+            "type": "array"
+          },
+          "runtime_ms": {
+            "title": "Runtime Ms",
+            "type": "integer"
+          },
+          "seed": {
+            "title": "Seed",
+            "type": "integer"
+          },
+          "winner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Winner"
+          }
+        },
+        "required": [
+          "results",
+          "infeasible",
+          "winner",
+          "n_simulations",
+          "seed",
+          "runtime_ms",
+          "distributions",
+          "as_of",
+          "assumptions",
+          "provenance",
+          "request_id"
+        ],
+        "title": "SimulateResponse",
+        "type": "object"
+      },
+      "SimulateStrategyRequest": {
+        "properties": {
+          "as_of": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "cargo": {
+            "$ref": "#/components/schemas/Cargo"
+          },
+          "deadline_miss_penalty_usd": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline Miss Penalty Usd"
+          },
+          "destination_port": {
+            "title": "Destination Port",
+            "type": "string"
+          },
+          "n_simulations": {
+            "default": 1000,
+            "maximum": 5000.0,
+            "minimum": 100.0,
+            "title": "N Simulations",
+            "type": "integer"
+          },
+          "origin_port": {
+            "title": "Origin Port",
+            "type": "string"
+          },
+          "required_by": {
+            "format": "date",
+            "title": "Required By",
+            "type": "string"
+          },
+          "risk_aversion": {
+            "anyOf": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Risk Aversion"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          },
+          "strategies": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Strategies",
+            "type": "array"
+          }
+        },
+        "required": [
+          "cargo",
+          "origin_port",
+          "destination_port",
+          "required_by"
+        ],
+        "title": "SimulateStrategyRequest",
+        "type": "object"
+      },
+      "SourceOut": {
+        "properties": {
+          "access_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access Method"
+          },
+          "availability_rating": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Availability Rating"
+          },
+          "covers": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Covers"
+          },
+          "last_checked": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Checked"
+          },
+          "licence": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Licence"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "organisation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organisation"
+          },
+          "source_id": {
+            "title": "Source Id",
+            "type": "integer"
+          },
+          "source_name": {
+            "title": "Source Name",
+            "type": "string"
+          },
+          "update_frequency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Update Frequency"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "required": [
+          "source_id",
+          "source_name",
+          "organisation",
+          "url",
+          "licence",
+          "access_method",
+          "update_frequency",
+          "availability_rating",
+          "covers",
+          "last_checked",
+          "notes"
+        ],
+        "title": "SourceOut",
+        "type": "object"
+      },
+      "StrategyResult": {
+        "properties": {
+          "breakdown": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Breakdown",
+            "type": "object"
+          },
+          "cost": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Cost",
+            "type": "object"
+          },
+          "execution": {
+            "title": "Execution",
+            "type": "string"
+          },
+          "feasible": {
+            "default": true,
+            "title": "Feasible",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "idle_cost_usd": {
+            "title": "Idle Cost Usd",
+            "type": "number"
+          },
+          "idle_days": {
+            "title": "Idle Days",
+            "type": "number"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "notes": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "p_deadline_miss": {
+            "title": "P Deadline Miss",
+            "type": "number"
+          },
+          "risk_adjusted_cost": {
+            "title": "Risk Adjusted Cost",
+            "type": "number"
+          },
+          "structure": {
+            "title": "Structure",
+            "type": "string"
+          },
+          "total_days": {
+            "title": "Total Days",
+            "type": "number"
+          },
+          "usd_per_tonne": {
+            "title": "Usd Per Tonne",
+            "type": "number"
+          },
+          "vessel_class": {
+            "title": "Vessel Class",
+            "type": "string"
+          },
+          "voyages": {
+            "title": "Voyages",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "vessel_class",
+          "voyages",
+          "structure",
+          "execution",
+          "total_days",
+          "cost",
+          "usd_per_tonne",
+          "p_deadline_miss",
+          "risk_adjusted_cost",
+          "breakdown",
+          "idle_days",
+          "idle_cost_usd"
+        ],
+        "title": "StrategyResult",
+        "type": "object"
+      },
+      "UsdPerTonne": {
+        "properties": {
+          "calibration_mape": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Mape"
+          },
+          "calibration_route": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Route"
+          },
+          "cargo_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cargo T"
+          },
+          "components_usd": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Components Usd"
+          },
+          "interval_80": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Interval 80",
+            "type": "array"
+          },
+          "model": {
+            "default": "shadow_freight_v1",
+            "title": "Model",
+            "type": "string"
+          },
+          "point": {
+            "title": "Point",
+            "type": "number"
+          },
+          "provenance": {
+            "default": "derived",
+            "enum": [
+              "measured",
+              "derived",
+              "estimated",
+              "simulated_demo",
+              "expert_set"
+            ],
+            "title": "Provenance",
+            "type": "string"
+          }
+        },
+        "required": [
+          "point",
+          "interval_80"
+        ],
+        "title": "UsdPerTonne",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VesselClassOut": {
+        "properties": {
+          "cons_ballast_mt_day": {
+            "title": "Cons Ballast Mt Day",
+            "type": "number"
+          },
+          "cons_laden_mt_day": {
+            "title": "Cons Laden Mt Day",
+            "type": "number"
+          },
+          "constants_t": {
+            "title": "Constants T",
+            "type": "number"
+          },
+          "demurrage_usd_day": {
+            "title": "Demurrage Usd Day",
+            "type": "number"
+          },
+          "dwt_range": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Dwt Range",
+            "type": "array"
+          },
+          "geared": {
+            "title": "Geared",
+            "type": "boolean"
+          },
+          "grt": {
+            "title": "Grt",
+            "type": "number"
+          },
+          "index_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Index Code"
+          },
+          "ref_beam_m": {
+            "title": "Ref Beam M",
+            "type": "number"
+          },
+          "ref_draft_m": {
+            "title": "Ref Draft M",
+            "type": "number"
+          },
+          "ref_dwt": {
+            "title": "Ref Dwt",
+            "type": "number"
+          },
+          "ref_loa_m": {
+            "title": "Ref Loa M",
+            "type": "number"
+          },
+          "retrieved_at": {
+            "format": "date",
+            "title": "Retrieved At",
+            "type": "string"
+          },
+          "source_url": {
+            "title": "Source Url",
+            "type": "string"
+          },
+          "speed_ballast_kn": {
+            "title": "Speed Ballast Kn",
+            "type": "number"
+          },
+          "speed_laden_kn": {
+            "title": "Speed Laden Kn",
+            "type": "number"
+          },
+          "tpc": {
+            "title": "Tpc",
+            "type": "number"
+          },
+          "vessel_class": {
+            "title": "Vessel Class",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vessel_class",
+          "index_code",
+          "ref_dwt",
+          "ref_draft_m",
+          "ref_loa_m",
+          "ref_beam_m",
+          "tpc",
+          "speed_laden_kn",
+          "speed_ballast_kn",
+          "cons_laden_mt_day",
+          "cons_ballast_mt_day",
+          "geared",
+          "dwt_range",
+          "constants_t",
+          "demurrage_usd_day",
+          "grt",
+          "source_url",
+          "retrieved_at"
+        ],
+        "title": "VesselClassOut",
+        "type": "object"
+      },
+      "VesselOption": {
+        "properties": {
+          "binding_constraint": {
+            "title": "Binding Constraint",
+            "type": "string"
+          },
+          "binding_port": {
+            "title": "Binding Port",
+            "type": "string"
+          },
+          "compatibility_factors": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Compatibility Factors",
+            "type": "object"
+          },
+          "compatibility_score": {
+            "title": "Compatibility Score",
+            "type": "number"
+          },
+          "deadline_feasible": {
+            "title": "Deadline Feasible",
+            "type": "boolean"
+          },
+          "estimated_days_per_voyage": {
+            "title": "Estimated Days Per Voyage",
+            "type": "number"
+          },
+          "expected_cost_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Cost Usd"
+          },
+          "intake_ratio": {
+            "title": "Intake Ratio",
+            "type": "number"
+          },
+          "interval_80_usd": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval 80 Usd"
+          },
+          "last_parcel_t": {
+            "title": "Last Parcel T",
+            "type": "number"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "parcel_t": {
+            "title": "Parcel T",
+            "type": "number"
+          },
+          "requires_lighterage": {
+            "title": "Requires Lighterage",
+            "type": "boolean"
+          },
+          "vessel_class": {
+            "title": "Vessel Class",
+            "type": "string"
+          },
+          "voyages": {
+            "title": "Voyages",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "vessel_class",
+          "voyages",
+          "parcel_t",
+          "last_parcel_t",
+          "intake_ratio",
+          "compatibility_score",
+          "compatibility_factors",
+          "estimated_days_per_voyage",
+          "deadline_feasible",
+          "binding_constraint",
+          "binding_port",
+          "requires_lighterage"
+        ],
+        "title": "VesselOption",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "\nDecision-support API for chartering bulk carriers into India's East Coast ports.\n\n**Forecast the market \u2192 understand the constraints \u2192 simulate charter strategies \u2192\nrecommend the best decision.**\n\nThis is not a freight price oracle. It is a constrained decision engine that treats\nthe freight forecast as an uncertain input, not as the answer. Every response carries\n`provenance`, `as_of` and `assumptions`, and every infeasible option comes back with\nthe constraint and the source that ruled it out.\n\nProvenance values: `measured` (from an official published record), `derived` (computed\nby one of our models from measured inputs), `estimated` (a documented judgement where no\npublication exists), `expert_set` (a hand-curated parameter), `simulated_demo` (a\nseeded demo series standing in for a feed that needs credentials).\n",
+    "title": "SIH26006 \u2014 Charter Intelligence API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/forecast": {
+      "post": {
+        "operationId": "post_forecast_api_v1_forecast_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Freight forecast for a vessel class",
+        "tags": [
+          "forecast"
+        ]
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Liveness and data-freshness check",
+        "tags": [
+          "meta"
+        ]
+      }
+    },
+    "/api/v1/market": {
+      "get": {
+        "operationId": "market_api_v1_market_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "as_of",
+            "required": false,
+            "schema": {
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Market dashboard",
+        "tags": [
+          "market"
+        ]
+      }
+    },
+    "/api/v1/market/backhaul": {
+      "get": {
+        "operationId": "backhaul_api_v1_market_backhaul_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "origin_port",
+            "required": true,
+            "schema": {
+              "title": "Origin Port",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "destination_port",
+            "required": true,
+            "schema": {
+              "title": "Destination Port",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "vessel_class",
+            "required": false,
+            "schema": {
+              "default": "Supramax",
+              "title": "Vessel Class",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "as_of",
+            "required": false,
+            "schema": {
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Backhaul insight for a lane",
+        "tags": [
+          "market"
+        ]
+      }
+    },
+    "/api/v1/market/ballast-matrix": {
+      "get": {
+        "operationId": "ballast_matrix_api_v1_market_ballast_matrix_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "vessel_class",
+            "required": false,
+            "schema": {
+              "default": "Supramax",
+              "title": "Vessel Class",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from_port",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From Port"
+            }
+          },
+          {
+            "in": "query",
+            "name": "as_of",
+            "required": false,
+            "schema": {
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Ballast cost matrix and the premium owners price in",
+        "tags": [
+          "market"
+        ]
+      }
+    },
+    "/api/v1/market/low-demand": {
+      "get": {
+        "operationId": "low_demand_api_v1_market_low_demand_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "vessel_class",
+            "required": false,
+            "schema": {
+              "default": "Supramax",
+              "title": "Vessel Class",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "months",
+            "required": false,
+            "schema": {
+              "default": 6,
+              "maximum": 12,
+              "minimum": 1,
+              "title": "Months",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "as_of",
+            "required": false,
+            "schema": {
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Six-month demand-regime strip for a vessel class",
+        "tags": [
+          "market"
+        ]
+      }
+    },
+    "/api/v1/opportunity-score": {
+      "post": {
+        "operationId": "opportunity_score_api_v1_opportunity_score_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpportunityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Charter Opportunity Score for a requirement",
+        "tags": [
+          "decision"
+        ]
+      }
+    },
+    "/api/v1/optimize-charter": {
+      "post": {
+        "operationId": "optimize_charter_api_v1_optimize_charter_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OptimizeCharterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recommend a charter strategy and explain it",
+        "tags": [
+          "decision"
+        ]
+      }
+    },
+    "/api/v1/ports": {
+      "get": {
+        "operationId": "list_ports_api_v1_ports_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 2,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(load|discharge|both)$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Role"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PortSummary"
+                  },
+                  "title": "Response List Ports Api V1 Ports Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Port registry",
+        "tags": [
+          "ports"
+        ]
+      }
+    },
+    "/api/v1/ports/{port_id}": {
+      "get": {
+        "operationId": "get_port_api_v1_ports__port_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "port_id",
+            "required": true,
+            "schema": {
+              "title": "Port Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cargo_type",
+            "required": false,
+            "schema": {
+              "default": "coking_coal",
+              "title": "Cargo Type",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "season",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Season"
+            }
+          },
+          {
+            "in": "query",
+            "name": "as_of",
+            "required": false,
+            "schema": {
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Port constraints, congestion and compatibility",
+        "tags": [
+          "ports"
+        ]
+      }
+    },
+    "/api/v1/ports/{port_id}/compatibility": {
+      "get": {
+        "operationId": "port_compatibility_api_v1_ports__port_id__compatibility_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "port_id",
+            "required": true,
+            "schema": {
+              "title": "Port Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "season",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Season"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cargo_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cargo Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Full compatibility grid for a port",
+        "tags": [
+          "ports"
+        ]
+      }
+    },
+    "/api/v1/recommend-vessel": {
+      "post": {
+        "operationId": "recommend_vessel_api_v1_recommend_vessel_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecommendVesselRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendVesselResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Feasibility filter, parcel split and class ranking",
+        "tags": [
+          "vessels"
+        ]
+      }
+    },
+    "/api/v1/risks": {
+      "get": {
+        "operationId": "risks_api_v1_risks_get",
+        "parameters": [
+          {
+            "description": "Discharge port",
+            "in": "query",
+            "name": "port_id",
+            "required": true,
+            "schema": {
+              "description": "Discharge port",
+              "title": "Port Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "vessel_class",
+            "required": false,
+            "schema": {
+              "default": "Supramax",
+              "title": "Vessel Class",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 12,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Month"
+            }
+          },
+          {
+            "in": "query",
+            "name": "as_of",
+            "required": false,
+            "schema": {
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RiskResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Explainable risk assessment",
+        "tags": [
+          "risk"
+        ]
+      }
+    },
+    "/api/v1/simulate-strategy": {
+      "post": {
+        "operationId": "simulate_strategy_api_v1_simulate_strategy_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateStrategyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulateResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Charter Strategy Digital Twin \u2014 compare strategies under uncertainty",
+        "tags": [
+          "decision"
+        ]
+      }
+    },
+    "/api/v1/sources": {
+      "get": {
+        "operationId": "sources_api_v1_sources_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "rating",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[GYOR]$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Rating"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SourceOut"
+                  },
+                  "title": "Response Sources Api V1 Sources Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Live data-lineage registry",
+        "tags": [
+          "provenance"
+        ]
+      }
+    },
+    "/api/v1/sources/coverage": {
+      "get": {
+        "operationId": "coverage_api_v1_sources_coverage_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Verification status of every constraint record",
+        "tags": [
+          "provenance"
+        ]
+      }
+    },
+    "/api/v1/vessels": {
+      "get": {
+        "operationId": "list_vessel_classes_api_v1_vessels_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VesselClassOut"
+                  },
+                  "title": "Response List Vessel Classes Api V1 Vessels Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Baltic standard vessel class profiles",
+        "tags": [
+          "vessels"
+        ]
+      }
+    },
+    "/api/v1/vessels/{vessel_class}": {
+      "get": {
+        "operationId": "get_vessel_class_api_v1_vessels__vessel_class__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "vessel_class",
+            "required": true,
+            "schema": {
+              "title": "Vessel Class",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VesselClassOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Vessel Class",
+        "tags": [
+          "vessels"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "description": "Freight index and route-rate forecasting",
+      "name": "forecast"
+    },
+    {
+      "description": "Constraint registry, congestion and compatibility",
+      "name": "ports"
+    },
+    {
+      "description": "Class profiles and vessel selection",
+      "name": "vessels"
+    },
+    {
+      "description": "Optimisation, simulation and opportunity scoring",
+      "name": "decision"
+    },
+    {
+      "description": "Market dashboard, demand regime and ballast",
+      "name": "market"
+    },
+    {
+      "description": "Explainable risk assessment",
+      "name": "risk"
+    },
+    {
+      "description": "Live data-lineage registry",
+      "name": "provenance"
+    },
+    {
+      "description": "Health and diagnostics",
+      "name": "meta"
+    }
+  ]
+}
