@@ -1,71 +1,46 @@
 import React, { useState } from 'react';
-import Header from './components/Header';
-import Dashboard from './pages/Dashboard';
-import HistoricalForecast from './pages/HistoricalForecast';
+import TopUtilityBar from './components/TopUtilityBar';
+import MainHeader from './components/MainHeader';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+
+import HomePortal from './pages/HomePortal';
+import MarketIntelligence from './pages/MarketIntelligence';
+import FreightForecast from './pages/FreightForecast';
 import RouteAnalysis from './pages/RouteAnalysis';
 import CharterOptimizer from './pages/CharterOptimizer';
+import PortIntelligence from './pages/PortIntelligence';
+import Methodology from './pages/Methodology';
+import AboutProject from './pages/AboutProject';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [selectedVessel, setSelectedVessel] = useState('Panamax');
-  const [currentForecast, setCurrentForecast] = useState(null);
-  const [currentRouteEstimate, setCurrentRouteEstimate] = useState(null);
-
-  const handleSelectForecastFromDashboard = (vesselClass) => {
-    setSelectedVessel(vesselClass);
-    setActiveTab('forecast');
-  };
-
-  const handleNavigateToRouteFromForecast = (vessel, forecast) => {
-    setSelectedVessel(vessel);
-    setCurrentForecast(forecast);
-    setActiveTab('route');
-  };
-
-  const handleProceedToOptimizerFromRoute = (estimate) => {
-    setCurrentRouteEstimate(estimate);
-    setActiveTab('optimizer');
-  };
+  const [activeTab, setActiveTab] = useState('home');
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#070B14] text-slate-100">
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="min-h-screen flex flex-col bg-portalBg text-slate-800 font-sans text-xs antialiased">
+      {/* 1. Official Government Top Bar */}
+      <TopUtilityBar />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === 'dashboard' && (
-          <Dashboard onSelectForecast={handleSelectForecastFromDashboard} />
-        )}
+      {/* 2. Main Institutional Brand Header */}
+      <MainHeader currentTab={activeTab} onNavigate={setActiveTab} />
 
-        {activeTab === 'forecast' && (
-          <HistoricalForecast
-            initialVessel={selectedVessel}
-            onNavigateToRoute={handleNavigateToRouteFromForecast}
-          />
-        )}
+      {/* 3. Primary Navigation Bar */}
+      <Navbar currentTab={activeTab} onNavigate={setActiveTab} />
 
-        {activeTab === 'route' && (
-          <RouteAnalysis
-            initialVessel={selectedVessel}
-            onProceedToOptimizer={handleProceedToOptimizerFromRoute}
-          />
-        )}
-
-        {activeTab === 'optimizer' && (
-          <CharterOptimizer preloadedEstimate={currentRouteEstimate} />
-        )}
+      {/* 4. Main Content Area */}
+      <main className="flex-grow max-w-7xl w-full mx-auto px-4 py-4 space-y-4" id="main-content">
+        {activeTab === 'home' && <HomePortal onNavigate={setActiveTab} />}
+        {activeTab === 'market' && <MarketIntelligence />}
+        {activeTab === 'forecast' && <FreightForecast />}
+        {activeTab === 'routes' && <RouteAnalysis />}
+        {activeTab === 'optimizer' && <CharterOptimizer />}
+        {activeTab === 'ports' && <PortIntelligence />}
+        {activeTab === 'methodology' && <Methodology />}
+        {activeTab === 'about' && <AboutProject onNavigate={setActiveTab} />}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 bg-slate-950/60 py-6 text-xs text-slate-500 text-center font-mono">
-        <div className="max-w-7xl mx-auto px-4 space-y-1">
-          <div>
-            SIH26006 • Intelligent Freight Forecasting for Optimized Vessel Chartering & Bulk Procurement
-          </div>
-          <div>
-            Phase 6B Verified Historical Integration • Mendeley Data (2012–2019) • 72 Quantile LightGBM Models
-          </div>
-        </div>
-      </footer>
+      {/* 5. Institutional Footer */}
+      <Footer onNavigate={setActiveTab} />
     </div>
   );
 }
