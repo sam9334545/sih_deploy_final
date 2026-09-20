@@ -255,3 +255,60 @@ def get_system_status():
     report = check_forecast_readiness()
     return report.to_dict()
 
+
+@router.get("/series", summary="Get verified historical Baltic time-series observations")
+def get_historical_series(
+    target: str = Query("BPI", description="Baltic sub-index code (BCI, BPI, BSI, BHSI)"),
+    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD filter"),
+    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD filter"),
+    limit: Optional[int] = Query(None, ge=1, le=2000, description="Max observations to return (most recent)")
+):
+    """
+    Returns verified historical Baltic observations strictly up to 2019-07-31 cutoff.
+    Zero synthetic or fabricated data.
+    """
+    svc = get_ml_service()
+    col_map = {
+        "BCI": "bci_value",
+        "BPI": "bpi_value",
+        "BSI": "bsi_value",
+        "BHSI": "bhsi_value"
+    }
+    target_clean = target.upper().strip()
+    if target_clean not in col_map:
+        raise HTTPException(status_code=400, detail=f"Unknown target index '{target}'. Must be one of BCI, BPI, BSI, BHSI")
+    
+    col = col_map[target_clean]
+    df = svc.df[["obs_date", col]].copy()
+    
+    if start_date:
+        df = df[df["obs_date"] >= start_date]
+    if end_date:
+        df = df[df["obs_date"] <= end_date]
+        
+    if limit is not None and len(df) > limit:
+        df = df.iloc[-limit:]
+        
+    records = []
+    for _, row in df.iterrows():
+        val = float(row[col])
+        records.append({
+            "obs_date": row["obs_date"],
+            "date": row["obs_date"],
+            "value": round(val, 2),
+            "target": target_clean
+        })
+        
+    return {
+        "target": target_clean,
+        "data_mode": "HISTORICAL_DEVELOPMENT",
+        "data_cutoff": "2019-07-31",
+        "provenance": "OBSERVED",
+        "source": "Mendeley Data DOI 10.17632/mcm7ycmjtt.1",
+        "count": len(records),
+        "start_date": records[0]["obs_date"] if records else None,
+        "end_date": records[-1]["obs_date"] if records else None,
+        "observations": records,
+        "data": records
+    }
+

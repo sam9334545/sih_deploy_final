@@ -29,8 +29,9 @@ from models.evaluation import (
     calculate_naive_scale
 )
 
-RAW_DATA_PATH = "ml-work/data/processed/real_baltic_multivariate.csv"
-FEATURE_DATA_PATH = "ml-work/data/features/dataset_bpi_h7.csv"
+ROOT_DIR = Path(__file__).resolve().parent.parent
+RAW_DATA_PATH = ROOT_DIR / "data" / "processed" / "real_baltic_multivariate.csv"
+FEATURE_DATA_PATH = ROOT_DIR / "data" / "features" / "dataset_bpi_h7.csv"
 
 @pytest.fixture
 def raw_df():

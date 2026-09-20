@@ -3,13 +3,24 @@ from __future__ import annotations
 from datetime import date
 from functools import lru_cache
 
+from pathlib import Path
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def _find_default_db_url() -> str:
+    if Path("./charter.db").exists():
+        return "sqlite:///./charter.db"
+    backend_db = Path(__file__).resolve().parent.parent / "charter.db"
+    if backend_db.exists():
+        return f"sqlite:///{backend_db.as_posix()}"
+    return "sqlite:///./charter.db"
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=(".env", "../.env"), extra="ignore")
 
-    database_url: str = "sqlite:///./charter.db"
+    database_url: str = Field(default_factory=_find_default_db_url)
     api_host: str = "0.0.0.0"
     api_port: int = 8000
     cors_origins: str = "http://localhost:5173,http://localhost:3000"

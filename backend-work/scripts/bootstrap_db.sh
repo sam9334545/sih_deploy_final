@@ -10,7 +10,7 @@ echo "→ generating demo series"
 "$PY" scripts/generate_demo_series.py
 
 echo "→ loading database"
-(cd backend && "../$PY" -m app.seed)
+"$PY" -m app.seed
 
 echo "→ freezing the API contract"
 "$PY" scripts/export_openapi.py
