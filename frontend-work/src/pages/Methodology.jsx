@@ -20,7 +20,7 @@ export default function Methodology() {
           </div>
           <div className="flex items-center space-x-2">
             <ProvenanceBadge type="observed" text="Category A Verified" />
-            <ProvenanceBadge type="conformal" text="Conformal 90%" />
+            <ProvenanceBadge type="conformal" text="80% Conformal Calibrated" />
           </div>
         </div>
       </div>
@@ -190,7 +190,7 @@ export default function Methodology() {
                 <td>
                   <ProvenanceBadge type="conformal" text="Conformal Calibrated" />
                 </td>
-                <td className="text-slate-700">Statistically calibrated prediction interval satisfying 90% coverage.</td>
+                <td className="text-slate-700">Statistically calibrated prediction interval satisfying 80% coverage (P10–P90).</td>
                 <td className="font-mono text-slate-800">P10 – P90 prediction interval expansion via Q̂</td>
                 <td className="text-slate-600">Split-conformal empirical residual calibration</td>
               </tr>

@@ -6,13 +6,37 @@ export default function HomePortal({ onNavigate }) {
   const [selectedPeriod, setSelectedPeriod] = useState('3Y');
   const [selectedView, setSelectedView] = useState('Daily');
   const [marketIndices, setMarketIndices] = useState([
-    { code: 'BCI', segment: 'Capesize', value: '3,657 pts', date: '31 Jul 2019', status: 'Observed' },
-    { code: 'BPI', segment: 'Panamax', value: '2,483 pts', date: '31 Jul 2019', status: 'Observed' },
-    { code: 'BSI', segment: 'Supramax', value: '1,678 pts', date: '31 Jul 2019', status: 'Observed' },
-    { code: 'BHSI', segment: 'Handysize', value: '951 pts', date: '31 Jul 2019', status: 'Observed' },
+    { code: 'BCI', segment: 'Capesize', value: '3,445 pts', date: '31 Jul 2019', status: 'Observed' },
+    { code: 'BPI', segment: 'Panamax', value: '2,042 pts', date: '31 Jul 2019', status: 'Observed' },
+    { code: 'BSI', segment: 'Supramax', value: '984 pts', date: '31 Jul 2019', status: 'Observed' },
+    { code: 'BHSI', segment: 'Handysize', value: '479 pts', date: '31 Jul 2019', status: 'Observed' },
   ]);
   const [chartSeries, setChartSeries] = useState(null);
   const [loadingChart, setLoadingChart] = useState(false);
+
+  // Fetch real market summary on mount
+  useEffect(() => {
+    async function loadSummary() {
+      try {
+        const res = await fetch('/api/v1/historical/market-summary');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.indices && json.indices.length > 0) {
+            setMarketIndices(json.indices.map(idx => ({
+              code: idx.target,
+              segment: idx.vessel_class,
+              value: `${Math.round(idx.latest_value).toLocaleString()} pts`,
+              date: idx.obs_date || '31 Jul 2019',
+              status: 'Observed'
+            })));
+          }
+        }
+      } catch (err) {
+        console.warn('Market summary fetch notice:', err);
+      }
+    }
+    loadSummary();
+  }, []);
 
   // Fetch real historical series from backend
   useEffect(() => {
@@ -27,7 +51,7 @@ export default function HomePortal({ onNavigate }) {
           }
         }
       } catch (err) {
-        console.warn('Backend series fetch fallback to SVG reference:', err);
+        console.warn('Backend series fetch notice:', err);
       } finally {
         setLoadingChart(false);
       }

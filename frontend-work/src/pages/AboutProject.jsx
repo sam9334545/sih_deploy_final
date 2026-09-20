@@ -55,7 +55,7 @@ export default function AboutProject({ onNavigate }) {
             <h3 className="text-xs font-bold text-govNavy">Machine Learning Tier</h3>
           </div>
           <p className="text-[11px] text-slate-600 leading-relaxed">
-            Quantile LightGBM models trained on verified Baltic Exchange sub-indices (1,749 sessions, Mendeley CC BY 4.0). Calibrated via Split-Conformal prediction to provide finite-sample valid 90% prediction intervals across 6 discrete horizons (7 to 180 sessions).
+            Quantile LightGBM models trained on verified Baltic Exchange sub-indices (1,749 sessions, Mendeley CC BY 4.0). Calibrated via Split-Conformal prediction to provide finite-sample valid 80% prediction intervals (P10–P90) across 6 discrete horizons (7 to 180 sessions).
           </p>
           <span className="text-[10px] text-govBlueAccent font-mono block">ml-work/models/saved_models/</span>
         </div>
