@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import StatusBanner from '../components/StatusBanner';
+
+const PERIOD_LIMITS = {
+  '1Y': 250,   // ~1 trading year
+  '2Y': 500,   // ~2 trading years
+  '3Y': 750,   // ~3 trading years
+  '5Y': 1250,  // ~5 trading years
+  'Full': 1800 // Full verified historical range
+};
 
 export default function HomePortal({ onNavigate }) {
   const [selectedTrendIndex, setSelectedTrendIndex] = useState('BPI');
@@ -13,6 +21,7 @@ export default function HomePortal({ onNavigate }) {
   ]);
   const [chartSeries, setChartSeries] = useState(null);
   const [loadingChart, setLoadingChart] = useState(false);
+  const [hoverPoint, setHoverPoint] = useState(null);
 
   // Fetch real market summary on mount
   useEffect(() => {
@@ -38,16 +47,18 @@ export default function HomePortal({ onNavigate }) {
     loadSummary();
   }, []);
 
-  // Fetch real historical series from backend
+  // Fetch real historical series dynamically based on selected index and period
   useEffect(() => {
     async function fetchSeriesData() {
       setLoadingChart(true);
       try {
-        const res = await fetch(`/api/v1/historical/series?target=${selectedTrendIndex}&limit=350`);
+        const limit = PERIOD_LIMITS[selectedPeriod] || 750;
+        const res = await fetch(`/api/v1/historical/series?target=${selectedTrendIndex}&limit=${limit}`);
         if (res.ok) {
           const json = await res.json();
-          if (json.data && json.data.length > 0) {
-            setChartSeries(json.data);
+          const observations = json.observations || json.data || [];
+          if (observations.length > 0) {
+            setChartSeries(observations);
           }
         }
       } catch (err) {
@@ -59,44 +70,182 @@ export default function HomePortal({ onNavigate }) {
     fetchSeriesData();
   }, [selectedTrendIndex, selectedPeriod]);
 
-  // Generate dynamic SVG path if real backend series is loaded
-  const renderTrendPath = () => {
-    if (!chartSeries || chartSeries.length < 5) {
-      // Reference smooth SVG trajectory representing BPI multi-year movement
+  // Downsample or aggregate based on selectedView (Daily / Weekly / Monthly)
+  const processedSeries = useMemo(() => {
+    if (!chartSeries || chartSeries.length === 0) return [];
+    if (selectedView === 'Daily') return chartSeries;
+
+    const step = selectedView === 'Weekly' ? 5 : 21;
+    const aggregated = [];
+    for (let i = 0; i < chartSeries.length; i += step) {
+      const chunk = chartSeries.slice(i, Math.min(i + step, chartSeries.length));
+      const avgVal = chunk.reduce((sum, item) => sum + (Number(item.value) || 0), 0) / chunk.length;
+      const lastItem = chunk[chunk.length - 1];
+      aggregated.push({
+        obs_date: lastItem.obs_date || lastItem.date,
+        date: lastItem.date || lastItem.obs_date,
+        value: Math.round(avgVal * 10) / 10,
+        target: lastItem.target,
+      });
+    }
+    return aggregated;
+  }, [chartSeries, selectedView]);
+
+  // Generate dynamic chart geometry, real dynamic Y and X axes, and summary stats
+  const chartData = useMemo(() => {
+    if (!processedSeries || processedSeries.length < 2) {
       return {
-        area: "M 40,140 C 80,140 100,135 130,138 C 160,141 180,132 210,126 C 240,120 260,105 285,95 C 310,85 330,102 355,80 C 380,58 400,68 425,75 C 450,82 465,100 490,110 L 490,150 L 40,150 Z",
-        line: "M 40,140 C 80,140 100,135 130,138 C 160,141 180,132 210,126 C 240,120 260,105 285,95 C 310,85 330,102 355,80 C 380,58 400,68 425,75 C 450,82 465,100 490,110",
-        peak: { x: 425, y: 75 }
+        area: "M 45,140 C 80,140 100,135 130,138 C 160,141 180,132 210,126 C 240,120 260,105 285,95 C 310,85 330,102 355,80 C 380,58 400,68 425,75 C 450,82 465,100 490,110 L 490,150 L 45,150 Z",
+        line: "M 45,140 C 80,140 100,135 130,138 C 160,141 180,132 210,126 C 240,120 260,105 285,95 C 310,85 330,102 355,80 C 380,58 400,68 425,75 C 450,82 465,100 490,110",
+        peak: { x: 425, y: 75, value: 2042, date: '31 Jul 2019' },
+        points: [],
+        yTicks: [
+          { y: 20, value: 4000 },
+          { y: 52.5, value: 3000 },
+          { y: 85, value: 2000 },
+          { y: 117.5, value: 1000 },
+          { y: 150, value: 0 },
+        ],
+        xLabels: [
+          { x: 45, label: '2016', anchor: 'start' },
+          { x: 156, label: '2017', anchor: 'middle' },
+          { x: 267, label: '2018', anchor: 'middle' },
+          { x: 378, label: '2019', anchor: 'middle' },
+          { x: 490, label: 'Jul \'19', anchor: 'end' },
+        ],
+        stats: null,
       };
     }
 
-    const w = 450;
-    const h = 130;
-    const padX = 40;
+    const padX = 45;
+    const plotWidth = 445; // 490 - 45
     const padY = 20;
+    const plotHeight = 130; // 150 - 20
 
-    const values = chartSeries.map(d => d.value);
-    const minVal = Math.min(...values);
-    const maxVal = Math.max(...values);
-    const range = maxVal - minVal || 1;
+    const values = processedSeries.map(d => Number(d.value) || 0);
+    const rawMin = Math.min(...values);
+    const rawMax = Math.max(...values);
+    const rawRange = rawMax - rawMin || 1;
 
-    const points = chartSeries.map((d, i) => {
-      const x = padX + (i / (chartSeries.length - 1)) * w;
-      const y = padY + h - ((d.value - minVal) / range) * (h - 15);
-      return { x, y };
+    // Calculate pleasant round axis bounds
+    const stepSize = rawMax > 2500 ? 100 : (rawMax > 1000 ? 50 : 25);
+    const yMin = Math.max(0, Math.floor((rawMin - rawRange * 0.06) / stepSize) * stepSize);
+    const yMax = Math.ceil((rawMax + rawRange * 0.06) / stepSize) * stepSize;
+    const yRange = yMax - yMin || 1;
+
+    // 5 evenly spaced Y-ticks
+    const yTicks = [
+      { y: padY, value: yMax },
+      { y: padY + (plotHeight * 0.25), value: Math.round(yMax - yRange * 0.25) },
+      { y: padY + (plotHeight * 0.50), value: Math.round(yMax - yRange * 0.50) },
+      { y: padY + (plotHeight * 0.75), value: Math.round(yMax - yRange * 0.75) },
+      { y: padY + plotHeight, value: yMin },
+    ];
+
+    // Map each observation to SVG coordinates
+    const points = processedSeries.map((d, i) => {
+      const x = padX + (i / (processedSeries.length - 1)) * plotWidth;
+      const val = Number(d.value) || 0;
+      const y = (padY + plotHeight) - ((val - yMin) / yRange) * plotHeight;
+      return {
+        x: Math.round(x * 10) / 10,
+        y: Math.round(y * 10) / 10,
+        date: d.obs_date || d.date,
+        value: val,
+      };
     });
 
-    const linePath = points.reduce((acc, pt, i) => i === 0 ? `M ${pt.x},${pt.y}` : `${acc} L ${pt.x},${pt.y}`, '');
-    const areaPath = `${linePath} L ${points[points.length - 1].x},150 L ${points[0].x},150 Z`;
-    
-    // Find highest peak point
+    const linePath = points.reduce((acc, pt, i) => (i === 0 ? `M ${pt.x},${pt.y}` : `${acc} L ${pt.x},${pt.y}`), '');
+    const areaPath = `${linePath} L ${points[points.length - 1].x},${padY + plotHeight} L ${points[0].x},${padY + plotHeight} Z`;
+
+    // Find highest peak point and lowest point
     let peakPt = points[0];
-    points.forEach(p => { if (p.y < peakPt.y) peakPt = p; });
+    let lowPt = points[0];
+    points.forEach(p => {
+      if (p.value > peakPt.value) peakPt = p;
+      if (p.value < lowPt.value) lowPt = p;
+    });
 
-    return { area: areaPath, line: linePath, peak: peakPt };
+    // Format date string for X-axis
+    const formatXDate = (dateStr) => {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length < 3) return dateStr;
+      const yr = parts[0];
+      const mo = parseInt(parts[1], 10) - 1;
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const moStr = months[mo] || '';
+      return `${moStr} '${yr.slice(2)}`;
+    };
+
+    // 5 evenly spaced X-axis date labels
+    const count = points.length;
+    const xIndices = [
+      0,
+      Math.floor((count - 1) * 0.25),
+      Math.floor((count - 1) * 0.50),
+      Math.floor((count - 1) * 0.75),
+      count - 1,
+    ];
+
+    const xLabels = xIndices.map((idx, i) => {
+      const pt = points[idx];
+      let anchor = 'middle';
+      if (i === 0) anchor = 'start';
+      if (i === 4) anchor = 'end';
+      return {
+        x: pt.x,
+        label: formatXDate(pt.date),
+        anchor,
+      };
+    });
+
+    // Statistical summary for the active period
+    const startVal = points[0]?.value || 0;
+    const currentVal = points[points.length - 1]?.value || 0;
+    const delta = currentVal - startVal;
+    const deltaPct = startVal > 0 ? (delta / startVal) * 100 : 0;
+
+    return {
+      area: areaPath,
+      line: linePath,
+      points,
+      peak: peakPt,
+      low: lowPt,
+      yTicks,
+      xLabels,
+      stats: {
+        current: currentVal,
+        currentDate: points[points.length - 1]?.date,
+        high: peakPt.value,
+        highDate: peakPt.date,
+        low: lowPt.value,
+        lowDate: lowPt.date,
+        delta,
+        deltaPct,
+        sessions: processedSeries.length,
+      }
+    };
+  }, [processedSeries, selectedPeriod]);
+
+  // Handle interactive hover over SVG chart
+  const handleChartMouseMove = (e) => {
+    if (!chartData || !chartData.points || chartData.points.length === 0) return;
+    const svgRect = e.currentTarget.getBoundingClientRect();
+    const mouseX = e.clientX - svgRect.left;
+    const svgX = (mouseX / svgRect.width) * 500;
+
+    let closest = chartData.points[0];
+    let minDiff = Math.abs(closest.x - svgX);
+    for (let i = 1; i < chartData.points.length; i++) {
+      const diff = Math.abs(chartData.points[i].x - svgX);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closest = chartData.points[i];
+      }
+    }
+    setHoverPoint(closest);
   };
-
-  const pathData = renderTrendPath();
 
   return (
     <div className="space-y-4">
@@ -361,7 +510,7 @@ export default function HomePortal({ onNavigate }) {
                   <select 
                     value={selectedTrendIndex}
                     onChange={(e) => setSelectedTrendIndex(e.target.value)}
-                    className="text-[10px] py-0.5 px-2 bg-slate-50 border border-slate-300 rounded text-slate-700 focus:ring-0" 
+                    className="text-[10px] py-0.5 px-2 bg-slate-50 border border-slate-300 rounded text-slate-700 focus:ring-0 font-medium" 
                     id="filter-index"
                   >
                     <option value="BPI">Index: BPI</option>
@@ -374,11 +523,12 @@ export default function HomePortal({ onNavigate }) {
                   <select 
                     value={selectedPeriod}
                     onChange={(e) => setSelectedPeriod(e.target.value)}
-                    className="text-[10px] py-0.5 px-2 bg-slate-50 border border-slate-300 rounded text-slate-700 focus:ring-0" 
+                    className="text-[10px] py-0.5 px-2 bg-slate-50 border border-slate-300 rounded text-slate-700 focus:ring-0 font-medium cursor-pointer" 
                     id="filter-period"
                   >
-                    <option value="3Y">Period: 3Y</option>
                     <option value="1Y">Period: 1Y</option>
+                    <option value="2Y">Period: 2Y</option>
+                    <option value="3Y">Period: 3Y</option>
                     <option value="5Y">Period: 5Y</option>
                     <option value="Full">Period: Full</option>
                   </select>
@@ -387,7 +537,7 @@ export default function HomePortal({ onNavigate }) {
                   <select 
                     value={selectedView}
                     onChange={(e) => setSelectedView(e.target.value)}
-                    className="text-[10px] py-0.5 px-2 bg-slate-50 border border-slate-300 rounded text-slate-700 focus:ring-0" 
+                    className="text-[10px] py-0.5 px-2 bg-slate-50 border border-slate-300 rounded text-slate-700 focus:ring-0 font-medium cursor-pointer" 
                     id="filter-view"
                   >
                     <option value="Daily">Daily</option>
@@ -398,9 +548,39 @@ export default function HomePortal({ onNavigate }) {
               </div>
             </div>
 
+            {/* Quick Metrics Bar for Selected Period */}
+            {chartData?.stats && (
+              <div className="flex flex-wrap items-center justify-between text-[10px] px-2 py-1 bg-slate-50 border border-slate-100 rounded mb-2 text-slate-600">
+                <div className="flex items-center space-x-2.5">
+                  <span>
+                    <strong className="text-slate-800 font-bold">{Math.round(chartData.stats.current).toLocaleString()}</strong> pts
+                  </span>
+                  <span className={`inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-semibold ${
+                    chartData.stats.delta >= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                  }`}>
+                    {chartData.stats.delta >= 0 ? '+' : ''}{Math.round(chartData.stats.delta).toLocaleString()} pts ({chartData.stats.deltaPct.toFixed(1)}%)
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2 text-[9px] text-slate-500">
+                  <span>Range: <strong className="text-slate-700">{Math.round(chartData.stats.low).toLocaleString()}</strong> – <strong className="text-slate-700">{Math.round(chartData.stats.high).toLocaleString()}</strong> pts</span>
+                  <span className="text-slate-300">|</span>
+                  <span>{chartData.stats.sessions} sessions</span>
+                </div>
+              </div>
+            )}
+
             {/* SVG Visual Line Chart */}
-            <div className="relative w-full h-44 sm:h-48 pt-2">
-              <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 500 170">
+            <div 
+              className="relative w-full h-44 sm:h-48 pt-2"
+              onMouseMove={handleChartMouseMove}
+              onMouseLeave={() => setHoverPoint(null)}
+            >
+              {loadingChart && (
+                <div className="absolute top-3 right-3 z-10 px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 text-[9px] font-medium animate-pulse">
+                  Updating series...
+                </div>
+              )}
+              <svg className="w-full h-full cursor-crosshair" preserveAspectRatio="none" viewBox="0 0 500 170">
                 <defs>
                   <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0%" stopColor="#0284c7" stopOpacity="0.25" />
@@ -408,24 +588,35 @@ export default function HomePortal({ onNavigate }) {
                   </linearGradient>
                 </defs>
 
-                {/* Horizontal Grid Lines & Y-Axis Labels */}
-                <line stroke="#f1f5f9" strokeWidth="1" x1="40" x2="490" y1="20" y2="20" />
-                <text fill="#94a3b8" fontSize="9" textAnchor="end" x="35" y="23">4,000</text>
-                <line stroke="#f1f5f9" strokeWidth="1" x1="40" x2="490" y1="55" y2="55" />
-                <text fill="#94a3b8" fontSize="9" textAnchor="end" x="35" y="58">3,000</text>
-                <line stroke="#f1f5f9" strokeWidth="1" x1="40" x2="490" y1="90" y2="90" />
-                <text fill="#94a3b8" fontSize="9" textAnchor="end" x="35" y="93">2,000</text>
-                <line stroke="#f1f5f9" strokeWidth="1" x1="40" x2="490" y1="125" y2="125" />
-                <text fill="#94a3b8" fontSize="9" textAnchor="end" x="35" y="128">1,000</text>
-                <line stroke="#cbd5e1" strokeWidth="1" x1="40" x2="490" y1="150" y2="150" />
-                <text fill="#94a3b8" fontSize="9" textAnchor="end" x="35" y="153">0</text>
+                {/* Horizontal Grid Lines & Dynamic Y-Axis Labels */}
+                {chartData.yTicks.map((tick, idx) => (
+                  <g key={`ytick-${idx}`}>
+                    <line 
+                      stroke={idx === chartData.yTicks.length - 1 ? "#cbd5e1" : "#f1f5f9"} 
+                      strokeWidth="1" 
+                      x1="45" 
+                      x2="490" 
+                      y1={tick.y} 
+                      y2={tick.y} 
+                    />
+                    <text 
+                      fill="#94a3b8" 
+                      fontSize="9" 
+                      textAnchor="end" 
+                      x="40" 
+                      y={tick.y + 3}
+                    >
+                      {tick.value.toLocaleString()}
+                    </text>
+                  </g>
+                ))}
 
                 {/* Area Fill */}
-                <path d={pathData.area} fill="url(#chartGradient)" />
+                <path d={chartData.area} fill="url(#chartGradient)" />
 
                 {/* Primary Trend Line Curve */}
                 <path 
-                  d={pathData.line} 
+                  d={chartData.line} 
                   fill="none" 
                   stroke="#0284c7" 
                   strokeLinecap="round" 
@@ -434,25 +625,82 @@ export default function HomePortal({ onNavigate }) {
                 />
 
                 {/* Point Marker at Peak */}
-                {pathData.peak && (
-                  <circle cx={pathData.peak.x} cy={pathData.peak.y} fill="#0369a1" r="3.5" stroke="#ffffff" strokeWidth="1.5" />
+                {chartData.peak && (
+                  <circle cx={chartData.peak.x} cy={chartData.peak.y} fill="#0369a1" r="3.5" stroke="#ffffff" strokeWidth="1.5" />
                 )}
 
-                {/* X-Axis Labels */}
-                <text fill="#64748b" fontSize="9" textAnchor="start" x="40" y="165">2012</text>
-                <text fill="#64748b" fontSize="9" textAnchor="middle" x="150" y="165">2014</text>
-                <text fill="#64748b" fontSize="9" textAnchor="middle" x="265" y="165">2016</text>
-                <text fill="#64748b" fontSize="9" textAnchor="middle" x="375" y="165">2018</text>
-                <text fill="#64748b" fontSize="9" textAnchor="end" x="485" y="165">2019</text>
+                {/* Interactive Hover Point & Tooltip */}
+                {hoverPoint && (
+                  <g pointerEvents="none">
+                    <line 
+                      x1={hoverPoint.x} 
+                      x2={hoverPoint.x} 
+                      y1="20" 
+                      y2="150" 
+                      stroke="#0284c7" 
+                      strokeWidth="1" 
+                      strokeDasharray="3,3" 
+                    />
+                    <circle 
+                      cx={hoverPoint.x} 
+                      cy={hoverPoint.y} 
+                      r="4.5" 
+                      fill="#0284c7" 
+                      stroke="#ffffff" 
+                      strokeWidth="2" 
+                    />
+                    <g transform={`translate(${Math.min(Math.max(hoverPoint.x, 65), 435)}, ${hoverPoint.y < 45 ? hoverPoint.y + 24 : hoverPoint.y - 12})`}>
+                      <rect 
+                        x="-48" 
+                        y="-13" 
+                        width="96" 
+                        height="18" 
+                        rx="4" 
+                        fill="#0f172a" 
+                        opacity="0.92" 
+                      />
+                      <text 
+                        fill="#ffffff" 
+                        fontSize="8.5" 
+                        fontWeight="600" 
+                        textAnchor="middle" 
+                        y="0"
+                      >
+                        {hoverPoint.date}: {Math.round(hoverPoint.value).toLocaleString()}
+                      </text>
+                    </g>
+                  </g>
+                )}
+
+                {/* Dynamic X-Axis Labels */}
+                {chartData.xLabels.map((lbl, idx) => (
+                  <text 
+                    key={`xlabel-${idx}`}
+                    fill="#64748b" 
+                    fontSize="9" 
+                    textAnchor={lbl.anchor} 
+                    x={lbl.x} 
+                    y="165"
+                  >
+                    {lbl.label}
+                  </text>
+                ))}
               </svg>
             </div>
           </div>
 
           {/* Legend and Source Footnote */}
           <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-slate-500 gap-1">
-            <div className="flex items-center space-x-1.5 font-medium text-slate-700">
-              <span className="w-2.5 h-2.5 rounded-full bg-sky-600 inline-block" />
-              <span>{selectedTrendIndex} (Observed History)</span>
+            <div className="flex items-center space-x-3 font-medium text-slate-700">
+              <div className="flex items-center space-x-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-sky-600 inline-block" />
+                <span>{selectedTrendIndex} ({selectedPeriod} · {selectedView})</span>
+              </div>
+              {chartData?.stats?.sessions && (
+                <span className="text-[9px] text-slate-400 font-normal">
+                  ({chartData.stats.sessions} observed sessions)
+                </span>
+              )}
             </div>
             <div className="text-[9px] text-slate-400">
               Source: Verified historical Baltic dry bulk sub-index dataset (Mendeley CC BY 4.0).
