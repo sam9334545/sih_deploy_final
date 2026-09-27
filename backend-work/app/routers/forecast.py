@@ -14,7 +14,7 @@ from app.repositories import reference as ref_repo
 from app.repositories import series as series_repo
 from app.schemas.requests import ForecastRequest
 from app.schemas.responses import ForecastResponse
-from app.services import forecast_service, shadow_freight
+from app.services import forecast_service, forecast_v2_adapter, shadow_freight
 from app.services.constants import CLASS_INDEX, HORIZONS
 from app.services.cost_model import port_charges
 from app.services.scenario import _weather_fraction
@@ -68,12 +68,27 @@ def post_forecast(req: ForecastRequest, request: Request, db: Session = Depends(
         usd_t = _route_rate(db, req, as_of, index_code, fc, tc_point)
         provenance["usd_per_tonne"] = "derived"
 
+    detail = forecast_service.v2_detail(as_of, index_code, req.horizon_days) or {}
+    is_v2 = fc.model_version == forecast_service.V2_VERSION
+    fallback_reason = None
+    if not is_v2:
+        fallback_reason = (
+            "forecast_v2 disabled by configuration" if not settings.forecast_v2_enabled
+            else forecast_v2_adapter.status().get("reason")
+            or "forecast_v2 did not produce a forecast for this index/horizon")
+
     return ForecastResponse(
         vessel_class=req.vessel_class, index=index_code, as_of=as_of,
         horizon_days=req.horizon_days,
         target_date=as_of + timedelta(days=req.horizon_days),
         index_forecast={"point": fc.point, "interval_80": [fc.lo_80, fc.hi_80]},
         tc_avg_usd_day=tc, usd_per_tonne=usd_t,
+        forecast_quality_score=fc.confidence,
+        quality_score_components=detail.get("quality_score_components"),
+        quality_score_definition=detail.get("quality_score_definition") or (
+            None if is_v2 else
+            "Heuristic 0-1 score from the built-in fallback model: band tightness "
+            "blended with backtest MASE and interval coverage. Not a probability."),
         confidence=fc.confidence, trend=fc.trend or "stable",
         history=forecast_service.history_points(db, index_code, as_of, 180),
         model_meta={
@@ -81,14 +96,25 @@ def post_forecast(req: ForecastRequest, request: Request, db: Session = Depends(
             "validation_mase": fc.validation_mase,
             "interval_coverage_80": fc.interval_coverage_80,
             "method": _METHOD.get(fc.model_version, _METHOD["v1"]),
+            "model_source": "forecast_v2" if is_v2 else "fallback_v1",
+            "selected_model": detail.get("selected_model"),
+            "fallback_reason": fallback_reason,
         },
         drivers=json.loads(fc.drivers_json or "[]"),
+        driver_groups=detail.get("driver_groups"),
+        validation=detail.get("validation"),
+        interval=detail.get("interval"),
+        model_provenance=detail.get("provenance"),
         provenance=provenance,
         provenance_detail={"history": hist_detail} if hist_detail else None,
         assumptions=[
             "The forecast is an uncertain input to a decision, not a price oracle",
             "TC average $/day is mapped from the index by the observed trailing ratio",
-            f"Interval coverage realised in backtest: {fc.interval_coverage_80}",
+            (f"80% interval empirical coverage measured over "
+             f"{(detail.get('interval') or {}).get('n_origins', 'n/a')} rolling origins: "
+             f"{fc.interval_coverage_80}%" if fc.interval_coverage_80 is not None
+             else "Interval coverage not measured for this model"),
+            "forecast_quality_score is a heuristic ranking aid, not a probability",
         ],
         request_id=request.state.request_id,
     )

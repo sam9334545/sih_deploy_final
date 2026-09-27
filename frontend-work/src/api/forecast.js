@@ -87,9 +87,101 @@ export function mapBackendForecast(raw) {
 }
 
 /**
- * Execute real ML forecast inference via backend endpoint.
+ * Map the canonical live forecast response (/api/v1/forecast, forecast_v2).
+ *
+ * Kept field-compatible with mapBackendForecast so the UI renders either source,
+ * but it additionally surfaces modelSource. The UI must never claim to show the
+ * new ML forecast while a fallback produced the numbers.
  */
-export async function executeForecast({ target, originDate, horizonSessions, vesselType }) {
+export function mapLiveForecast(raw) {
+  if (!raw || typeof raw !== 'object' || !raw.index_forecast) {
+    throw new ApiError('Backend returned an invalid live forecast payload.', 500);
+  }
+  const f = raw.index_forecast;
+  const [lo, hi] = Array.isArray(f.interval_80) ? f.interval_80 : [null, null];
+  if (typeof f.point !== 'number' || typeof lo !== 'number' || typeof hi !== 'number') {
+    throw new ApiError(
+      `Integration Error: live forecast missing numerical values (point: ${f.point}, interval_80: ${f.interval_80}).`,
+      500
+    );
+  }
+
+  const meta = raw.model_meta || {};
+  const interval = raw.interval || {};
+  return {
+    target: raw.index,
+    vesselType: raw.vessel_class || INDEX_VESSEL_MAP[raw.index] || 'Panamax',
+    originDate: raw.as_of,
+    targetDate: raw.target_date,
+    horizonSessions: raw.horizon_days,
+    p10: lo,
+    p50: f.point,
+    p90: hi,
+    p10Raw: lo,
+    p50Raw: f.point,
+    p90Raw: hi,
+    trend: raw.trend,
+    // Heuristic ranking aid in [0,1]. Explicitly NOT a probability — see
+    // quality_score_definition returned alongside it.
+    qualityScore: raw.forecast_quality_score,
+    qualityScoreComponents: raw.quality_score_components || null,
+    qualityScoreDefinition: raw.quality_score_definition || null,
+    modelName: meta.name || 'forecast_v2',
+    modelVersion: meta.version || 'v2',
+    modelSource: meta.model_source || 'fallback_v1',
+    selectedModel: meta.selected_model || null,
+    fallbackReason: meta.fallback_reason || null,
+    validation: raw.validation || null,
+    validationMase: meta.validation_mase ?? null,
+    drivers: raw.drivers || [],
+    driverGroups: raw.driver_groups || [],
+    nominalCoverage: 0.80,
+    nominalCoverageLabel: '80% conformal calibrated (P10-P90)',
+    empiricalCoverage:
+      typeof interval.empirical_coverage_pct === 'number'
+        ? interval.empirical_coverage_pct / 100
+        : null,
+    dataMode: 'LIVE_INFERENCE',
+    dataCutoff: raw.model_provenance?.trained_through || DATA_CUTOFF,
+    provenance: raw.provenance?.history || 'unknown',
+    modelProvenance: raw.model_provenance || null,
+    history: raw.history || [],
+  };
+}
+
+/**
+ * CANONICAL LIVE FORECAST.
+ *
+ * Frontend -> /api/v1/forecast -> forecast_service -> forecast_v2.
+ * This is the path the product's forecast screens must use. The historical
+ * endpoint below is for backtesting against observed outcomes only.
+ */
+export async function executeLiveForecast({ vesselClass, horizonDays, asOf, route }) {
+  if (!vesselClass) throw new ApiError('Vessel class is required.', 400);
+  if (!horizonDays) throw new ApiError('Horizon is required.', 400);
+
+  const payload = {
+    vessel_class: vesselClass,
+    horizon_days: Number(horizonDays),
+  };
+  if (asOf) payload.as_of = asOf;
+  if (route) payload.route = route;
+
+  const raw = await apiFetch('/api/v1/forecast', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+  return mapLiveForecast(raw);
+}
+
+/**
+ * HISTORICAL BACKTEST ONLY.
+ *
+ * Replays a forecast from a past origin date and compares it with the observed
+ * outcome. It is served by the older phase-5 historical pipeline, so it must not
+ * be presented as the live ML forecast — that is `executeLiveForecast`.
+ */
+export async function executeHistoricalBacktest({ target, originDate, horizonSessions, vesselType }) {
   if (!target) throw new ApiError('Target index is required.', 400);
   if (!originDate) throw new ApiError('Forecast origin date is required.', 400);
   if (!horizonSessions) throw new ApiError('Horizon sessions is required.', 400);
@@ -108,3 +200,10 @@ export async function executeForecast({ target, originDate, horizonSessions, ves
 
   return mapBackendForecast(raw);
 }
+
+/**
+ * @deprecated Ambiguous name that pointed the live forecast screen at the
+ * historical backtest pipeline. Use executeLiveForecast for the product
+ * forecast, or executeHistoricalBacktest for backtesting.
+ */
+export const executeForecast = executeHistoricalBacktest;

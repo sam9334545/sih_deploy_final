@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel
 
@@ -17,12 +17,18 @@ class ModelMeta(BaseModel):
     validation_mase: float | None = None
     interval_coverage_80: float | None = None
     method: str
+    # Which engine actually answered. A v1 forecast must never be presented as v2.
+    model_source: Literal["forecast_v2", "fallback_v1"] = "fallback_v1"
+    selected_model: str | None = None
+    fallback_reason: str | None = None
 
 
 class Driver(BaseModel):
     feature: str
     direction: str
     contribution_log: float
+    group: str | None = None
+    feature_value: float | None = None
 
 
 class UsdPerTonne(Interval):
@@ -48,11 +54,21 @@ class ForecastResponse(BaseModel):
     index_forecast: Interval
     tc_avg_usd_day: Interval | None = None
     usd_per_tonne: UsdPerTonne | None = None
+    # A heuristic 0-1 score, not a probability. See quality_score_definition.
+    forecast_quality_score: float
+    quality_score_components: dict[str, float] | None = None
+    quality_score_definition: str | None = None
+    # Deprecated alias of forecast_quality_score, kept so existing callers do not
+    # break. It was never a probability and the name implied otherwise.
     confidence: float
     trend: str
     history: list[HistoryPoint]
     model_meta: ModelMeta
     drivers: list[Driver]
+    driver_groups: list[dict[str, Any]] | None = None
+    validation: dict[str, Any] | None = None
+    interval: dict[str, Any] | None = None
+    model_provenance: dict[str, Any] | None = None
     provenance: dict[str, Provenance]
     # Row counts behind a "mixed" provenance, so a caller can see exactly how much
     # of the served history is verified and how much is synthetic.

@@ -19,6 +19,15 @@ logger = logging.getLogger(__name__)
 MODEL_VERSION = "v1"          # built-in numpy fallback
 V2_VERSION = "v2"             # trained ml-work/forecast_v2 ensemble
 
+# Bounded cache of the richest v2 output, keyed like the forecast itself.
+_V2_DETAIL: dict[tuple[date, str, int], dict] = {}
+_V2_DETAIL_MAX = 256
+
+
+def v2_detail(as_of: date, index_code: str, horizon_days: int) -> dict | None:
+    """The v2-only payload for a forecast already built this process, if any."""
+    return _V2_DETAIL.get((as_of, index_code, horizon_days))
+
 
 class NoModelError(Exception):
     pass
@@ -55,6 +64,8 @@ def get_or_build(db: Session, index_code: str, horizon_days: int, as_of: date,
 
     if settings.forecast_v2_enabled:
         try:
+            if len(_V2_DETAIL) > _V2_DETAIL_MAX:
+                _V2_DETAIL.clear()
             return _build_v2(db, index_code, horizon_days, as_of)
         except forecast_v2_adapter.V2Unavailable as e:
             # Not an error: the service is designed to run without the ML stack.
@@ -80,17 +91,20 @@ def get_or_build(db: Session, index_code: str, horizon_days: int, as_of: date,
 def _build_v2(db: Session, index_code: str, horizon_days: int,
               as_of: date) -> ModelForecast:
     out = forecast_v2_adapter.forecast(db, index_code, horizon_days, as_of)
-    drivers = [
-        {"feature": f"ensemble_weight_{k}", "direction": "up", "contribution_log": v}
-        for k, v in (out["weights"] or {}).items() if v
-    ]
+    # Real per-feature attribution (TreeSHAP / exact linear contributions), not
+    # ensemble weights dressed up as explanations.
+    drivers = [{"feature": d["feature"], "group": d["group"],
+                "direction": d["direction"],
+                "contribution_log": d["contribution_logret"],
+                "feature_value": d.get("feature_value")}
+               for d in (out.get("drivers") or [])]
     row = ModelForecast(
         as_of=as_of, index_code=index_code, horizon_days=horizon_days,
         point=out["point"], lo_80=out["lo_80"], hi_80=out["hi_80"],
-        confidence=out["confidence"], trend=out["trend"],
+        confidence=out["forecast_quality_score"], trend=out["trend"],
         model_name=out["model_name"], model_version=V2_VERSION,
-        validation_mase=out["validation_mase"],
-        interval_coverage_80=None,      # measured per horizon in the v2 interval report
+        validation_mase=(out.get("validation") or {}).get("mase"),
+        interval_coverage_80=(out.get("interval") or {}).get("empirical_coverage_pct"),
         # The artifact's real training cutoff, not today: quoting `as_of` here would
         # imply the model has seen data it has never seen.
         trained_on=(date.fromisoformat(out["trained_through"])
@@ -98,7 +112,12 @@ def _build_v2(db: Session, index_code: str, horizon_days: int,
         drivers_json=json.dumps(drivers),
         created_at=datetime.now(UTC),
     )
-    return _replace(db, row, V2_VERSION)
+    stored = _replace(db, row, V2_VERSION)
+    # Keep the richer v2 payload (attribution, interval coverage, provenance) for
+    # the router. ModelForecast has no columns for it, and adding one per field
+    # would couple the table to the model's internals.
+    _V2_DETAIL[(as_of, index_code, horizon_days)] = out
+    return stored
 
 
 def _replace(db: Session, row: ModelForecast, version: str) -> ModelForecast:

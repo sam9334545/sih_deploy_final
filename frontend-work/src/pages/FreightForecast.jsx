@@ -4,7 +4,7 @@ import HistoricalForecast from './HistoricalForecast';
 import { 
   VESSEL_INDEX_MAP, 
   VALID_HORIZONS, 
-  executeForecast, 
+  executeLiveForecast,
   fetchHistoricalSeries,
   ApiError
 } from '../api';
@@ -32,14 +32,16 @@ export default function FreightForecast() {
     setStatus('loading');
     setErrorMessage(null);
     try {
-      // 1. Call real backend inference endpoint
-      const result = await executeForecast({
-        target: mappedIndex,
-        originDate,
-        horizonSessions: Number(horizon),
-        vesselType: vesselClass,
+      // 1. Canonical live path: /api/v1/forecast -> forecast_service -> forecast_v2
+      const result = await executeLiveForecast({
+        vesselClass,
+        horizonDays: Number(horizon),
       });
       setForecastResult(result);
+      if (result.modelSource !== 'forecast_v2') {
+        // Never let the screen imply the new model produced these numbers.
+        console.warn('[Forecast] served by fallback:', result.fallbackReason);
+      }
 
       // 2. Fetch context history up to origin date from real /historical/series
       try {
@@ -369,7 +371,22 @@ export default function FreightForecast() {
                   <span>Target Index:</span>
                   <strong className="text-govNavy font-mono">{forecastResult.target}</strong>
                 </div>
-                <ProvenanceBadge type="model" text="Quantile LightGBM P50" className="mt-2" />
+                {/* Names the engine that actually answered. A fallback forecast must
+                    never be displayed as if the v2 model produced it. */}
+                <ProvenanceBadge
+                  type="model"
+                  text={
+                    forecastResult.modelSource === 'forecast_v2'
+                      ? `forecast_v2 · ${forecastResult.selectedModel || 'ensemble'}`
+                      : 'FALLBACK MODEL (not forecast_v2)'
+                  }
+                  className="mt-2"
+                />
+                {forecastResult.modelSource !== 'forecast_v2' && (
+                  <p className="mt-1 text-[10px] text-amber-700">
+                    Served by the built-in fallback: {forecastResult.fallbackReason || 'reason not reported'}
+                  </p>
+                )}
               </div>
 
               {/* Conformal Prediction Interval Card */}
@@ -393,7 +410,21 @@ export default function FreightForecast() {
                     ± {forecastResult.conformalQHat ? Math.round(forecastResult.conformalQHat).toLocaleString() : Math.round((forecastResult.p90 - forecastResult.p10) / 2).toLocaleString()} pts
                   </strong>
                 </div>
-                <ProvenanceBadge type="conformal" text="80% Conformal Calibrated" className="mt-2" />
+                <ProvenanceBadge
+                  type="conformal"
+                  text={
+                    forecastResult.empiricalCoverage != null
+                      ? `80% nominal · ${(forecastResult.empiricalCoverage * 100).toFixed(1)}% measured`
+                      : '80% conformal calibrated'
+                  }
+                  className="mt-2"
+                />
+                {forecastResult.empiricalCoverage != null && (
+                  <p className="mt-1 text-[10px] text-slate-500">
+                    Measured coverage is the share of rolling-origin outcomes that fell
+                    inside this band — not an assumption.
+                  </p>
+                )}
               </div>
 
               {/* Validation Actual Observed Card */}
@@ -439,6 +470,24 @@ export default function FreightForecast() {
                     <span className="text-slate-500">Model:</span>
                     <span className="font-semibold text-slate-800 font-mono truncate">{forecastResult.modelName}</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Source:</span>
+                    <span className={`font-semibold font-mono ${
+                      forecastResult.modelSource === 'forecast_v2' ? 'text-emerald-700' : 'text-amber-700'
+                    }`}>{forecastResult.modelSource}</span>
+                  </div>
+                  {forecastResult.validationMase != null && (
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Validation MASE:</span>
+                      <span className="font-mono text-slate-700">{forecastResult.validationMase.toFixed(3)}</span>
+                    </div>
+                  )}
+                  {forecastResult.qualityScore != null && (
+                    <div className="flex justify-between" title={forecastResult.qualityScoreDefinition || ''}>
+                      <span className="text-slate-500">Quality score (heuristic):</span>
+                      <span className="font-mono text-slate-700">{forecastResult.qualityScore.toFixed(2)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span className="text-slate-500">Active Horizon:</span>
                     <span className="font-bold text-slate-800 font-mono">+{forecastResult.horizonSessions} sessions</span>
