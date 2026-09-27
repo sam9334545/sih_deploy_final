@@ -54,6 +54,9 @@ class ForecastResponse(BaseModel):
     model_meta: ModelMeta
     drivers: list[Driver]
     provenance: dict[str, Provenance]
+    # Row counts behind a "mixed" provenance, so a caller can see exactly how much
+    # of the served history is verified and how much is synthetic.
+    provenance_detail: dict[str, dict[str, int]] | None = None
     assumptions: list[str]
     request_id: str
 

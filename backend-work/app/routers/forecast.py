@@ -21,6 +21,17 @@ from app.services.scenario import _weather_fraction
 
 router = APIRouter(prefix="/forecast", tags=["forecast"])
 
+_METHOD = {
+    "v1": ("Built-in fallback: ridge on stationary lag/rolling/momentum/Fourier features, "
+           "selected against a damped-drift baseline by rolling-origin MASE; 80% bands are "
+           "conformal quantiles of the backtest residuals."),
+    "v2": ("ml-work/forecast_v2 ensemble (damped momentum + ridge + LightGBM), weights "
+           "fitted on a chronological validation tail. Scored by expanding-origin "
+           "rolling evaluation on the verified real Baltic record (2012-08 to 2019-07); "
+           "80% bands are conformalized quantile regression with a finite-sample order "
+           "statistic. Significance tested with a moving-block bootstrap."),
+}
+
 
 @router.post("", response_model=ForecastResponse, summary="Freight forecast for a vessel class")
 def post_forecast(req: ForecastRequest, request: Request, db: Session = Depends(get_db)):
@@ -50,8 +61,8 @@ def post_forecast(req: ForecastRequest, request: Request, db: Session = Depends(
                           forecast_service.tc_from_index(db, index_code, fc.hi_80, as_of)]}
 
     usd_t = None
-    provenance = {"index_forecast": "derived", "history": "simulated_demo"
-                  if settings.demo_mode else "measured"}
+    hist_prov, hist_detail = series_repo.history_provenance(db, index_code, as_of)
+    provenance = {"index_forecast": "derived", "history": hist_prov}
 
     if req.route:
         usd_t = _route_rate(db, req, as_of, index_code, fc, tc_point)
@@ -69,12 +80,11 @@ def post_forecast(req: ForecastRequest, request: Request, db: Session = Depends(
             "name": fc.model_name, "version": fc.model_version, "trained_on": fc.trained_on,
             "validation_mase": fc.validation_mase,
             "interval_coverage_80": fc.interval_coverage_80,
-            "method": ("Ridge on log-level lag/rolling/momentum/Fourier features, selected "
-                       "against a damped-drift baseline by rolling-origin MASE; 80% bands are "
-                       "conformal quantiles of the backtest residuals."),
+            "method": _METHOD.get(fc.model_version, _METHOD["v1"]),
         },
         drivers=json.loads(fc.drivers_json or "[]"),
         provenance=provenance,
+        provenance_detail={"history": hist_detail} if hist_detail else None,
         assumptions=[
             "The forecast is an uncertain input to a decision, not a price oracle",
             "TC average $/day is mapped from the index by the observed trailing ratio",

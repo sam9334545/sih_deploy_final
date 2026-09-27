@@ -2,17 +2,22 @@
 from __future__ import annotations
 
 import json
+import logging
 from datetime import UTC, date, datetime
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.models import ModelForecast
 from app.repositories import series as series_repo
-from app.services import forecast_model
+from app.services import forecast_model, forecast_v2_adapter
 from app.services.constants import CLASS_INDEX, HORIZONS
 
-MODEL_VERSION = "v1"
+logger = logging.getLogger(__name__)
+
+MODEL_VERSION = "v1"          # built-in numpy fallback
+V2_VERSION = "v2"             # trained ml-work/forecast_v2 ensemble
 
 
 class NoModelError(Exception):
@@ -35,16 +40,26 @@ def get_or_build(db: Session, index_code: str, horizon_days: int, as_of: date,
         raise NoModelError(f"No trained model for horizon {horizon_days}")
 
     if not refresh:
-        cached = db.execute(
-            select(ModelForecast).where(
-                ModelForecast.as_of == as_of,
-                ModelForecast.index_code == index_code,
-                ModelForecast.horizon_days == horizon_days,
-                ModelForecast.model_version == MODEL_VERSION,
-            )
-        ).scalars().first()
-        if cached:
-            return cached
+        # Prefer a cached v2 row; the fallback's row only wins if v2 never ran.
+        for version in (V2_VERSION, MODEL_VERSION):
+            cached = db.execute(
+                select(ModelForecast).where(
+                    ModelForecast.as_of == as_of,
+                    ModelForecast.index_code == index_code,
+                    ModelForecast.horizon_days == horizon_days,
+                    ModelForecast.model_version == version,
+                )
+            ).scalars().first()
+            if cached:
+                return cached
+
+    if settings.forecast_v2_enabled:
+        try:
+            return _build_v2(db, index_code, horizon_days, as_of)
+        except forecast_v2_adapter.V2Unavailable as e:
+            # Not an error: the service is designed to run without the ML stack.
+            logger.info("forecast_v2 unavailable for %s h=%s (%s); using built-in model",
+                        index_code, horizon_days, e)
 
     dates, values, _tc, t = series_repo.index_history(db, index_code, as_of)
     if len(values) < 300:
@@ -59,11 +74,39 @@ def get_or_build(db: Session, index_code: str, horizon_days: int, as_of: date,
         trained_on=dates[-1], drivers_json=json.dumps(f.drivers),
         created_at=datetime.now(UTC),
     )
+    return _replace(db, row, MODEL_VERSION)
+
+
+def _build_v2(db: Session, index_code: str, horizon_days: int,
+              as_of: date) -> ModelForecast:
+    out = forecast_v2_adapter.forecast(db, index_code, horizon_days, as_of)
+    drivers = [
+        {"feature": f"ensemble_weight_{k}", "direction": "up", "contribution_log": v}
+        for k, v in (out["weights"] or {}).items() if v
+    ]
+    row = ModelForecast(
+        as_of=as_of, index_code=index_code, horizon_days=horizon_days,
+        point=out["point"], lo_80=out["lo_80"], hi_80=out["hi_80"],
+        confidence=out["confidence"], trend=out["trend"],
+        model_name=out["model_name"], model_version=V2_VERSION,
+        validation_mase=out["validation_mase"],
+        interval_coverage_80=None,      # measured per horizon in the v2 interval report
+        # The artifact's real training cutoff, not today: quoting `as_of` here would
+        # imply the model has seen data it has never seen.
+        trained_on=(date.fromisoformat(out["trained_through"])
+                    if out.get("trained_through") else None),
+        drivers_json=json.dumps(drivers),
+        created_at=datetime.now(UTC),
+    )
+    return _replace(db, row, V2_VERSION)
+
+
+def _replace(db: Session, row: ModelForecast, version: str) -> ModelForecast:
     existing = db.execute(
         select(ModelForecast).where(
-            ModelForecast.as_of == as_of, ModelForecast.index_code == index_code,
-            ModelForecast.horizon_days == horizon_days,
-            ModelForecast.model_version == MODEL_VERSION)
+            ModelForecast.as_of == row.as_of, ModelForecast.index_code == row.index_code,
+            ModelForecast.horizon_days == row.horizon_days,
+            ModelForecast.model_version == version)
     ).scalars().first()
     if existing:
         db.delete(existing)

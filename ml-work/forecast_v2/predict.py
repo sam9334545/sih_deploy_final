@@ -83,10 +83,14 @@ def forecast(history: pd.DataFrame, index_code: str, horizon: int,
     lo_lr = min(q[0] - art["q_hat"], q[1])
     hi_lr = max(q[2] + art["q_hat"], q[1])
 
-    point_lv = origin * float(np.exp(point_lr))
-    # The served band must contain the served point, or the card contradicts itself.
-    lo_lr = min(lo_lr, point_lr)
-    hi_lr = max(hi_lr, point_lr)
+    # The served band must contain the served point, or the card contradicts
+    # itself. When the ensemble point falls outside the quantile band, the two
+    # heads genuinely disagree, and that disagreement is extra uncertainty — so
+    # widen past the point by a margin rather than pinning it to the edge, which
+    # would advertise the point as an exact 10th or 90th percentile.
+    margin = 0.10 * max(hi_lr - lo_lr, 1e-4)
+    lo_lr = min(lo_lr, point_lr - margin)
+    hi_lr = max(hi_lr, point_lr + margin)
 
     meta = art["meta"]
     score = meta.get("rolling_origin_score") or {}

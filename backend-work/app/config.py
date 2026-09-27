@@ -44,6 +44,13 @@ class Settings(BaseSettings):
     stranded_parcel_ratio: float = 0.60
     max_classes_in_mix: int = 2
 
+    # forecast_v2: trained artifacts from ml-work. If either path is missing, or the
+    # ML dependencies are absent, the API falls back to the built-in numpy model
+    # rather than failing — the service must start on a bare machine.
+    forecast_v2_root: str = "../ml-work"
+    forecast_v2_artifacts: str = "../ml-work/models/saved_models/v2"
+    forecast_v2_enabled: bool = True
+
     n_simulations_default: int = 1000
     n_simulations_max: int = 5000
     simulation_seed: int = 42

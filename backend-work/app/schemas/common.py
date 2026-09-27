@@ -8,7 +8,8 @@ from pydantic import BaseModel, Field, field_validator
 VesselClassName = Literal["Handysize", "Supramax", "Panamax", "Capesize"]
 CargoType = Literal["thermal_coal", "coking_coal", "iron_ore"]
 Horizon = Literal[7, 14, 28, 60, 90, 180]
-Provenance = Literal["measured", "derived", "estimated", "simulated_demo", "expert_set"]
+Provenance = Literal["measured", "derived", "estimated", "simulated_demo", "expert_set",
+                     "synthetic_postcovid", "mixed", "unknown"]
 
 
 class ErrorEnvelope(BaseModel):
