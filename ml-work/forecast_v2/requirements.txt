@@ -1,0 +1,26 @@
+# Exact versions used to train the committed artifacts in models/saved_models/v2.
+#
+# These are pinned rather than lower-bounded because joblib artifacts embed
+# pickled scikit-learn and LightGBM objects: loading them under a different
+# minor version can warn, silently change behaviour, or fail outright. If you
+# change a pin here, retrain with forecast_v2/train_final.py and commit the new
+# artifacts in the same change.
+#
+# Python 3.13.6  (3.11+ required: the code uses PEP 604 unions and dataclass slots)
+
+numpy==2.5.3
+pandas==3.0.6
+scipy==1.18.1
+scikit-learn==1.9.1
+lightgbm==4.7.0
+statsmodels==0.15.0
+joblib==1.6.0
+
+# transitive, pinned because they affect numerical results or artifact loading
+threadpoolctl==3.7.0
+python-dateutil==2.9.0.post0
+patsy==1.0.3
+
+# tooling
+pytest==9.1.1
+tabulate==0.10.0

@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 
 import numpy as np
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models import CommodityPrice, FreightIndex
@@ -73,3 +73,28 @@ def pct_change(values: np.ndarray, days: int) -> float | None:
     if len(values) <= days:
         return None
     return round(float((values[-1] / values[-1 - days] - 1) * 100), 2)
+
+
+_KNOWN = {"measured", "derived", "estimated", "simulated_demo", "expert_set",
+          "synthetic_postcovid", "mixed", "unknown"}
+
+
+def history_provenance(db: Session, index_code: str, as_of: date) -> tuple[str, dict[str, int]]:
+    """What the served history actually is, rather than what DEMO_MODE assumes.
+
+    A mixed series reports the mix, because a card that says 'measured' over rows
+    that are partly synthetic is the kind of small lie that loses a jury.
+    """
+    rows = db.execute(
+        select(FreightIndex.provenance, func.count())
+        .where(FreightIndex.index_code == index_code, FreightIndex.obs_date <= as_of)
+        .group_by(FreightIndex.provenance)
+    ).all()
+    if not rows:
+        return "unknown", {}
+    tags = {p: int(n) for p, n in rows}
+    if len(tags) == 1:
+        only = next(iter(tags))
+        label = "measured" if only.startswith("verified_real") else only
+        return (label if label in _KNOWN else "unknown"), tags
+    return "mixed", tags

@@ -119,12 +119,59 @@ def load_reference(db) -> dict[str, int]:
     return counts
 
 
+# ml-work panel: real 2012-2019 + regime-anchored synthetic 2019-present.
+ML_PANEL = os.path.abspath(os.path.join(
+    HERE, "..", "..", "ml-work", "data", "processed", "baltic_real_plus_postcovid.csv"))
+
+# Index level → class TC average $/day. A documented linear assumption, not a
+# published series: the panel carries index levels only. Ratios are the ones the
+# Baltic standard vessel descriptions imply for each class.
+TC_FACTOR = {"BCI": 8.29, "BPI": 9.00, "BSI": 11.00, "BHSI": 17.50}
+PANEL_COLS = {"bpi_value": "BPI", "bci_value": "BCI",
+              "bsi_value": "BSI", "bhsi_value": "BHSI"}
+
+
+def load_ml_panel(db) -> int:
+    """Prefer the ml-work panel for the four class indices.
+
+    It carries the verified real record rather than a demo series, and the
+    forecast_v2 models were trained on exactly these rows — so the API serves
+    forecasts built from the same data the reported accuracy was measured on.
+    Each row keeps its own provenance tag, so `verified_real_*` and
+    `synthetic_postcovid` stay distinguishable all the way to the API response.
+    """
+    if not os.path.exists(ML_PANEL):
+        return 0
+    rows = []
+    with open(ML_PANEL, newline="") as f:
+        for r in csv.DictReader(f):
+            for col, code in PANEL_COLS.items():
+                v = _f(r.get(col))
+                if v is None:
+                    continue
+                rows.append(FreightIndex(
+                    obs_date=_d(r["obs_date"]), index_code=code, value=v,
+                    tc_avg_usd_day=round(v * TC_FACTOR[code], 2),
+                    provenance=r.get("provenance_tag", "unknown"),
+                    source_url=("https://doi.org/10.17632/t76ckh2ygg.1"
+                                if r.get("provenance_tag", "").startswith("verified_real")
+                                else "ml-work/forecast_v2/postcovid.py (synthetic)"),
+                    retrieved_at=datetime.now(UTC),
+                ))
+    db.bulk_save_objects(rows)
+    db.commit()
+    return len(rows)
+
+
 def load_series(db) -> dict[str, int]:
+    panel_rows = load_ml_panel(db)
+    skip = set(PANEL_COLS.values()) if panel_rows else set()
+
     db.bulk_save_objects([FreightIndex(
         obs_date=_d(r["obs_date"]), index_code=r["index_code"], value=_f(r["value"]),
         tc_avg_usd_day=_f(r["tc_avg_usd_day"]), provenance="simulated_demo",
         source_url=r["source_url"], retrieved_at=datetime.now(UTC),
-    ) for r in _rows("freight_index.csv", "demo")])
+    ) for r in _rows("freight_index.csv", "demo") if r["index_code"] not in skip])
 
     db.bulk_save_objects([CommodityPrice(
         obs_date=_d(r["obs_date"]), series_code=r["series_code"], value=_f(r["value"]),
@@ -142,6 +189,7 @@ def load_series(db) -> dict[str, int]:
 
     db.commit()
     return {"freight_index": db.query(FreightIndex).count(),
+            "from_ml_panel": panel_rows,
             "commodity_price": db.query(CommodityPrice).count(),
             "port_calls": db.query(PortCall).count()}
 
