@@ -108,14 +108,43 @@ See `reports/v2_synthetic_fidelity.csv` for the full real-vs-synthetic table.
 
 Mean absolute distance from the nominal 80%: **12.7 pp raw → 4.9 pp calibrated**. Crossing rate after sorting is 0 by construction.
 
+## 5b. Post-COVID panel (2019-08 → present)
+
+No free source carries daily BPI/BCI/BSI/BHSI after July 2019 — the Baltic Exchange licenses it, and the one free mirror we found is behind bot detection we will not bypass. So the post-2019 span is synthetic, and built in two separable parts so each can be judged on its own:
+
+- **Dynamics** — volatility, momentum persistence, cross-index correlation — come from the VAR sieve fitted to the real 2012–2019 record.
+- **Macro shape** comes from the regime calendar below, applied as a moving anchor the path reverts toward. Each level is stated as a multiple of that index's own 2012–2019 median, scaled by an index beta (Capesize 1.45, Handysize 0.55) so the classes over- and under-react as they do in reality.
+
+**The calendar is a set of judgement calls informed by public market commentary, not measurements.** The sequence of events is well documented; the daily values are not something we can verify, which is exactly why the table below states multiples rather than index points.
+
+| start      | regime              |   anchor_multiple_of_2012_2019_median |   volatility_multiple | rationale                                                                                                                            |
+|:-----------|:--------------------|--------------------------------------:|----------------------:|:-------------------------------------------------------------------------------------------------------------------------------------|
+| 2019-08-01 | pre_covid_softening |                                  1    |                  1    | Trade-war drag and IMO 2020 scrubber retrofits taking tonnage out of service.                                                        |
+| 2020-01-15 | covid_collapse      |                                  0.42 |                  1.2  | Chinese New Year plus the first COVID wave; dry bulk demand and the index both fell to multi-decade lows in February 2020.           |
+| 2020-06-01 | stimulus_recovery   |                                  0.95 |                  1.1  | Chinese infrastructure stimulus restarts iron ore and coal flows.                                                                    |
+| 2021-01-01 | supply_chain_boom   |                                  1.85 |                  1.15 | Port congestion locks up effective tonnage supply while commodity demand runs hot; dry bulk rates climb through the year.            |
+| 2021-09-01 | boom_peak           |                                  2.8  |                  1.2  | The October 2021 peak — the strongest dry bulk market since 2008, driven by congestion-constrained supply rather than by new demand. |
+| 2021-11-01 | post_peak_unwind    |                                  1.45 |                  1.2  | Chinese steel output curbs and easing congestion release tonnage; the spike reverses far faster than it built.                       |
+| 2022-03-01 | war_dislocation     |                                  1.3  |                  1.15 | Ukraine invasion redraws grain and coal routings; tonne-mile gains partly offset weaker volumes.                                     |
+| 2022-08-01 | demand_fade         |                                  0.85 |                  1.05 | Chinese property weakness and global slowdown pull rates down through H2.                                                            |
+| 2023-01-15 | trough_2023         |                                  0.55 |                  1.1  | February 2023 trough; Capesize earnings fall below operating cost for a period.                                                      |
+| 2023-06-01 | gradual_recovery    |                                  1.05 |                  1.1  | Bauxite and coal volumes recover; Panama Canal drought lengthens voyages.                                                            |
+| 2024-01-01 | red_sea_rerouting   |                                  1.55 |                  1.05 | Red Sea diversions around the Cape absorb tonne-miles and tighten effective supply.                                                  |
+| 2024-10-01 | normalisation       |                                  1.15 |                  1    | Rerouting premium partly priced in; market settles above its pre-COVID mean.                                                         |
+| 2025-06-01 | range_bound         |                                  1.1  |                  1    | No dominant driver; rates range-trade on Chinese demand and fleet growth.                                                            |
+
+Validation across 5 scenarios: worst calendar-tracking correlation 0.985; the Capesize peak lands inside the 2021 boom window in 5/5 of them. Both are asserted in the test suite, because the first working version put that peak in 2024.
+
+This panel is for demonstrating and stress-testing the application on current dates. It is **not** evidence of forecast skill and must never be quoted as such: a model scored on it would be graded against our own assumptions.
+
 ## 6. Data inventory
 
 | provenance_tag                   | min        | max        |   count |
 |:---------------------------------|:-----------|:-----------|--------:|
-| synthetic_bridge                 | 2019-08-01 | 2026-09-15 |    1859 |
+| synthetic_postcovid              | 2019-08-01 | 2026-09-15 |    1859 |
 | verified_real_mendeley_cc_by_4.0 | 2012-08-01 | 2019-07-31 |    1749 |
 
-`baltic_real_plus_bridge.csv` carries a `provenance_tag` on every row. Only `verified_real_*` rows are used for any metric in this report. The bridge exists so the application can run on current dates; it reproduces the market's *dynamics*, not its *history*, and it has never seen COVID or the 2021 spike.
+`baltic_real_plus_postcovid.csv` carries a `provenance_tag` on every row. Only `verified_real_*` rows are used for any metric in this report. The bridge exists so the application can run on current dates. It reproduces the market's *dynamics* from real data and its *shape* from a documented calendar — it is not a record of what the market did.
 
 ## 7. Honest limits
 

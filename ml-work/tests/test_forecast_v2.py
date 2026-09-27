@@ -130,3 +130,54 @@ def test_served_band_contains_served_point(real):
             f = predict.forecast(real, code, h, root=root)
             assert f.lo_80 <= f.point <= f.hi_80, f"{code} h={h}: {f.lo_80} {f.point} {f.hi_80}"
             assert f.lo_80 > 0
+
+
+# ───────────────────────── post-COVID panel ─────────────────────────
+
+def test_postcovid_follows_its_regime_calendar(real):
+    """The panel must actually trace the collapse → boom → trough shape it claims."""
+    from forecast_v2 import postcovid
+    cfg = postcovid.PostCovidConfig(n_scenarios=3)
+    panels = postcovid.generate(real, "2026-09-15", cfg)
+    checks = postcovid.validate(panels, real)
+    assert checks["anchor_tracking_corr"].min() > 0.95
+
+    for p in panels:
+        med = p.groupby("regime", sort=False)["bci_value"].median()
+        # The three facts that define this period, in order.
+        assert med["covid_collapse"] < med["pre_covid_softening"]
+        assert med["boom_peak"] > med["pre_covid_softening"] * 1.5
+        assert med["trough_2023"] < med["boom_peak"] * 0.5
+
+
+def test_postcovid_peak_lands_in_2021(real):
+    from forecast_v2 import postcovid
+    panels = postcovid.generate(real, "2026-09-15",
+                                postcovid.PostCovidConfig(n_scenarios=3))
+    for p in panels:
+        peak = p.loc[p["bci_value"].idxmax(), "obs_date"]
+        assert pd.Timestamp("2021-06-01") <= peak <= pd.Timestamp("2022-01-31"), \
+            f"Capesize peak at {peak.date()}, outside the 2021 boom"
+
+
+def test_postcovid_keeps_real_dynamics(real):
+    """Steering the level path must not destroy the momentum structure."""
+    from forecast_v2 import postcovid
+    panels = postcovid.generate(real, "2026-09-15",
+                                postcovid.PostCovidConfig(n_scenarios=3))
+    rep = synth.fidelity_report(real, panels)
+    assert rep["ac1_return"]["rel_error_pct"].abs().max() < 15
+    assert rep["ac1_abs_return"]["rel_error_pct"].abs().max() < 20
+
+
+def test_postcovid_rows_are_labelled_and_barred_from_scoring(real):
+    from forecast_v2 import postcovid
+    p = postcovid.generate(real, "2021-01-01", postcovid.PostCovidConfig(n_scenarios=1))[0]
+    assert (p["provenance_tag"] == "synthetic_postcovid").all()
+    assert p["obs_date"].min() > real["obs_date"].max()
+    combined = Path(__file__).resolve().parent.parent / \
+        "data/processed/baltic_real_plus_postcovid.csv"
+    if combined.exists():
+        c = pd.read_csv(combined)
+        tags = set(c["provenance_tag"].unique())
+        assert tags == {"verified_real_mendeley_cc_by_4.0", "synthetic_postcovid"}

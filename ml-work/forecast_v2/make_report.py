@@ -149,7 +149,45 @@ def main() -> None:
           f"{gap_cal:.1f} pp calibrated**. Crossing rate after sorting is 0 by construction.")
         A("")
 
-    bridge = Path("data/processed/baltic_real_plus_bridge.csv")
+    pc_cal = _load("v2_postcovid_regime_calendar.csv")
+    pc_val = _load("v2_postcovid_validation.csv")
+    if pc_cal is not None:
+        A("## 5b. Post-COVID panel (2019-08 → present)")
+        A("")
+        A("No free source carries daily BPI/BCI/BSI/BHSI after July 2019 — the Baltic "
+          "Exchange licenses it, and the one free mirror we found is behind bot detection "
+          "we will not bypass. So the post-2019 span is synthetic, and built in two "
+          "separable parts so each can be judged on its own:")
+        A("")
+        A("- **Dynamics** — volatility, momentum persistence, cross-index correlation — "
+          "come from the VAR sieve fitted to the real 2012–2019 record.")
+        A("- **Macro shape** comes from the regime calendar below, applied as a moving "
+          "anchor the path reverts toward. Each level is stated as a multiple of that "
+          "index's own 2012–2019 median, scaled by an index beta (Capesize 1.45, "
+          "Handysize 0.55) so the classes over- and under-react as they do in reality.")
+        A("")
+        A("**The calendar is a set of judgement calls informed by public market "
+          "commentary, not measurements.** The sequence of events is well documented; "
+          "the daily values are not something we can verify, which is exactly why the "
+          "table below states multiples rather than index points.")
+        A("")
+        A(pc_cal[["start", "regime", "anchor_multiple_of_2012_2019_median",
+                  "volatility_multiple", "rationale"]].to_markdown(index=False))
+        A("")
+        if pc_val is not None:
+            bci = pc_val[pc_val["index"] == "bci_value"]
+            A(f"Validation across {pc_val['scenario'].nunique()} scenarios: worst "
+              f"calendar-tracking correlation "
+              f"{pc_val['anchor_tracking_corr'].min():.3f}; the Capesize peak lands inside "
+              f"the 2021 boom window in {len(bci)}/{len(bci)} of them. Both are asserted "
+              "in the test suite, because the first working version put that peak in 2024.")
+            A("")
+        A("This panel is for demonstrating and stress-testing the application on current "
+          "dates. It is **not** evidence of forecast skill and must never be quoted as "
+          "such: a model scored on it would be graded against our own assumptions.")
+        A("")
+
+    bridge = Path("data/processed/baltic_real_plus_postcovid.csv")
     if bridge.exists():
         b = pd.read_csv(bridge)
         counts = b.groupby("provenance_tag")["obs_date"].agg(["min", "max", "count"])
@@ -157,10 +195,11 @@ def main() -> None:
         A("")
         A(counts.to_markdown())
         A("")
-        A("`baltic_real_plus_bridge.csv` carries a `provenance_tag` on every row. Only "
+        A("`baltic_real_plus_postcovid.csv` carries a `provenance_tag` on every row. Only "
           "`verified_real_*` rows are used for any metric in this report. The bridge exists "
-          "so the application can run on current dates; it reproduces the market's *dynamics*, "
-          "not its *history*, and it has never seen COVID or the 2021 spike.")
+          "so the application can run on current dates. It reproduces the market's "
+          "*dynamics* from real data and its *shape* from a documented calendar — it is "
+          "not a record of what the market did.")
         A("")
         A("## 7. Honest limits")
     else:

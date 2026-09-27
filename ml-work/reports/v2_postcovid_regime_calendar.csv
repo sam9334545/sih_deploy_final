@@ -1,0 +1,14 @@
+start,regime,anchor_multiple_of_2012_2019_median,volatility_multiple,rationale
+2019-08-01,pre_covid_softening,1.0,1.0,Trade-war drag and IMO 2020 scrubber retrofits taking tonnage out of service.
+2020-01-15,covid_collapse,0.42,1.2,Chinese New Year plus the first COVID wave; dry bulk demand and the index both fell to multi-decade lows in February 2020.
+2020-06-01,stimulus_recovery,0.95,1.1,Chinese infrastructure stimulus restarts iron ore and coal flows.
+2021-01-01,supply_chain_boom,1.85,1.15,Port congestion locks up effective tonnage supply while commodity demand runs hot; dry bulk rates climb through the year.
+2021-09-01,boom_peak,2.8,1.2,"The October 2021 peak — the strongest dry bulk market since 2008, driven by congestion-constrained supply rather than by new demand."
+2021-11-01,post_peak_unwind,1.45,1.2,Chinese steel output curbs and easing congestion release tonnage; the spike reverses far faster than it built.
+2022-03-01,war_dislocation,1.3,1.15,Ukraine invasion redraws grain and coal routings; tonne-mile gains partly offset weaker volumes.
+2022-08-01,demand_fade,0.85,1.05,Chinese property weakness and global slowdown pull rates down through H2.
+2023-01-15,trough_2023,0.55,1.1,February 2023 trough; Capesize earnings fall below operating cost for a period.
+2023-06-01,gradual_recovery,1.05,1.1,Bauxite and coal volumes recover; Panama Canal drought lengthens voyages.
+2024-01-01,red_sea_rerouting,1.55,1.05,Red Sea diversions around the Cape absorb tonne-miles and tighten effective supply.
+2024-10-01,normalisation,1.15,1.0,Rerouting premium partly priced in; market settles above its pre-COVID mean.
+2025-06-01,range_bound,1.1,1.0,No dominant driver; rates range-trade on Chinese demand and fleet growth.
