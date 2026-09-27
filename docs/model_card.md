@@ -1,6 +1,6 @@
 # Model Card — forecast_v2
 
-Generated 2026-09-28 from the trained artifacts. Model version `v2`, trained 2026-09-27, git `4e4e1f65e5`.
+Generated 2026-09-28 from the trained artifacts. Model version `v2`, trained 2026-09-27, git `372a1e6478`.
 
 ## Purpose
 

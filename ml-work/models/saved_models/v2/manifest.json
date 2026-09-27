@@ -5,7 +5,7 @@
   "horizon_days": 7,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:07+00:00",
+  "trained_at": "2026-09-27T20:07:59+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -17,8 +17,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -50,7 +50,7 @@
    "crossing_rate_pct_before_sort": 0.1,
    "n_origins": 985
   },
-  "artifact_sha256": "3e50ad47b5d5a26828ba5a44bf99b74cdf45abfeb9217b749b8e17a68dcb4c08"
+  "artifact_sha256": "4ab924dc5fff782e7d0f2e9453b028e3db5c7ec584f8b94ac8cc0ad1f696d41a"
  },
  {
   "model_version": "v2",
@@ -58,7 +58,7 @@
   "horizon_days": 14,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:07+00:00",
+  "trained_at": "2026-09-27T20:08:00+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -70,8 +70,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -103,7 +103,7 @@
    "crossing_rate_pct_before_sort": 0.1,
    "n_origins": 978
   },
-  "artifact_sha256": "e3eb634d5e4fae51b365f5df344f67a8eae1e2e68864ab56b63bb0c4a2d8c9ef"
+  "artifact_sha256": "e5c26186c46a365e87c478f5b656ef9ffe5675bae3adc952b4377d2105143b04"
  },
  {
   "model_version": "v2",
@@ -111,7 +111,7 @@
   "horizon_days": 28,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:08+00:00",
+  "trained_at": "2026-09-27T20:08:00+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -123,8 +123,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -156,7 +156,7 @@
    "crossing_rate_pct_before_sort": 1.04,
    "n_origins": 964
   },
-  "artifact_sha256": "eb6469c60ed3bec1cb858250fab31e7a97fa240e724724d7fa6f2ece69d75280"
+  "artifact_sha256": "d6c32f305e8457092b15319068be82210e109a5e8e9af98a11ec3da887c4d840"
  },
  {
   "model_version": "v2",
@@ -164,7 +164,7 @@
   "horizon_days": 60,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:09+00:00",
+  "trained_at": "2026-09-27T20:08:01+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -176,8 +176,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -209,7 +209,7 @@
    "crossing_rate_pct_before_sort": 0.54,
    "n_origins": 932
   },
-  "artifact_sha256": "7c7eea985ba2e457c2fccb05f262e58c0ef4cac40c7bfe262a6b5a787cb2dc68"
+  "artifact_sha256": "aabbcc455388928c3dcbe5fe490f61ee3a9798f83ba90cb8ba0859d566ec891d"
  },
  {
   "model_version": "v2",
@@ -217,7 +217,7 @@
   "horizon_days": 90,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:09+00:00",
+  "trained_at": "2026-09-27T20:08:02+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -229,8 +229,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -262,7 +262,7 @@
    "crossing_rate_pct_before_sort": 2.66,
    "n_origins": 902
   },
-  "artifact_sha256": "c2ec8ecc590c676645cb8b885331c76dc7c30d6f39ff241dbfb14771a759167c"
+  "artifact_sha256": "f1466fece5261ec37f63a50d69d0a0f3fdd55cb9dd0729537395edb482db521f"
  },
  {
   "model_version": "v2",
@@ -270,7 +270,7 @@
   "horizon_days": 180,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:10+00:00",
+  "trained_at": "2026-09-27T20:08:03+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -282,8 +282,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -315,7 +315,7 @@
    "crossing_rate_pct_before_sort": 4.56,
    "n_origins": 812
   },
-  "artifact_sha256": "afc16c1b03ecd4ffaafc8ff961c0e93e660223302f27aee21cd573663b7b761e"
+  "artifact_sha256": "997c1f30e533281ea60177870bbac0e6f9dea04cd6f3e5cf98e1905c9f5a0642"
  },
  {
   "model_version": "v2",
@@ -323,7 +323,7 @@
   "horizon_days": 7,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:11+00:00",
+  "trained_at": "2026-09-27T20:08:03+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -335,8 +335,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -368,7 +368,7 @@
    "crossing_rate_pct_before_sort": 0.0,
    "n_origins": 985
   },
-  "artifact_sha256": "d6a1c127b1a1a7a2d7f4f1899e0328c4a43086e7eda6cc0f7b518a0947004b78"
+  "artifact_sha256": "43b03b49717994a7eb19c7d1c50ad020da77ad5e3299ee6ed14c2dda6828c55e"
  },
  {
   "model_version": "v2",
@@ -376,7 +376,7 @@
   "horizon_days": 14,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:11+00:00",
+  "trained_at": "2026-09-27T20:08:04+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -388,8 +388,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -421,7 +421,7 @@
    "crossing_rate_pct_before_sort": 0.31,
    "n_origins": 978
   },
-  "artifact_sha256": "d370df82511b889139a938581dc30a82074fff87ee9fa10f7a4075c046e7f498"
+  "artifact_sha256": "3fb7f69fc8b4c92a03fcd13495a6e0db176f695a1a121d21e5b2a153e5934941"
  },
  {
   "model_version": "v2",
@@ -429,7 +429,7 @@
   "horizon_days": 28,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:12+00:00",
+  "trained_at": "2026-09-27T20:08:04+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -441,8 +441,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -474,7 +474,7 @@
    "crossing_rate_pct_before_sort": 2.9,
    "n_origins": 964
   },
-  "artifact_sha256": "a6c7d8ec5b7aa950ef9ce74e2485f37ba52f056cf2b44922cad6455896a0cce6"
+  "artifact_sha256": "81c6e53e53faba3b0a84e57e4524df8d0b8c74ef31c0439091e5c9a6ad6ae9c4"
  },
  {
   "model_version": "v2",
@@ -482,7 +482,7 @@
   "horizon_days": 60,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:13+00:00",
+  "trained_at": "2026-09-27T20:08:06+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -494,8 +494,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -527,7 +527,7 @@
    "crossing_rate_pct_before_sort": 4.61,
    "n_origins": 932
   },
-  "artifact_sha256": "241dbd4ddc7736b83655cca96451dc5c212b3913d7ea27eaec62b6ae6bfbe0d2"
+  "artifact_sha256": "b9800b899ec65501b7d20f0a7b53adf1e49205c733c3c0ddaf2afdf6c07a2890"
  },
  {
   "model_version": "v2",
@@ -535,7 +535,7 @@
   "horizon_days": 90,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:14+00:00",
+  "trained_at": "2026-09-27T20:08:07+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -547,8 +547,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -580,7 +580,7 @@
    "crossing_rate_pct_before_sort": 4.66,
    "n_origins": 902
   },
-  "artifact_sha256": "ba030c2b36f0f8c203e77ed133a14f5228c9d387dacac9de2264e0bf666d7e03"
+  "artifact_sha256": "86d9a1228a4ce05f638df114489b8aec9e996aa57541fb9c62a0cdd2ffa783e2"
  },
  {
   "model_version": "v2",
@@ -588,7 +588,7 @@
   "horizon_days": 180,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:14+00:00",
+  "trained_at": "2026-09-27T20:08:07+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -600,8 +600,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -633,7 +633,7 @@
    "crossing_rate_pct_before_sort": 6.28,
    "n_origins": 812
   },
-  "artifact_sha256": "d6bf55a0556e363e668ca656e851ba4f4c562626e8e2fe908e06e373722e9cc1"
+  "artifact_sha256": "f84d017a0497f9922b5373dba1b44bffc5082a55bdf2deb7ee6302a291be1c5f"
  },
  {
   "model_version": "v2",
@@ -641,7 +641,7 @@
   "horizon_days": 7,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:15+00:00",
+  "trained_at": "2026-09-27T20:08:08+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -653,8 +653,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -686,7 +686,7 @@
    "crossing_rate_pct_before_sort": 2.94,
    "n_origins": 985
   },
-  "artifact_sha256": "4194478d281120d45c3b2e0bd5e961b3e6421ad18110685bff734e64961d4d50"
+  "artifact_sha256": "af644f2a9e93e0f8b2893d2681a4729540d82d75197cb4b93c837d56f881853e"
  },
  {
   "model_version": "v2",
@@ -694,7 +694,7 @@
   "horizon_days": 14,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:16+00:00",
+  "trained_at": "2026-09-27T20:08:09+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -706,8 +706,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -739,7 +739,7 @@
    "crossing_rate_pct_before_sort": 0.92,
    "n_origins": 978
   },
-  "artifact_sha256": "55c42c8faabcbbe845c5e533e5a77a1c8403cc90f4c40adf565dbd3f244eafa1"
+  "artifact_sha256": "fdfb1b11d3384273fdb2b16dd3faa3527c9453ba521f3523c71d445627993b09"
  },
  {
   "model_version": "v2",
@@ -747,7 +747,7 @@
   "horizon_days": 28,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:16+00:00",
+  "trained_at": "2026-09-27T20:08:10+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -759,8 +759,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -792,7 +792,7 @@
    "crossing_rate_pct_before_sort": 1.56,
    "n_origins": 964
   },
-  "artifact_sha256": "47d362fb6644583c5fafbd19be09a856c23b8d4cb557626022b62ec1a18b338f"
+  "artifact_sha256": "f4f62ce9726b622307276bd0789b1d56a1f8340211b0ca6184fe7cfc9a0904b0"
  },
  {
   "model_version": "v2",
@@ -800,7 +800,7 @@
   "horizon_days": 60,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:17+00:00",
+  "trained_at": "2026-09-27T20:08:10+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -812,8 +812,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -845,7 +845,7 @@
    "crossing_rate_pct_before_sort": 4.4,
    "n_origins": 932
   },
-  "artifact_sha256": "ca2ec654471b479bedcb3360c82630e019284fe615920f9725e8e7617f78141f"
+  "artifact_sha256": "ca6f059136d2205b7ff2e3879bf54393335fefeb523542d2131dc2f304beadd3"
  },
  {
   "model_version": "v2",
@@ -853,7 +853,7 @@
   "horizon_days": 90,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:18+00:00",
+  "trained_at": "2026-09-27T20:08:11+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -865,8 +865,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -898,7 +898,7 @@
    "crossing_rate_pct_before_sort": 5.65,
    "n_origins": 902
   },
-  "artifact_sha256": "a5859086fdfb416feca16c320cbb9081aa9796f07a09aa4d1b48980ffd17ce78"
+  "artifact_sha256": "748f335c8b1670a2cc5a2697457852f43cc3c231253d7f8113e85d051feca561"
  },
  {
   "model_version": "v2",
@@ -906,7 +906,7 @@
   "horizon_days": 180,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:19+00:00",
+  "trained_at": "2026-09-27T20:08:12+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -918,8 +918,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -951,7 +951,7 @@
    "crossing_rate_pct_before_sort": 10.34,
    "n_origins": 812
   },
-  "artifact_sha256": "c3e5196a98f5254d1bbb9cc32dc49f7fba17843c8f21b1d00d6b0a42bc058a9b"
+  "artifact_sha256": "9478b4df129d254b3e81704418cb8d1a2663ef458c853c560b48e5f447981595"
  },
  {
   "model_version": "v2",
@@ -959,7 +959,7 @@
   "horizon_days": 7,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:20+00:00",
+  "trained_at": "2026-09-27T20:08:13+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -971,8 +971,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -1004,7 +1004,7 @@
    "crossing_rate_pct_before_sort": 1.12,
    "n_origins": 985
   },
-  "artifact_sha256": "5637859c5dd4832e4a55ebf44e4b4f7d78a8c04b2b0a149fc27e785349f5823d"
+  "artifact_sha256": "b2cd4f95ee3718d41b5f2294a52a7e40bc3d9f2bc2f59422481a96bf9ba68a3f"
  },
  {
   "model_version": "v2",
@@ -1012,7 +1012,7 @@
   "horizon_days": 14,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:20+00:00",
+  "trained_at": "2026-09-27T20:08:14+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -1024,8 +1024,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -1057,7 +1057,7 @@
    "crossing_rate_pct_before_sort": 2.97,
    "n_origins": 978
   },
-  "artifact_sha256": "06a03c7f6f3889dfeaa0971f53f7a44840db1f803dd18dff0aa3b33abfc8263d"
+  "artifact_sha256": "9b632d11498948ea8ce07ff4358c4a437a38c6bb503c9d769fcb66d6083f775b"
  },
  {
   "model_version": "v2",
@@ -1065,7 +1065,7 @@
   "horizon_days": 28,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:21+00:00",
+  "trained_at": "2026-09-27T20:08:15+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -1077,8 +1077,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -1110,7 +1110,7 @@
    "crossing_rate_pct_before_sort": 2.49,
    "n_origins": 964
   },
-  "artifact_sha256": "23f6038649f38619696fce3207cf65d3996b7f782df5b2ad2f255defffc87c80"
+  "artifact_sha256": "b83b1e5611c251e557d4745e914e80e8955ae91d890e48d524038e75be5526cd"
  },
  {
   "model_version": "v2",
@@ -1118,7 +1118,7 @@
   "horizon_days": 60,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:22+00:00",
+  "trained_at": "2026-09-27T20:08:16+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -1130,8 +1130,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -1163,7 +1163,7 @@
    "crossing_rate_pct_before_sort": 2.9,
    "n_origins": 932
   },
-  "artifact_sha256": "a13def6941e01211d5740ce1cc48991caa13b38de11dcdbd90ec457105985467"
+  "artifact_sha256": "98df1db67f79333413495d8e4d517fd68adc27f347e316ded3d85a3be0b1f163"
  },
  {
   "model_version": "v2",
@@ -1171,7 +1171,7 @@
   "horizon_days": 90,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:23+00:00",
+  "trained_at": "2026-09-27T20:08:17+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -1183,8 +1183,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -1216,7 +1216,7 @@
    "crossing_rate_pct_before_sort": 4.21,
    "n_origins": 902
   },
-  "artifact_sha256": "c18d025c8ad3dc797eb5fc923de22a229b093611f00aaba540bae951dce80a56"
+  "artifact_sha256": "4c9fb0fd4791710b3f57b7307874e36aa30d48459198d96fa3d3c22dbeb77959"
  },
  {
   "model_version": "v2",
@@ -1224,7 +1224,7 @@
   "horizon_days": 180,
   "selected_model": "ensemble",
   "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
-  "trained_at": "2026-09-27T19:49:24+00:00",
+  "trained_at": "2026-09-27T20:08:18+00:00",
   "trained_through": "2019-07-31",
   "dataset_path": "data/processed/real_baltic_multivariate.csv",
   "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
@@ -1236,8 +1236,8 @@
   "augmentation_used": false,
   "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
-  "git_dirty": true,
+  "git_commit": "372a1e64789c5b2aced2ade7191fb3dd6f97a9b4",
+  "git_dirty": false,
   "environment": {
    "python": "3.13.6",
    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
@@ -1269,6 +1269,6 @@
    "crossing_rate_pct_before_sort": 2.96,
    "n_origins": 812
   },
-  "artifact_sha256": "06cc9823714fa0644b1ec53338e43941a0e75777897e7eb6b1d043f52b6fe8ed"
+  "artifact_sha256": "2672667a6edbf8abebeb987fbe31f17e1e27e38c1b4fce5b47e3ade6cbecdb16"
  }
 ]
