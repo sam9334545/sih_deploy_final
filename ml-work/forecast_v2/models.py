@@ -4,6 +4,7 @@ The rung above is only taken if it beats the rung below on rolling-origin MASE.
 """
 from __future__ import annotations
 
+import inspect
 from dataclasses import dataclass
 
 import numpy as np
@@ -16,6 +17,23 @@ try:
     HAS_LGB = True
 except ImportError:                                   # pragma: no cover
     HAS_LGB = False
+
+if HAS_LGB:
+    # LightGBM renamed the validation arguments: <=4.6 takes `eval_set=[(X, y)]`,
+    # >=4.7 takes `eval_X=` / `eval_y=` and deprecates the old form. Passing the
+    # wrong one is a TypeError, so detect rather than assume — this package has to
+    # train and load artifacts across both.
+    _FIT_PARAMS = set(inspect.signature(lgb.LGBMRegressor.fit).parameters)
+    _USE_EVAL_XY = "eval_X" in _FIT_PARAMS
+else:                                                 # pragma: no cover
+    _USE_EVAL_XY = False
+
+
+def _eval_kwargs(X_val, y_val) -> dict:
+    """Validation arguments in whichever form the installed LightGBM accepts."""
+    if _USE_EVAL_XY:
+        return {"eval_X": X_val, "eval_y": y_val}
+    return {"eval_set": [(X_val, y_val)]}
 
 
 class BaseModel:
@@ -158,7 +176,8 @@ class LgbModel(BaseModel):
             kwargs["alpha"] = self.alpha
         self.m_ = lgb.LGBMRegressor(**kwargs)
         if X_val is not None and len(X_val) > 30:
-            self.m_.fit(X, y, sample_weight=sample_weight, eval_X=X_val, eval_y=y_val,
+            self.m_.fit(X, y, sample_weight=sample_weight,
+                        **_eval_kwargs(X_val, y_val),
                         callbacks=[lgb.early_stopping(60, verbose=False)])
         else:
             self.m_.fit(X, y, sample_weight=sample_weight)

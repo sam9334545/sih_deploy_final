@@ -1,722 +1,1274 @@
 [
  {
+  "model_version": "v2",
   "index_code": "BPI",
   "horizon_days": 7,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.4,
-   "lightgbm": 0.6
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.00093,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:07+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1188,
   "n_calibration": 297,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 5.1183,
    "skill_vs_naive_pct": 13.32,
    "directional_accuracy": 66.67,
-   "bootstrap_p": 0.0
+   "bootstrap_p": 0.0,
+   "n_origins": 985,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:25+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 77.56,
+   "raw_coverage_pct": 73.71,
+   "mean_width_index_points": 323.49,
+   "pinball_logret": 0.029528,
+   "crossing_rate_pct_before_sort": 0.1,
+   "n_origins": 985
+  },
+  "artifact_sha256": "3e50ad47b5d5a26828ba5a44bf99b74cdf45abfeb9217b749b8e17a68dcb4c08"
  },
  {
+  "model_version": "v2",
   "index_code": "BPI",
   "horizon_days": 14,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.4,
-   "lightgbm": 0.6
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.00274,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:07+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1183,
   "n_calibration": 295,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 8.5615,
    "skill_vs_naive_pct": 4.86,
    "directional_accuracy": 55.84,
-   "bootstrap_p": 0.1585
+   "bootstrap_p": 0.1585,
+   "n_origins": 978,
+   "significant_at_05": false,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:27+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 79.86,
+   "raw_coverage_pct": 77.51,
+   "mean_width_index_points": 566.02,
+   "pinball_logret": 0.051112,
+   "crossing_rate_pct_before_sort": 0.1,
+   "n_origins": 978
+  },
+  "artifact_sha256": "e3eb634d5e4fae51b365f5df344f67a8eae1e2e68864ab56b63bb0c4a2d8c9ef"
  },
  {
+  "model_version": "v2",
   "index_code": "BPI",
   "horizon_days": 28,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.7,
-   "lightgbm": 0.3
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.06201,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:08+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1172,
   "n_calibration": 292,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 11.2751,
    "skill_vs_naive_pct": 7.13,
    "directional_accuracy": 51.76,
-   "bootstrap_p": 0.106
+   "bootstrap_p": 0.106,
+   "n_origins": 964,
+   "significant_at_05": false,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:29+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 79.15,
+   "raw_coverage_pct": 77.49,
+   "mean_width_index_points": 783.62,
+   "pinball_logret": 0.07295,
+   "crossing_rate_pct_before_sort": 1.04,
+   "n_origins": 964
+  },
+  "artifact_sha256": "eb6469c60ed3bec1cb858250fab31e7a97fa240e724724d7fa6f2ece69d75280"
  },
  {
+  "model_version": "v2",
   "index_code": "BPI",
   "horizon_days": 60,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.7,
-   "lightgbm": 0.3
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.10744,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:09+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1146,
   "n_calibration": 286,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 12.7101,
    "skill_vs_naive_pct": 15.84,
    "directional_accuracy": 64.59,
-   "bootstrap_p": 0.0025
+   "bootstrap_p": 0.0025,
+   "n_origins": 932,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:30+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 75.11,
+   "raw_coverage_pct": 76.29,
+   "mean_width_index_points": 840.7,
+   "pinball_logret": 0.099318,
+   "crossing_rate_pct_before_sort": 0.54,
+   "n_origins": 932
+  },
+  "artifact_sha256": "7c7eea985ba2e457c2fccb05f262e58c0ef4cac40c7bfe262a6b5a787cb2dc68"
  },
  {
+  "model_version": "v2",
   "index_code": "BPI",
   "horizon_days": 90,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 1.0,
-   "lightgbm": 0.0
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.04388,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:09+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1122,
   "n_calibration": 280,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 13.6323,
    "skill_vs_naive_pct": 17.36,
    "directional_accuracy": 62.15,
-   "bootstrap_p": 0.145
+   "bootstrap_p": 0.145,
+   "n_origins": 902,
+   "significant_at_05": false,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:31+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 74.5,
+   "raw_coverage_pct": 69.29,
+   "mean_width_index_points": 926.56,
+   "pinball_logret": 0.116402,
+   "crossing_rate_pct_before_sort": 2.66,
+   "n_origins": 902
+  },
+  "artifact_sha256": "c2ec8ecc590c676645cb8b885331c76dc7c30d6f39ff241dbfb14771a759167c"
  },
  {
+  "model_version": "v2",
   "index_code": "BPI",
   "horizon_days": 180,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.3,
-   "ridge": 0.7,
-   "lightgbm": 0.0
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.00246,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:10+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1050,
   "n_calibration": 262,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 16.8843,
    "skill_vs_naive_pct": 6.52,
    "directional_accuracy": 60.96,
-   "bootstrap_p": 0.3275
+   "bootstrap_p": 0.3275,
+   "n_origins": 812,
+   "significant_at_05": false,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:33+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 80.67,
+   "raw_coverage_pct": 59.36,
+   "mean_width_index_points": 1228.85,
+   "pinball_logret": 0.137552,
+   "crossing_rate_pct_before_sort": 4.56,
+   "n_origins": 812
+  },
+  "artifact_sha256": "afc16c1b03ecd4ffaafc8ff961c0e93e660223302f27aee21cd573663b7b761e"
  },
  {
+  "model_version": "v2",
   "index_code": "BCI",
   "horizon_days": 7,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.7,
-   "lightgbm": 0.3
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.1336,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:11+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1188,
   "n_calibration": 297,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 3.9002,
    "skill_vs_naive_pct": 8.12,
    "directional_accuracy": 60.57,
-   "bootstrap_p": 0.011
+   "bootstrap_p": 0.011,
+   "n_origins": 985,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:34+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 77.16,
+   "raw_coverage_pct": 71.88,
+   "mean_width_index_points": 1006.12,
+   "pinball_logret": 0.07219,
+   "crossing_rate_pct_before_sort": 0.0,
+   "n_origins": 985
+  },
+  "artifact_sha256": "d6a1c127b1a1a7a2d7f4f1899e0328c4a43086e7eda6cc0f7b518a0947004b78"
  },
  {
+  "model_version": "v2",
   "index_code": "BCI",
   "horizon_days": 14,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.6,
-   "lightgbm": 0.4
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.13331,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:11+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1183,
   "n_calibration": 295,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 5.9276,
    "skill_vs_naive_pct": 11.76,
    "directional_accuracy": 60.96,
-   "bootstrap_p": 0.025
+   "bootstrap_p": 0.025,
+   "n_origins": 978,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:35+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 73.31,
+   "raw_coverage_pct": 70.25,
+   "mean_width_index_points": 1674.14,
+   "pinball_logret": 0.112704,
+   "crossing_rate_pct_before_sort": 0.31,
+   "n_origins": 978
+  },
+  "artifact_sha256": "d370df82511b889139a938581dc30a82074fff87ee9fa10f7a4075c046e7f498"
  },
  {
+  "model_version": "v2",
   "index_code": "BCI",
   "horizon_days": 28,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.2,
-   "lightgbm": 0.8
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.23021,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:12+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1172,
   "n_calibration": 292,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 7.8652,
    "skill_vs_naive_pct": 19.17,
    "directional_accuracy": 69.09,
-   "bootstrap_p": 0.005
+   "bootstrap_p": 0.005,
+   "n_origins": 964,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:36+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 68.88,
+   "raw_coverage_pct": 62.34,
+   "mean_width_index_points": 2380.58,
+   "pinball_logret": 0.167488,
+   "crossing_rate_pct_before_sort": 2.9,
+   "n_origins": 964
+  },
+  "artifact_sha256": "a6c7d8ec5b7aa950ef9ce74e2485f37ba52f056cf2b44922cad6455896a0cce6"
  },
  {
+  "model_version": "v2",
   "index_code": "BCI",
   "horizon_days": 60,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.5,
-   "lightgbm": 0.5
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.47917,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:13+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1146,
   "n_calibration": 286,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 9.3997,
    "skill_vs_naive_pct": 33.16,
    "directional_accuracy": 76.61,
-   "bootstrap_p": 0.0
+   "bootstrap_p": 0.0,
+   "n_origins": 932,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:39+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 68.99,
+   "raw_coverage_pct": 54.18,
+   "mean_width_index_points": 3064.84,
+   "pinball_logret": 0.207357,
+   "crossing_rate_pct_before_sort": 4.61,
+   "n_origins": 932
+  },
+  "artifact_sha256": "241dbd4ddc7736b83655cca96451dc5c212b3913d7ea27eaec62b6ae6bfbe0d2"
  },
  {
+  "model_version": "v2",
   "index_code": "BCI",
   "horizon_days": 90,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.7,
-   "lightgbm": 0.3
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.37086,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:14+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1122,
   "n_calibration": 280,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 9.0345,
    "skill_vs_naive_pct": 38.38,
    "directional_accuracy": 78.82,
-   "bootstrap_p": 0.0
+   "bootstrap_p": 0.0,
+   "n_origins": 902,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:41+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 69.73,
+   "raw_coverage_pct": 55.88,
+   "mean_width_index_points": 3560.93,
+   "pinball_logret": 0.21623,
+   "crossing_rate_pct_before_sort": 4.66,
+   "n_origins": 902
+  },
+  "artifact_sha256": "ba030c2b36f0f8c203e77ed133a14f5228c9d387dacac9de2264e0bf666d7e03"
  },
  {
+  "model_version": "v2",
   "index_code": "BCI",
   "horizon_days": 180,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 1.0,
-   "lightgbm": 0.0
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.28876,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:14+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1050,
   "n_calibration": 262,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 9.5903,
    "skill_vs_naive_pct": 25.24,
    "directional_accuracy": 70.57,
-   "bootstrap_p": 0.025
+   "bootstrap_p": 0.025,
+   "n_origins": 812,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:42+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 73.89,
+   "raw_coverage_pct": 60.59,
+   "mean_width_index_points": 3048.81,
+   "pinball_logret": 0.220966,
+   "crossing_rate_pct_before_sort": 6.28,
+   "n_origins": 812
+  },
+  "artifact_sha256": "d6bf55a0556e363e668ca656e851ba4f4c562626e8e2fe908e06e373722e9cc1"
  },
  {
+  "model_version": "v2",
   "index_code": "BSI",
   "horizon_days": 7,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.9,
-   "lightgbm": 0.1
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.01557,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:15+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1188,
   "n_calibration": 297,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 4.0377,
    "skill_vs_naive_pct": 26.89,
    "directional_accuracy": 74.01,
-   "bootstrap_p": 0.0
+   "bootstrap_p": 0.0,
+   "n_origins": 985,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:44+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 74.11,
+   "raw_coverage_pct": 65.69,
+   "mean_width_index_points": 115.7,
+   "pinball_logret": 0.01659,
+   "crossing_rate_pct_before_sort": 2.94,
+   "n_origins": 985
+  },
+  "artifact_sha256": "4194478d281120d45c3b2e0bd5e961b3e6421ad18110685bff734e64961d4d50"
  },
  {
+  "model_version": "v2",
   "index_code": "BSI",
   "horizon_days": 14,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.6,
-   "lightgbm": 0.4
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.03542,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:16+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1183,
   "n_calibration": 295,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 8.0115,
    "skill_vs_naive_pct": 13.85,
    "directional_accuracy": 69.51,
-   "bootstrap_p": 0.007
+   "bootstrap_p": 0.007,
+   "n_origins": 978,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:45+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 74.85,
+   "raw_coverage_pct": 68.0,
+   "mean_width_index_points": 226.31,
+   "pinball_logret": 0.032142,
+   "crossing_rate_pct_before_sort": 0.92,
+   "n_origins": 978
+  },
+  "artifact_sha256": "55c42c8faabcbbe845c5e533e5a77a1c8403cc90f4c40adf565dbd3f244eafa1"
  },
  {
+  "model_version": "v2",
   "index_code": "BSI",
   "horizon_days": 28,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.8,
-   "lightgbm": 0.2
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.04576,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:16+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1172,
   "n_calibration": 292,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 11.3476,
    "skill_vs_naive_pct": 18.9,
    "directional_accuracy": 71.55,
-   "bootstrap_p": 0.0035
+   "bootstrap_p": 0.0035,
+   "n_origins": 964,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:47+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 71.78,
+   "raw_coverage_pct": 67.12,
+   "mean_width_index_points": 359.98,
+   "pinball_logret": 0.051405,
+   "crossing_rate_pct_before_sort": 1.56,
+   "n_origins": 964
+  },
+  "artifact_sha256": "47d362fb6644583c5fafbd19be09a856c23b8d4cb557626022b62ec1a18b338f"
  },
  {
+  "model_version": "v2",
   "index_code": "BSI",
   "horizon_days": 60,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 1.0,
-   "lightgbm": 0.0
-  },
-  "alpha": 0.2,
-  "q_hat_logret": -0.01519,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:17+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1146,
   "n_calibration": 286,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 14.3628,
    "skill_vs_naive_pct": 22.81,
    "directional_accuracy": 74.22,
-   "bootstrap_p": 0.001
+   "bootstrap_p": 0.001,
+   "n_origins": 932,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:49+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 73.93,
+   "raw_coverage_pct": 74.68,
+   "mean_width_index_points": 507.23,
+   "pinball_logret": 0.071908,
+   "crossing_rate_pct_before_sort": 4.4,
+   "n_origins": 932
+  },
+  "artifact_sha256": "ca2ec654471b479bedcb3360c82630e019284fe615920f9725e8e7617f78141f"
  },
  {
+  "model_version": "v2",
   "index_code": "BSI",
   "horizon_days": 90,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 1.0,
-   "lightgbm": 0.0
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.03698,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:18+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1122,
   "n_calibration": 280,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 15.8274,
    "skill_vs_naive_pct": 24.84,
    "directional_accuracy": 64.92,
-   "bootstrap_p": 0.0315
+   "bootstrap_p": 0.0315,
+   "n_origins": 902,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:51+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 78.16,
+   "raw_coverage_pct": 67.41,
+   "mean_width_index_points": 530.29,
+   "pinball_logret": 0.082349,
+   "crossing_rate_pct_before_sort": 5.65,
+   "n_origins": 902
+  },
+  "artifact_sha256": "a5859086fdfb416feca16c320cbb9081aa9796f07a09aa4d1b48980ffd17ce78"
  },
  {
+  "model_version": "v2",
   "index_code": "BSI",
   "horizon_days": 180,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.7,
-   "lightgbm": 0.3
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.01429,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:19+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1050,
   "n_calibration": 262,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 20.3606,
    "skill_vs_naive_pct": 22.57,
    "directional_accuracy": 60.22,
-   "bootstrap_p": 0.224
+   "bootstrap_p": 0.224,
+   "n_origins": 812,
+   "significant_at_05": false,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:53+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 73.15,
+   "raw_coverage_pct": 56.65,
+   "mean_width_index_points": 662.16,
+   "pinball_logret": 0.111808,
+   "crossing_rate_pct_before_sort": 10.34,
+   "n_origins": 812
+  },
+  "artifact_sha256": "c3e5196a98f5254d1bbb9cc32dc49f7fba17843c8f21b1d00d6b0a42bc058a9b"
  },
  {
+  "model_version": "v2",
   "index_code": "BHSI",
   "horizon_days": 7,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.4,
-   "lightgbm": 0.6
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.00712,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:20+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1188,
   "n_calibration": 297,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 3.8284,
    "skill_vs_naive_pct": 39.03,
    "directional_accuracy": 84.45,
-   "bootstrap_p": 0.0
+   "bootstrap_p": 0.0,
+   "n_origins": 985,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:55+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 77.16,
+   "raw_coverage_pct": 67.11,
+   "mean_width_index_points": 51.02,
+   "pinball_logret": 0.011674,
+   "crossing_rate_pct_before_sort": 1.12,
+   "n_origins": 985
+  },
+  "artifact_sha256": "5637859c5dd4832e4a55ebf44e4b4f7d78a8c04b2b0a149fc27e785349f5823d"
  },
  {
+  "model_version": "v2",
   "index_code": "BHSI",
   "horizon_days": 14,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.6,
-   "lightgbm": 0.4
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.0163,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:20+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1183,
   "n_calibration": 295,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 7.5169,
    "skill_vs_naive_pct": 33.49,
    "directional_accuracy": 79.98,
-   "bootstrap_p": 0.0
+   "bootstrap_p": 0.0,
+   "n_origins": 978,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:57+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 79.45,
+   "raw_coverage_pct": 69.12,
+   "mean_width_index_points": 110.19,
+   "pinball_logret": 0.023966,
+   "crossing_rate_pct_before_sort": 2.97,
+   "n_origins": 978
+  },
+  "artifact_sha256": "06a03c7f6f3889dfeaa0971f53f7a44840db1f803dd18dff0aa3b33abfc8263d"
  },
  {
+  "model_version": "v2",
   "index_code": "BHSI",
   "horizon_days": 28,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.1,
-   "ridge": 0.9,
-   "lightgbm": 0.0
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.04675,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:21+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1172,
   "n_calibration": 292,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 14.0698,
    "skill_vs_naive_pct": 23.04,
    "directional_accuracy": 71.53,
-   "bootstrap_p": 0.0
+   "bootstrap_p": 0.0,
+   "n_origins": 964,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T17:59:59+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 74.59,
+   "raw_coverage_pct": 69.61,
+   "mean_width_index_points": 188.58,
+   "pinball_logret": 0.042794,
+   "crossing_rate_pct_before_sort": 2.49,
+   "n_origins": 964
+  },
+  "artifact_sha256": "23f6038649f38619696fce3207cf65d3996b7f782df5b2ad2f255defffc87c80"
  },
  {
+  "model_version": "v2",
   "index_code": "BHSI",
   "horizon_days": 60,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.3,
-   "lightgbm": 0.7
-  },
-  "alpha": 0.2,
-  "q_hat_logret": -0.06043,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:22+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1146,
   "n_calibration": 286,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 17.3097,
    "skill_vs_naive_pct": 28.94,
    "directional_accuracy": 68.06,
-   "bootstrap_p": 0.0
+   "bootstrap_p": 0.0,
+   "n_origins": 932,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T18:00:01+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 76.61,
+   "raw_coverage_pct": 76.07,
+   "mean_width_index_points": 271.73,
+   "pinball_logret": 0.066398,
+   "crossing_rate_pct_before_sort": 2.9,
+   "n_origins": 932
+  },
+  "artifact_sha256": "a13def6941e01211d5740ce1cc48991caa13b38de11dcdbd90ec457105985467"
  },
  {
+  "model_version": "v2",
   "index_code": "BHSI",
   "horizon_days": 90,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.7,
-   "lightgbm": 0.3
-  },
-  "alpha": 0.2,
-  "q_hat_logret": 0.01429,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:23+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1122,
   "n_calibration": 280,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 21.8173,
    "skill_vs_naive_pct": 21.14,
    "directional_accuracy": 70.94,
-   "bootstrap_p": 0.047
+   "bootstrap_p": 0.047,
+   "n_origins": 902,
+   "significant_at_05": true,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T18:00:03+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 75.94,
+   "raw_coverage_pct": 68.07,
+   "mean_width_index_points": 312.57,
+   "pinball_logret": 0.07495,
+   "crossing_rate_pct_before_sort": 4.21,
+   "n_origins": 902
+  },
+  "artifact_sha256": "c18d025c8ad3dc797eb5fc923de22a229b093611f00aaba540bae951dce80a56"
  },
  {
+  "model_version": "v2",
   "index_code": "BHSI",
   "horizon_days": 180,
-  "model": "ensemble_v2",
-  "members": [
-   "damped_momentum",
-   "ridge",
-   "lightgbm"
-  ],
-  "weights": {
-   "damped_momentum": 0.0,
-   "ridge": 0.5,
-   "lightgbm": 0.5
-  },
-  "alpha": 0.2,
-  "q_hat_logret": -0.02332,
+  "selected_model": "ensemble",
+  "selection_rule": "Lowest rolling-origin MASE among models that beat persistence on MAE. If no model beats persistence, persistence itself is selected and served. Significance (moving-block bootstrap, block = horizon) is recorded but does not gate selection: an insignificant 5% gain is still the better bet, and the p-value travels with the forecast so the caller can judge.",
+  "trained_at": "2026-09-27T19:49:24+00:00",
+  "trained_through": "2019-07-31",
+  "dataset_path": "data/processed/real_baltic_multivariate.csv",
+  "dataset_sha256": "1c392e244def0e19a34861d5f244feff6c33ec27e1875114c6a925756b8ece2f",
+  "dataset_rows": 1749,
+  "feature_spec_sha256": "c4855f5cdd40a4d9986ebcb2f0174e22dd8d3a1cf0f373e8d6d6456de1c802a7",
+  "feature_count": 73,
   "n_train_real": 1050,
   "n_calibration": 262,
-  "augmented": false,
-  "trained_on": "2019-07-31",
+  "augmentation_used": false,
+  "augmentation_source": null,
   "data_provenance": "verified_real_mendeley_cc_by_4.0",
-  "feature_count": 73,
-  "rolling_origin_score": {
+  "git_commit": "4e4e1f65e55d761b09450283820338ab7ee2d845",
+  "git_dirty": true,
+  "environment": {
+   "python": "3.13.6",
+   "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+   "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+   }
+  },
+  "validation": {
    "mase": 26.9458,
    "skill_vs_naive_pct": 21.27,
    "directional_accuracy": 63.5,
-   "bootstrap_p": 0.2165
+   "bootstrap_p": 0.2165,
+   "n_origins": 812,
+   "significant_at_05": false,
+   "beat_persistence": true
   },
-  "built_at": "2026-09-27T18:00:04+00:00"
+  "interval": {
+   "nominal_coverage_pct": 80.0,
+   "empirical_coverage_pct": 75.0,
+   "raw_coverage_pct": 57.88,
+   "mean_width_index_points": 375.39,
+   "pinball_logret": 0.10829,
+   "crossing_rate_pct_before_sort": 2.96,
+   "n_origins": 812
+  },
+  "artifact_sha256": "06cc9823714fa0644b1ec53338e43941a0e75777897e7eb6b1d043f52b6fe8ed"
  }
 ]
