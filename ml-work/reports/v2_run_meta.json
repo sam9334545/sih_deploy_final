@@ -1,0 +1,7 @@
+{
+ "runtime_s": 22.7,
+ "min_train": 500,
+ "step": 21,
+ "augmented": false,
+ "n_rows": 6
+}

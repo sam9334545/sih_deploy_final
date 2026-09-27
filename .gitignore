@@ -38,3 +38,9 @@ node_modules/
 dist/
 .vite/
 
+
+# forecast_v2 local environment
+.venv-ml/
+# regenerable synthetic artefacts (build_synthetic.py rebuilds in ~60s)
+ml-work/data/synthetic/augmentation.npz
+ml-work/data/synthetic/panels.csv

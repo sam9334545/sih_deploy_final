@@ -1,0 +1,3 @@
+target,horizon,raw_coverage_pct,calibrated_coverage_pct,target_coverage_pct,raw_mean_width,calibrated_mean_width,pinball,crossing_rate_pct,q_hat_logret,n
+BPI,7,73.71,77.56,80.0,303.51,323.49,0.029528,0.1,0.00946,985
+BPI,28,77.49,79.15,80.0,744.17,783.62,0.07295,1.04,0.02074,964
