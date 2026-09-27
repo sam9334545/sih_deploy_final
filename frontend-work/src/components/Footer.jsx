@@ -34,31 +34,41 @@ export default function Footer({ onNavigate }) {
 
         {/* Footer Nav 1: Platform */}
         <div>
-          <h3 className="text-white font-bold text-xs mb-2">Platform</h3>
+          <h3 className="text-white font-bold text-xs mb-2">Primary Workflows</h3>
           <ul className="space-y-1.5 text-slate-400 text-[10px]">
             <li>
-              <button onClick={() => onNavigate('market')} className="hover:text-white transition text-left">
-                Market Intelligence
+              <button onClick={() => onNavigate('dashboard')} className="hover:text-white transition text-left cursor-pointer">
+                Executive Dashboard
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate('forecast')} className="hover:text-white transition text-left">
-                Forecasting Engine
+              <button onClick={() => onNavigate('planner')} className="hover:text-white transition text-left cursor-pointer">
+                Charter Planner
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate('routes')} className="hover:text-white transition text-left">
-                Route Analysis
+              <button onClick={() => onNavigate('forecast')} className="hover:text-white transition text-left cursor-pointer">
+                Freight Forecast
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate('optimizer')} className="hover:text-white transition text-left">
-                Charter Optimization
-              </button>
-            </li>
-            <li>
-              <button onClick={() => onNavigate('ports')} className="hover:text-white transition text-left">
+              <button onClick={() => onNavigate('ports')} className="hover:text-white transition text-left cursor-pointer">
                 Port Intelligence
+              </button>
+            </li>
+            <li>
+              <button onClick={() => onNavigate('vessels')} className="hover:text-white transition text-left cursor-pointer">
+                Vessel Optimizer
+              </button>
+            </li>
+            <li>
+              <button onClick={() => onNavigate('simulator')} className="hover:text-white transition text-left cursor-pointer">
+                Strategy Simulator
+              </button>
+            </li>
+            <li>
+              <button onClick={() => onNavigate('risks')} className="hover:text-white transition text-left cursor-pointer">
+                Risk &amp; Alerts
               </button>
             </li>
           </ul>

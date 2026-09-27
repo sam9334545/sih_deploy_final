@@ -9,18 +9,24 @@ export default function MainHeader({ onNavigate, currentTab }) {
     const term = searchTerm.toLowerCase();
     if (term.includes('port') || term.includes('paradip') || term.includes('vizag') || term.includes('haldia')) {
       onNavigate('ports');
+    } else if (term.includes('vessel') || term.includes('capesize') || term.includes('panamax') || term.includes('supramax')) {
+      onNavigate('vessels');
+    } else if (term.includes('simulat') || term.includes('monte') || term.includes('twin')) {
+      onNavigate('simulator');
+    } else if (term.includes('risk') || term.includes('alert')) {
+      onNavigate('risks');
     } else if (term.includes('route') || term.includes('voyage') || term.includes('australia')) {
       onNavigate('routes');
-    } else if (term.includes('charter') || term.includes('optimi') || term.includes('strategy')) {
-      onNavigate('optimizer');
+    } else if (term.includes('charter') || term.includes('plan') || term.includes('optimi')) {
+      onNavigate('planner');
     } else if (term.includes('forecast') || term.includes('bpi') || term.includes('bci') || term.includes('predict')) {
       onNavigate('forecast');
-    } else if (term.includes('market') || term.includes('index') || term.includes('baltic')) {
+    } else if (term.includes('market') || term.includes('index') || term.includes('baltic') || term.includes('ballast')) {
       onNavigate('market');
     } else if (term.includes('data') || term.includes('provenance') || term.includes('method')) {
       onNavigate('methodology');
     } else {
-      onNavigate('market');
+      onNavigate('dashboard');
     }
   };
 
@@ -29,7 +35,7 @@ export default function MainHeader({ onNavigate, currentTab }) {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Brand & Project Identity */}
         <div 
-          onClick={() => onNavigate('home')} 
+          onClick={() => onNavigate('dashboard')} 
           className="flex items-center space-x-3.5 cursor-pointer select-none"
         >
           {/* Marine Ship's Wheel Institutional Icon */}

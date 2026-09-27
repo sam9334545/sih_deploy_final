@@ -16,6 +16,7 @@ const VESSEL_SPECS = {
 };
 
 export default function RouteAnalysis() {
+  const [routesList, setRoutesList] = useState(CANONICAL_ROUTES);
   const [selectedRouteId, setSelectedRouteId] = useState(CANONICAL_ROUTES[0].id);
   const [vesselClass, setVesselClass] = useState('Panamax');
   const [cargoQty, setCargoQty] = useState(75000);
@@ -27,7 +28,28 @@ export default function RouteAnalysis() {
   const [estimateResult, setEstimateResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const selectedRoute = CANONICAL_ROUTES.find(r => r.id === selectedRouteId) || CANONICAL_ROUTES[0];
+  useEffect(() => {
+    async function loadRoutes() {
+      try {
+        const routes = await fetchRoutesList();
+        if (routes && routes.length > 0) {
+          setRoutesList(routes.map(r => ({
+            id: r.route_id,
+            name: `${r.origin_port_name || r.origin_port} → ${r.destination_port_name || r.destination_port}`,
+            originPort: r.origin_port,
+            destPort: r.destination_port,
+            dist: r.distance_nm,
+            cargo: 'coking_coal'
+          })));
+        }
+      } catch (err) {
+        console.warn('Backend routes load notice, using canonical routes:', err);
+      }
+    }
+    loadRoutes();
+  }, []);
+
+  const selectedRoute = routesList.find(r => r.id === selectedRouteId) || routesList[0] || CANONICAL_ROUTES[0];
   const vesselSpec = VESSEL_SPECS[vesselClass] || VESSEL_SPECS.Panamax;
   const mappedTarget = VESSEL_INDEX_MAP[vesselClass]?.index || 'BPI';
 
@@ -106,9 +128,9 @@ export default function RouteAnalysis() {
               onChange={(e) => setSelectedRouteId(e.target.value)}
               className="w-full text-xs py-1.5 px-2 bg-slate-50 border border-slate-300 rounded focus:border-govBlueAccent focus:outline-none cursor-pointer"
             >
-              {CANONICAL_ROUTES.map(r => (
+              {routesList.map(r => (
                 <option key={r.id} value={r.id}>
-                  {r.name} • {r.dist.toLocaleString()} nm
+                  {r.name} • {r.dist ? r.dist.toLocaleString() : '—'} nm
                 </option>
               ))}
             </select>

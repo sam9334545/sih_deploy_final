@@ -12,9 +12,11 @@ from app.models import Port
 from app.services.constants import VESSEL_CLASSES
 
 
-def resolve_as_of(requested: date | None) -> date:
+def resolve_as_of(requested: date | str | None) -> date:
     """DEMO_AS_OF freezes the clock so a demo is reproducible; otherwise today."""
     if requested:
+        if isinstance(requested, str):
+            return date.fromisoformat(requested)
         return requested
     return settings.demo_as_of if settings.demo_mode else date.today()
 

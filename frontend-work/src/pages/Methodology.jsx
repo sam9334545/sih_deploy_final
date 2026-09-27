@@ -35,15 +35,15 @@ export default function Methodology() {
           </div>
           <div className="text-[11px] leading-relaxed">
             <strong className="text-govNavy font-bold block text-xs">
-              Current Market Data Status: Historical Development Mode Active
+              Forecast Environment: Verified Historical (2012–2019) + Synthetic Extension (2020–2026)
             </strong>
             <p className="text-slate-700 mt-0.5">
-              Current-market forecasting is temporarily disabled because the verified Baltic Exchange historical observation record ends on <strong>31 July 2019</strong>. To preserve total mathematical integrity and prevent fabricated values, live forecasts require authorized post-2019 Baltic Exchange feed credentials. The post-2019 validation and ingestion framework is implemented and standing by in <code className="font-mono bg-white px-1 py-0.5 rounded border border-blue-200">ml-work/pipeline/validate_extended_data.py</code>.
+              The model is trained and conformal-calibrated on verified historical Baltic Exchange observations (2012–2019, Mendeley Data). To support 2026 forecasting experiments and multi-voyage simulation without fabricating real observations, the system incorporates the project's calibrated post-2019 synthetic extension pipeline. Real observed and synthetic data are strictly segregated and badged across all surfaces.
             </p>
           </div>
         </div>
         <span className="text-[10px] font-bold text-govBlueAccent bg-white px-2 py-1 rounded border border-blue-200 whitespace-nowrap">
-          Readiness Phase 7B Ready
+          2026 Forecasting Active
         </span>
       </div>
 
