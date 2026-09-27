@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from datetime import date
 from functools import lru_cache
+from pathlib import Path
+
+# backend-work/app/config.py -> backend-work -> repository root
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 from pathlib import Path
 from pydantic import Field
@@ -47,8 +51,12 @@ class Settings(BaseSettings):
     # forecast_v2: trained artifacts from ml-work. If either path is missing, or the
     # ML dependencies are absent, the API falls back to the built-in numpy model
     # rather than failing — the service must start on a bare machine.
-    forecast_v2_root: str = "../ml-work"
-    forecast_v2_artifacts: str = "../ml-work/models/saved_models/v2"
+    #
+    # Defaults are anchored to this package's location, not the process working
+    # directory: a cwd-relative default made v2 silently unavailable whenever the
+    # suite was run from the repository root instead of backend-work/.
+    forecast_v2_root: str = str(_REPO_ROOT / "ml-work")
+    forecast_v2_artifacts: str = str(_REPO_ROOT / "ml-work" / "models" / "saved_models" / "v2")
     forecast_v2_enabled: bool = True
 
     n_simulations_default: int = 1000

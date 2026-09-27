@@ -121,7 +121,7 @@ def supervised(df: pd.DataFrame, target_col: str, horizon: int,
     n = len(df)
     tgt_ret = np.full(n, np.nan)
     tgt_level = np.full(n, np.nan)
-    tgt_date = np.full(n, np.datetime64("NaT"), dtype="datetime64[ns]")
+    tgt_date = np.full(n, np.datetime64("NaT", "ns"), dtype="datetime64[ns]")
     idx = np.arange(n - horizon)
     tgt_ret[idx] = y[idx + horizon] - y[idx]
     tgt_level[idx] = level[idx + horizon]
