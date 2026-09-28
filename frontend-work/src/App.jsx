@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LanguageProvider } from './context/LanguageContext';
 import TopUtilityBar from './components/TopUtilityBar';
 import MainHeader from './components/MainHeader';
 import Navbar from './components/Navbar';
@@ -56,9 +57,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-portalBg text-slate-800 font-sans text-xs antialiased">
-      {/* 1. Official Government Header Bar */}
-      <TopUtilityBar />
+    <LanguageProvider>
+      <div className="min-h-screen flex flex-col bg-portalBg text-slate-800 font-sans text-xs antialiased">
+        {/* 1. Official Government Header Bar */}
+        <TopUtilityBar />
 
       {/* 2. Main Institutional Brand Header */}
       <MainHeader currentTab={activeTab} onNavigate={handleNavigate} />
@@ -106,8 +108,9 @@ export default function App() {
         )}
       </main>
 
-      {/* 5. Institutional Footer */}
-      <Footer onNavigate={handleNavigate} />
-    </div>
+        {/* 5. Institutional Footer */}
+        <Footer onNavigate={handleNavigate} />
+      </div>
+    </LanguageProvider>
   );
 }
