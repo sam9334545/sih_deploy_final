@@ -18,8 +18,11 @@ import ProvenanceBadge from '../components/ProvenanceBadge';
 import DataCutoffNotice from '../components/DataCutoffNotice';
 import DecisionWorkflowBanner from '../components/DecisionWorkflowBanner';
 import { fetchMarketData, fetchRisks, executeLiveForecast, ApiError } from '../api';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Dashboard({ onNavigate }) {
+  const { lang } = useLanguage();
+  const isHi = lang === 'hi';
   const [marketData, setMarketData] = useState(null);
   const [riskData, setRiskData] = useState(null);
   const [forecastSnapshot, setForecastSnapshot] = useState(null);
@@ -78,14 +81,16 @@ export default function Dashboard({ onNavigate }) {
           <div className="flex items-center space-x-2">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
             <h1 className="text-lg font-bold text-govNavy font-serif tracking-tight">
-              Executive Chartering &amp; Maritime Freight Dashboard
+              {isHi ? 'कार्यकारी चार्टरिंग एवं समुद्री भाड़ा डैशबोर्ड' : 'Executive Chartering & Maritime Freight Dashboard'}
             </h1>
             <span className="bg-blue-100 text-govBlueAccent font-semibold px-2 py-0.5 rounded text-[10px] border border-blue-200">
-              Decision Support
+              {isHi ? 'निर्णय समर्थन' : 'Decision Support'}
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-            Dry bulk freight forecasting, market opportunity scoring, and constrained charter decision optimization for East Coast India terminals.
+            {isHi 
+              ? 'भारत के पूर्वी तट टर्मिनलों हेतु ड्राई बल्क भाड़ा पूर्वानुमान, बाजार अवसर स्कोरिंग और अनुकूलित चार्टर निर्णय प्रणाली।'
+              : 'Dry bulk freight forecasting, market opportunity scoring, and constrained charter decision optimization for East Coast India terminals.'}
           </p>
         </div>
 
@@ -93,7 +98,7 @@ export default function Dashboard({ onNavigate }) {
           <button
             onClick={() => loadDashboardData()}
             className="p-2 border border-slate-300 rounded text-slate-600 hover:bg-slate-50 transition cursor-pointer"
-            title="Refresh dashboard from backend"
+            title={isHi ? 'डैशबोर्ड डेटा रीफ्रेश करें' : 'Refresh dashboard from backend'}
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -102,7 +107,7 @@ export default function Dashboard({ onNavigate }) {
             onClick={() => onNavigate('planner')}
             className="flex-1 md:flex-none px-4 py-2.5 bg-govNavy text-white hover:bg-govNavyLight transition rounded-md font-semibold text-xs flex items-center justify-center space-x-2 shadow-sm cursor-pointer"
           >
-            <span>Plan a Charter</span>
+            <span>{isHi ? 'चार्टर योजना बनाएं' : 'Plan a Charter'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -114,7 +119,9 @@ export default function Dashboard({ onNavigate }) {
       {error && (
         <div className="bg-rose-50 border border-rose-200 rounded p-3 text-xs text-rose-800 flex items-center justify-between">
           <span>{error}</span>
-          <button onClick={() => loadDashboardData()} className="underline font-bold">Retry</button>
+          <button onClick={() => loadDashboardData()} className="underline font-bold">
+            {isHi ? 'पुनः प्रयास करें' : 'Retry'}
+          </button>
         </div>
       )}
 
@@ -126,10 +133,12 @@ export default function Dashboard({ onNavigate }) {
             <div className="flex justify-between items-start border-b border-slate-100 pb-2">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  Charter Opportunity Score (COS)
+                  {isHi ? 'चार्टर अवसर स्कोर (COS)' : 'Charter Opportunity Score (COS)'}
                 </span>
                 <div className="flex items-center space-x-2 mt-0.5">
-                  <h3 className="text-base font-bold text-govNavy">{selectedClass} Fleet Signal</h3>
+                  <h3 className="text-base font-bold text-govNavy">
+                    {selectedClass} {isHi ? 'बेड़ा संकेत' : 'Fleet Signal'}
+                  </h3>
                   <select
                     value={selectedClass}
                     onChange={(e) => setSelectedClass(e.target.value)}
@@ -142,7 +151,7 @@ export default function Dashboard({ onNavigate }) {
                   </select>
                 </div>
               </div>
-              <ProvenanceBadge type="DERIVED" text="Score: 0–100" />
+              <ProvenanceBadge type="DERIVED" text={isHi ? 'स्कोर: 0–100' : 'Score: 0–100'} />
             </div>
 
             {/* Score Display */}
@@ -177,29 +186,33 @@ export default function Dashboard({ onNavigate }) {
                   <span className={`w-2 h-2 rounded-full ${cosScore != null ? (cosScore >= 70 ? 'bg-emerald-500' : 'bg-amber-500') : 'bg-slate-400'}`} />
                   <span className="font-bold text-slate-800">
                     {cosScore != null
-                      ? (cosScore >= 70 ? 'Favorable Window (Fix Now)' : 'Neutral Market Window')
-                      : 'Market Score Pending'}
+                      ? (cosScore >= 70 
+                          ? (isHi ? 'अनुकूल समय (अभी अनुबंध करें)' : 'Favorable Window (Fix Now)') 
+                          : (isHi ? 'तटस्थ बाजार खिड़की' : 'Neutral Market Window'))
+                      : (isHi ? 'बाजार स्कोर प्रतीक्षारत' : 'Market Score Pending')}
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 leading-tight">
-                  Committing today provides a favorable landed cost percentile vs forward 28-day drift.
+                  {isHi 
+                    ? 'आज अनुबंध करने पर आगामी 28 दिनों की संभावित वृद्धि की तुलना में अनुकूल लैंडेड लागत प्राप्त होती है।'
+                    : 'Committing today provides a favorable landed cost percentile vs forward 28-day drift.'}
                 </p>
                 <div className="flex items-center gap-2 pt-1 text-[10px] text-slate-600">
-                  <span>Fleet Supply: <strong>{availability?.signal || 'NORMAL'}</strong></span>
+                  <span>{isHi ? 'बेड़ा आपूर्ति:' : 'Fleet Supply:'} <strong>{availability?.signal || 'NORMAL'}</strong></span>
                   <span>•</span>
-                  <span>Trend: <strong className="capitalize">{oppTrend}</strong></span>
+                  <span>{isHi ? 'प्रवृत्ति:' : 'Trend:'} <strong className="capitalize">{oppTrend}</strong></span>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="pt-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-500">
-            <span>As of: {marketData?.as_of || '2026-09-15'}</span>
+            <span>{isHi ? 'तिथि:' : 'As of:'} {marketData?.as_of || '2026-09-15'}</span>
             <button
               onClick={() => onNavigate('planner')}
               className="text-govBlueAccent hover:underline font-semibold flex items-center space-x-1 cursor-pointer"
             >
-              <span>Test requirement COS</span>
+              <span>{isHi ? 'चार्टर आवश्यकता पर परीक्षण करें' : 'Test requirement COS'}</span>
               <ArrowRight className="w-3 h-3" />
             </button>
           </div>
@@ -211,13 +224,15 @@ export default function Dashboard({ onNavigate }) {
             <div className="flex justify-between items-start border-b border-slate-100 pb-2">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  Forward Freight Outlook (28-Day Horizon)
+                  {isHi ? 'अग्रिम भाड़ा परिदृश्य (28-दिवसीय क्षितिज)' : 'Forward Freight Outlook (28-Day Horizon)'}
                 </span>
                 <h3 className="text-base font-bold text-govNavy">
-                  {forecastSnapshot ? `${forecastSnapshot.target} Forecast: ${Math.round(forecastSnapshot.p50).toLocaleString()} pts` : 'Loading forecast...'}
+                  {forecastSnapshot 
+                    ? `${forecastSnapshot.target} ${isHi ? 'पूर्वानुमान:' : 'Forecast:'} ${Math.round(forecastSnapshot.p50).toLocaleString()} ${isHi ? 'अंक' : 'pts'}` 
+                    : (isHi ? 'पूर्वानुमान लोड हो रहा है...' : 'Loading forecast...')}
                 </h3>
               </div>
-              <ProvenanceBadge type="FORECAST" text="Conformal 80%" />
+              <ProvenanceBadge type="FORECAST" text={isHi ? '80% कॉन्फ़ॉर्मल' : 'Conformal 80%'} />
             </div>
 
             {/* Forecast Numbers Grid */}
@@ -225,19 +240,25 @@ export default function Dashboard({ onNavigate }) {
               <div className="my-3 space-y-2">
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="p-2 bg-slate-50 rounded border border-slate-200">
-                    <span className="text-[10px] text-slate-500 block">P10 Optimistic</span>
+                    <span className="text-[10px] text-slate-500 block">
+                      {isHi ? 'P10 आशावादी' : 'P10 Optimistic'}
+                    </span>
                     <strong className="text-xs font-mono text-emerald-700">
                       {Math.round(forecastSnapshot.p10).toLocaleString()}
                     </strong>
                   </div>
                   <div className="p-2 bg-blue-50/60 rounded border border-blue-200">
-                    <span className="text-[10px] text-govBlueAccent font-semibold block">P50 Median</span>
+                    <span className="text-[10px] text-govBlueAccent font-semibold block">
+                      {isHi ? 'P50 मध्यमान' : 'P50 Median'}
+                    </span>
                     <strong className="text-xs font-mono text-govNavy">
                       {Math.round(forecastSnapshot.p50).toLocaleString()}
                     </strong>
                   </div>
                   <div className="p-2 bg-slate-50 rounded border border-slate-200">
-                    <span className="text-[10px] text-slate-500 block">P90 Pessimistic</span>
+                    <span className="text-[10px] text-slate-500 block">
+                      {isHi ? 'P90 निराशावादी' : 'P90 Pessimistic'}
+                    </span>
                     <strong className="text-xs font-mono text-rose-700">
                       {Math.round(forecastSnapshot.p90).toLocaleString()}
                     </strong>
@@ -256,17 +277,19 @@ export default function Dashboard({ onNavigate }) {
                 </div>
               </div>
             ) : (
-              <div className="py-6 text-center text-xs text-slate-400">Loading model snapshot...</div>
+              <div className="py-6 text-center text-xs text-slate-400">
+                {isHi ? 'मॉडल स्नैपशॉट लोड हो रहा है...' : 'Loading model snapshot...'}
+              </div>
             )}
           </div>
 
           <div className="pt-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-500">
-            <span>Model: {forecastSnapshot?.modelName || 'Quantile LightGBM'}</span>
+            <span>{isHi ? 'मॉडल:' : 'Model:'} {forecastSnapshot?.modelName || 'Quantile LightGBM'}</span>
             <button
               onClick={() => onNavigate('forecast')}
               className="text-govBlueAccent hover:underline font-semibold flex items-center space-x-1 cursor-pointer"
             >
-              <span>Explore full forecast curve</span>
+              <span>{isHi ? 'संपूर्ण पूर्वानुमान वक्र देखें' : 'Explore full forecast curve'}</span>
               <ArrowRight className="w-3 h-3" />
             </button>
           </div>
@@ -278,45 +301,55 @@ export default function Dashboard({ onNavigate }) {
             <div className="flex justify-between items-start border-b border-slate-100 pb-2">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  Voyage Risk Assessment
+                  {isHi ? 'यात्रा जोखिम मूल्यांकन' : 'Voyage Risk Assessment'}
                 </span>
-                <h3 className="text-base font-bold text-govNavy">East Coast Terminals</h3>
+                <h3 className="text-base font-bold text-govNavy">
+                  {isHi ? 'पूर्वी तट टर्मिनल' : 'East Coast Terminals'}
+                </h3>
               </div>
-              <ProvenanceBadge type="DERIVED" text="Perturbation Score" />
+              <ProvenanceBadge type="DERIVED" text={isHi ? 'संवेदनशीलता स्कोर' : 'Perturbation Score'} />
             </div>
 
             <div className="my-3 space-y-2 text-xs">
               <div className="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
-                <span className="text-slate-600">Overall Level</span>
+                <span className="text-slate-600">{isHi ? 'समग्र जोखिम स्तर' : 'Overall Level'}</span>
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                   riskData?.overall === 'HIGH' ? 'bg-rose-100 text-rose-800' :
                   riskData?.overall === 'MEDIUM' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
                 }`}>
-                  {riskData?.overall || 'MEDIUM'}
+                  {isHi 
+                    ? (riskData?.overall === 'HIGH' ? 'उच्च (HIGH)' : riskData?.overall === 'LOW' ? 'निम्न (LOW)' : 'मध्यम (MEDIUM)') 
+                    : (riskData?.overall || 'MEDIUM')}
                 </span>
               </div>
 
               <div className="text-[11px] text-slate-600 leading-snug">
-                <strong>Primary Driver: </strong>
-                <span>{riskData?.main_driver || 'Market rate volatility and seasonal monsoon waiting queues.'}</span>
+                <strong>{isHi ? 'प्रमुख चालक कारक: ' : 'Primary Driver: '}</strong>
+                <span>
+                  {riskData?.main_driver 
+                    ? (isHi ? 'बाजार दर में अस्थिरता एवं मौसमी मानसून प्रतीक्षा कतारें।' : riskData.main_driver)
+                    : (isHi ? 'बाजार दर में अस्थिरता एवं मौसमी मानसून प्रतीक्षा कतारें।' : 'Market rate volatility and seasonal monsoon waiting queues.')}
+                </span>
               </div>
 
               {riskData?.alerts && riskData.alerts.length > 0 && (
                 <div className="p-2 bg-amber-50 rounded border border-amber-200 text-[10px] text-amber-900 flex items-start space-x-1.5">
                   <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 text-amber-600 mt-0.5" />
-                  <span>{riskData.alerts[0].message || 'Congestion queue detected at Paradip CB-01.'}</span>
+                  <span>
+                    {isHi ? 'पारादीप CB-01 बर्थ पर भीड़भाड़ एवं प्रतीक्षा कतार दर्ज।' : (riskData.alerts[0].message || 'Congestion queue detected at Paradip CB-01.')}
+                  </span>
                 </div>
               )}
             </div>
           </div>
 
           <div className="pt-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-500">
-            <span>Discharge: Paradip (INPRT)</span>
+            <span>{isHi ? 'डिस्चार्ज: पारादीप (INPRT)' : 'Discharge: Paradip (INPRT)'}</span>
             <button
               onClick={() => onNavigate('risks')}
               className="text-govBlueAccent hover:underline font-semibold flex items-center space-x-1 cursor-pointer"
             >
-              <span>View Risk &amp; Alerts</span>
+              <span>{isHi ? 'जोखिम एवं अलर्ट देखें' : 'View Risk & Alerts'}</span>
               <ArrowRight className="w-3 h-3" />
             </button>
           </div>
@@ -328,13 +361,15 @@ export default function Dashboard({ onNavigate }) {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-2.5">
           <div>
             <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-              Baltic Exchange Dry-Bulk Sub-Indices
+              {isHi ? 'बाल्टिक एक्सचेंज ड्राई-बल्क उप-सूचकांक' : 'Baltic Exchange Dry-Bulk Sub-Indices'}
             </h3>
             <p className="text-[11px] text-slate-500 mt-0.5">
-              Authoritative benchmark index levels, daily percent movement, and Time Charter average daily rates.
+              {isHi 
+                ? 'प्रामाणिक बेंचमार्क सूचकांक स्तर, दैनिक प्रतिशत उतार-चढ़ाव और टाइम चार्टर औसत दैनिक दरें।'
+                : 'Authoritative benchmark index levels, daily percent movement, and Time Charter average daily rates.'}
             </p>
           </div>
-          <ProvenanceBadge type="OBSERVED" text="Baltic Exchange Series" />
+          <ProvenanceBadge type="OBSERVED" text={isHi ? 'बाल्टिक एक्सचेंज श्रृंखला' : 'Baltic Exchange Series'} />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -374,13 +409,13 @@ export default function Dashboard({ onNavigate }) {
                     {idx?.value ? Math.round(idx.value).toLocaleString() : '—'}
                   </span>
                   <span className="text-[10px] font-mono text-slate-500">
-                    TC: {idx?.tc_avg_usd_day ? `$${Math.round(idx.tc_avg_usd_day).toLocaleString()}/d` : '—'}
+                    TC: {idx?.tc_avg_usd_day ? `$${Math.round(idx.tc_avg_usd_day).toLocaleString()}/${isHi ? 'दिन' : 'd'}` : '—'}
                   </span>
                 </div>
 
                 <div className="mt-1 pt-1 border-t border-slate-200/50 flex justify-between text-[9px] text-slate-400">
                   <span>30d: {idx?.change_30d_pct ? `${idx.change_30d_pct.toFixed(1)}%` : '—'}</span>
-                  <span>Vol 20d: {idx?.realised_vol_20d ? `${(idx.realised_vol_20d * 100).toFixed(1)}%` : '—'}</span>
+                  <span>{isHi ? 'अस्थिरता 20d:' : 'Vol 20d:'} {idx?.realised_vol_20d ? `${(idx.realised_vol_20d * 100).toFixed(1)}%` : '—'}</span>
                 </div>
               </div>
             );
@@ -395,17 +430,17 @@ export default function Dashboard({ onNavigate }) {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">
-                Bunker VLSFO Singapore
+                {isHi ? 'बंकर ईंधन VLSFO (सिंगापुर)' : 'Bunker VLSFO Singapore'}
               </span>
               <span className="text-base font-extrabold text-govNavy font-mono block mt-0.5">
-                ${marketData?.bunker?.value ? marketData.bunker.value.toFixed(2) : '550.00'} / mt
+                ${marketData?.bunker?.value ? marketData.bunker.value.toFixed(2) : '550.00'} / {isHi ? 'मी.टन' : 'mt'}
               </span>
             </div>
-            <ProvenanceBadge type="OBSERVED" text="Singapore Spot" />
+            <ProvenanceBadge type="OBSERVED" text={isHi ? 'सिंगापुर स्पॉट' : 'Singapore Spot'} />
           </div>
           <div className="text-[10px] text-slate-500 mt-2 flex justify-between border-t border-slate-100 pt-1">
             <span>Series: BUNKER_VLSFO_SG</span>
-            <span>Vol 90d: 14.2%</span>
+            <span>{isHi ? 'अस्थिरता 90d: 14.2%' : 'Vol 90d: 14.2%'}</span>
           </div>
         </div>
 
@@ -414,13 +449,13 @@ export default function Dashboard({ onNavigate }) {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">
-                Aus Premium Coking Coal
+                {isHi ? 'ऑस्ट्रेलियाई प्रीमियम कोकिंग कोल' : 'Aus Premium Coking Coal'}
               </span>
               <span className="text-base font-extrabold text-govNavy font-mono block mt-0.5">
-                ${marketData?.commodities?.COAL_COKING_AU_PHCC?.value ? marketData.commodities.COAL_COKING_AU_PHCC.value.toFixed(2) : '245.00'} / t
+                ${marketData?.commodities?.COAL_COKING_AU_PHCC?.value ? marketData.commodities.COAL_COKING_AU_PHCC.value.toFixed(2) : '245.00'} / {isHi ? 'टन' : 't'}
               </span>
             </div>
-            <ProvenanceBadge type="OBSERVED" text="FOB Australia" />
+            <ProvenanceBadge type="OBSERVED" text={isHi ? 'एफओबी ऑस्ट्रेलिया' : 'FOB Australia'} />
           </div>
           <div className="text-[10px] text-slate-500 mt-2 flex justify-between border-t border-slate-100 pt-1">
             <span>Change 30d: {marketData?.commodities?.COAL_COKING_AU_PHCC?.change_30d_pct ? `${marketData.commodities.COAL_COKING_AU_PHCC.change_30d_pct.toFixed(1)}%` : '+1.4%'}</span>
@@ -433,13 +468,13 @@ export default function Dashboard({ onNavigate }) {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">
-                Iron Ore 62% Fe CFR
+                {isHi ? 'लौह अयस्क 62% Fe CFR' : 'Iron Ore 62% Fe CFR'}
               </span>
               <span className="text-base font-extrabold text-govNavy font-mono block mt-0.5">
                 ${marketData?.commodities?.IRON_ORE_CFR62?.value ? marketData.commodities.IRON_ORE_CFR62.value.toFixed(2) : '108.50'} / dmt
               </span>
             </div>
-            <ProvenanceBadge type="OBSERVED" text="CFR China / India" />
+            <ProvenanceBadge type="OBSERVED" text={isHi ? 'सीएफआर चीन / भारत' : 'CFR China / India'} />
           </div>
           <div className="text-[10px] text-slate-500 mt-2 flex justify-between border-t border-slate-100 pt-1">
             <span>Change 30d: {marketData?.commodities?.IRON_ORE_CFR62?.change_30d_pct ? `${marketData.commodities.IRON_ORE_CFR62.change_30d_pct.toFixed(1)}%` : '-2.1%'}</span>
@@ -452,17 +487,17 @@ export default function Dashboard({ onNavigate }) {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">
-                Exchange Rate USD / INR
+                {isHi ? 'विनिमय दर USD / INR' : 'Exchange Rate USD / INR'}
               </span>
               <span className="text-base font-extrabold text-govNavy font-mono block mt-0.5">
                 ₹{marketData?.fx?.rate ? marketData.fx.rate.toFixed(2) : '83.45'}
               </span>
             </div>
-            <ProvenanceBadge type="OBSERVED" text="RBI Reference" />
+            <ProvenanceBadge type="OBSERVED" text={isHi ? 'आरबीआई संदर्भ' : 'RBI Reference'} />
           </div>
           <div className="text-[10px] text-slate-500 mt-2 flex justify-between border-t border-slate-100 pt-1">
-            <span>Landed Cost Multiplier</span>
-            <span>As of: {marketData?.fx?.obs_date || '2026-09-15'}</span>
+            <span>{isHi ? 'लैंडेड लागत गुणक' : 'Landed Cost Multiplier'}</span>
+            <span>{isHi ? 'तिथि:' : 'As of:'} {marketData?.fx?.obs_date || '2026-09-15'}</span>
           </div>
         </div>
       </div>

@@ -1,22 +1,23 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 // Authoritative coordinates for Indian East Coast discharge ports & major load hubs
 const PORT_COORDINATES = {
   // Indian East Coast Discharge Ports
-  INPRT: { name: 'Paradip Port', lat: 20.2654, lon: 86.6763, x: 535, y: 220, role: 'discharge', state: 'Odisha' },
-  INVTZ: { name: 'Visakhapatnam Port', lat: 17.6868, lon: 83.2185, x: 475, y: 310, role: 'discharge', state: 'Andhra Pradesh' },
-  INDHA: { name: 'Dhamra Port', lat: 20.8033, lon: 86.9733, x: 550, y: 195, role: 'discharge', state: 'Odisha' },
-  INGGV: { name: 'Gangavaram Port', lat: 17.6186, lon: 83.2389, x: 475, y: 325, role: 'discharge', state: 'Andhra Pradesh' },
-  INHAL: { name: 'Haldia Dock Complex', lat: 22.0667, lon: 88.0833, x: 585, y: 145, role: 'discharge', state: 'West Bengal' },
-  INGPR: { name: 'Gopalpur Port', lat: 19.3083, lon: 84.9667, x: 505, y: 260, role: 'discharge', state: 'Odisha' },
+  INPRT: { name: 'Paradip Port', hiName: 'पारादीप बंदरगाह', lat: 20.2654, lon: 86.6763, x: 535, y: 220, role: 'discharge', state: 'Odisha' },
+  INVTZ: { name: 'Visakhapatnam Port', hiName: 'विशाखापट्टनम बंदरगाह', lat: 17.6868, lon: 83.2185, x: 475, y: 310, role: 'discharge', state: 'Andhra Pradesh' },
+  INDHA: { name: 'Dhamra Port', hiName: 'धामरा बंदरगाह', lat: 20.8033, lon: 86.9733, x: 550, y: 195, role: 'discharge', state: 'Odisha' },
+  INGGV: { name: 'Gangavaram Port', hiName: 'गंगावरम बंदरगाह', lat: 17.6186, lon: 83.2389, x: 475, y: 325, role: 'discharge', state: 'Andhra Pradesh' },
+  INHAL: { name: 'Haldia Dock Complex', hiName: 'हल्दिया डॉक कॉम्प्लेक्स', lat: 22.0667, lon: 88.0833, x: 585, y: 145, role: 'discharge', state: 'West Bengal' },
+  INGPR: { name: 'Gopalpur Port', hiName: 'गोपालपुर बंदरगाह', lat: 19.3083, lon: 84.9667, x: 505, y: 260, role: 'discharge', state: 'Odisha' },
 
   // Overseas Origin Loading Ports (Projected into navigational locator inset)
-  AUHPT: { name: 'Hay Point (Australia)', lat: -21.28, lon: 149.30, x: 670, y: 380, role: 'load', country: 'Australia' },
-  AUGLT: { name: 'Gladstone (Australia)', lat: -23.85, lon: 151.27, x: 685, y: 350, role: 'load', country: 'Australia' },
-  IDTBA: { name: 'Taboneo (Indonesia)', lat: -3.55, lon: 114.45, x: 630, y: 310, role: 'load', country: 'Indonesia' },
-  ZARBY: { name: 'Richards Bay (South Africa)', lat: -28.80, lon: 32.08, x: 120, y: 380, role: 'load', country: 'South Africa' },
-  USHAM: { name: 'Hampton Roads (USA)', lat: 36.95, lon: -76.33, x: 90, y: 90, role: 'load', country: 'USA' },
-  MZBEW: { name: 'Beira (Mozambique)', lat: -19.83, lon: 34.84, x: 150, y: 330, role: 'load', country: 'Mozambique' },
+  AUHPT: { name: 'Hay Point (Australia)', hiName: 'हे पॉइंट (ऑस्ट्रेलिया)', lat: -21.28, lon: 149.30, x: 670, y: 380, role: 'load', country: 'Australia' },
+  AUGLT: { name: 'Gladstone (Australia)', hiName: 'ग्लैडस्टोन (ऑस्ट्रेलिया)', lat: -23.85, lon: 151.27, x: 685, y: 350, role: 'load', country: 'Australia' },
+  IDTBA: { name: 'Taboneo (Indonesia)', hiName: 'ताबानेओ (इंडोनेशिया)', lat: -3.55, lon: 114.45, x: 630, y: 310, role: 'load', country: 'Indonesia' },
+  ZARBY: { name: 'Richards Bay (South Africa)', hiName: 'रिचर्ड्स बे (द. अफ्रीका)', lat: -28.80, lon: 32.08, x: 120, y: 380, role: 'load', country: 'South Africa' },
+  USHAM: { name: 'Hampton Roads (USA)', hiName: 'हैम्पटन रोड्स (यू.एस.ए.)', lat: 36.95, lon: -76.33, x: 90, y: 90, role: 'load', country: 'USA' },
+  MZBEW: { name: 'Beira (Mozambique)', hiName: 'बेइरा (मोजाम्बिक)', lat: -19.83, lon: 34.84, x: 150, y: 330, role: 'load', country: 'Mozambique' },
 };
 
 export default function PortMap({
@@ -26,8 +27,13 @@ export default function PortMap({
   originPortId = 'AUHPT',
   onSelectOrigin,
 }) {
+  const { lang } = useLanguage();
+  const isHi = lang === 'hi';
+
   const currentDischarge = PORT_COORDINATES[selectedPortId] || PORT_COORDINATES.INPRT;
   const currentOrigin = PORT_COORDINATES[originPortId] || PORT_COORDINATES.AUHPT;
+
+  const dischargeName = isHi ? currentDischarge.hiName : currentDischarge.name;
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-white space-y-2 relative overflow-hidden shadow-xs">
@@ -35,11 +41,11 @@ export default function PortMap({
         <div className="flex items-center space-x-2">
           <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
           <h4 className="font-bold text-slate-100 tracking-wide">
-            East Coast India Maritime Terminal Radar &amp; Navigational Corridors
+            {isHi ? 'पूर्वी तट भारत समुद्री टर्मिनल रडार एवं नौवहन गलियारा' : 'East Coast India Maritime Terminal Radar & Navigational Corridors'}
           </h4>
         </div>
         <span className="text-[10px] font-mono text-cyan-300">
-          Selected: {currentDischarge.name} ({selectedPortId})
+          {isHi ? 'चयनित' : 'Selected'}: {dischargeName} ({selectedPortId})
         </span>
       </div>
 
@@ -82,8 +88,12 @@ export default function PortMap({
           <line x1="600" y1="0" x2="600" y2="420" stroke="#1e293b" strokeDasharray="3 4" strokeWidth="0.8" />
 
           {/* Coordinate labels */}
-          <text x="15" y="135" fill="#475569" fontSize="9" fontFamily="monospace">22° N (Tropic of Cancer)</text>
-          <text x="15" y="255" fill="#475569" fontSize="9" fontFamily="monospace">18° N (Bay of Bengal)</text>
+          <text x="15" y="135" fill="#475569" fontSize="9" fontFamily="monospace">
+            {isHi ? '22° N (कर्क रेखा / Tropic of Cancer)' : '22° N (Tropic of Cancer)'}
+          </text>
+          <text x="15" y="255" fill="#475569" fontSize="9" fontFamily="monospace">
+            {isHi ? '18° N (बंगाल की खाड़ी / Bay of Bengal)' : '18° N (Bay of Bengal)'}
+          </text>
           <text x="455" y="15" fill="#475569" fontSize="9" fontFamily="monospace">84° E</text>
           <text x="590" y="15" fill="#475569" fontSize="9" fontFamily="monospace">88° E</text>
 
@@ -111,6 +121,7 @@ export default function PortMap({
           {/* Overseas Loading Port Pins */}
           {Object.entries(PORT_COORDINATES).filter(([_, p]) => p.role === 'load').map(([id, p]) => {
             const isSelectedOrigin = id === originPortId;
+            const displayName = isHi ? p.hiName : p.name.replace(' (', ' · ').replace(')', '');
             return (
               <g
                 key={id}
@@ -139,7 +150,7 @@ export default function PortMap({
                   fontSize={isSelectedOrigin ? '9.5' : '8.5'}
                   fontWeight={isSelectedOrigin ? 'bold' : 'normal'}
                 >
-                  {p.name.replace(' (', ' · ').replace(')', '')}
+                  {displayName}
                 </text>
               </g>
             );
@@ -148,6 +159,7 @@ export default function PortMap({
           {/* East Coast Discharge Ports Pins */}
           {Object.entries(PORT_COORDINATES).filter(([_, p]) => p.role === 'discharge').map(([id, p]) => {
             const isSelected = id === selectedPortId;
+            const displayName = isHi ? p.hiName.replace(' बंदरगाह', '') : p.name.replace(' Port', '');
             return (
               <g
                 key={id}
@@ -188,7 +200,7 @@ export default function PortMap({
                   fontSize={isSelected ? '10' : '9'}
                   fontWeight={isSelected ? 'bold' : 'normal'}
                 >
-                  {p.name.replace(' Port', '')}
+                  {displayName}
                 </text>
               </g>
             );
@@ -199,15 +211,15 @@ export default function PortMap({
         <div className="absolute bottom-2 left-2 bg-slate-900/90 border border-slate-700/80 rounded px-2 py-1.5 text-[9px] text-slate-300 space-y-1">
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-cyan-500 border border-cyan-300" />
-            <span>Active Discharge Port</span>
+            <span>{isHi ? 'सक्रिय डिस्चार्ज बंदरगाह' : 'Active Discharge Port'}</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-900 border border-blue-400" />
-            <span>East Coast Bulk Terminals</span>
+            <span>{isHi ? 'पूर्वी तट थोक टर्मिनल्स' : 'East Coast Bulk Terminals'}</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-3 h-0.5 bg-sky-400" />
-            <span>Active Maritime Charter Corridor</span>
+            <span>{isHi ? 'सक्रिय समुद्री चार्टर गलियारा' : 'Active Maritime Charter Corridor'}</span>
           </div>
         </div>
       </div>

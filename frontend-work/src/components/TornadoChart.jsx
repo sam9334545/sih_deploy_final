@@ -1,10 +1,10 @@
 import React from 'react';
 import ProvenanceBadge from './ProvenanceBadge';
+import { useLanguage } from '../context/LanguageContext';
 
 /**
  * Tornado / Sensitivity Analysis Chart
  * Displays the backend-authoritative cost impact range of parameter shocks
- * (Freight ±20%, Bunker ±15%, Waiting ±30%, Demurrage ±30%, Port Costs ±10%, Repositioning ±15%, Lighterage ±20%)
  * calculated via the Monte Carlo digital twin simulator.
  */
 export default function TornadoChart({
@@ -12,6 +12,19 @@ export default function TornadoChart({
   breakdown = {},
   totalCost = 0,
 }) {
+  const { lang } = useLanguage();
+  const isHi = lang === 'hi';
+
+  const factorHindiMap = {
+    freight: 'महासागर भाड़ा दर (Freight)',
+    bunker: 'बंकर ईंधन लागत (Bunker)',
+    waiting: 'बर्थ प्रतीक्षा समय (Waiting)',
+    demurrage: 'विलंब शुल्क दावे (Demurrage)',
+    port_costs: 'बंदरगाह प्रभार (Port Dues)',
+    repositioning: 'बैलास्ट पुनर्संस्थापन (Repositioning)',
+    lighterage: 'सैंडहेड्स लाइटरज (Lighterage)',
+  };
+
   const items = Array.isArray(sensitivity) && sensitivity.length > 0
     ? sensitivity
         .filter((item) => {
@@ -26,9 +39,14 @@ export default function TornadoChart({
           const baseline = typeof item.baseline_cost === 'number' ? item.baseline_cost : totalCost;
           const compVal = typeof item.component_baseline === 'number' ? item.component_baseline : 0;
 
+          const factorKey = (item.factor || '').toLowerCase();
+          const translatedLabel = isHi && factorHindiMap[factorKey]
+            ? factorHindiMap[factorKey]
+            : (item.name || item.label || item.factor);
+
           return {
             key: item.factor,
-            label: item.name || item.label || item.factor,
+            label: translatedLabel,
             value: compVal > 0 ? compVal : baseline,
             baselineCost: baseline,
             lowCost: item.low_cost,
@@ -53,31 +71,35 @@ export default function TornadoChart({
         <div>
           <div className="flex items-center space-x-2">
             <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-              Decision Sensitivity Tornado: What Could Change This Decision?
+              {isHi ? 'निर्णय संवेदनशीलता टॉरनेडो: इस निर्णय को क्या बदल सकता है?' : 'Decision Sensitivity Tornado: What Could Change This Decision?'}
             </h3>
-            <ProvenanceBadge type="DERIVED" text="Backend Simulation" />
+            <ProvenanceBadge type="DERIVED" text={isHi ? 'बैकएंड सिमुलेशन' : 'Backend Simulation'} />
           </div>
           <p className="text-[11px] text-slate-500 mt-0.5">
-            Parametric variance impact on landed cost calculated by stochastic backend simulation under calibrated factor shocks.
+            {isHi 
+              ? 'कैलिब्रेटेड फैक्टर शॉक के तहत स्टोकेस्टिक बैकएंड सिमुलेशन द्वारा गणना किया गया लैंडेड लागत पर प्रभाव।'
+              : 'Parametric variance impact on landed cost calculated by stochastic backend simulation under calibrated factor shocks.'}
           </p>
         </div>
         <div className="flex items-center space-x-3 text-[10px] font-medium text-slate-600">
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 bg-emerald-500 rounded-xs" />
-            <span>Favorable Swing (-Cost)</span>
+            <span>{isHi ? 'अनुकूल उतार (-लागत)' : 'Favorable Swing (-Cost)'}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 bg-rose-500 rounded-xs" />
-            <span>Adverse Swing (+Cost)</span>
+            <span>{isHi ? 'प्रतिकूल उतार (+लागत)' : 'Adverse Swing (+Cost)'}</span>
           </span>
         </div>
       </div>
 
       {items.length === 0 ? (
         <div className="py-6 px-4 text-center text-xs text-slate-500 bg-slate-50 rounded border border-dashed border-slate-200">
-          <p className="font-semibold text-slate-700">Sensitivity Analysis Standby</p>
+          <p className="font-semibold text-slate-700">{isHi ? 'संवेदनशीलता विश्लेषण स्टैंडबाय' : 'Sensitivity Analysis Standby'}</p>
           <p className="text-[11px] text-slate-400 mt-1">
-            Execute Monte Carlo simulation above to compute backend-authoritative scenario shocks.
+            {isHi 
+              ? 'बैकएंड-प्रामाणिक परिदृश्य झटकों की गणना करने हेतु ऊपर मोंटे कार्लो सिमुलेशन निष्पादित करें।'
+              : 'Execute Monte Carlo simulation above to compute backend-authoritative scenario shocks.'}
           </p>
         </div>
       ) : (
@@ -99,7 +121,7 @@ export default function TornadoChart({
                     )}
                   </span>
                   <span className="font-mono text-slate-500 text-[10px]">
-                    Component: ${Math.round(item.value).toLocaleString()}
+                    {isHi ? 'घटक आधार:' : 'Component:'} ${Math.round(item.value).toLocaleString()}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-1 items-center h-5 bg-slate-50 rounded px-1 border border-slate-100">
@@ -108,7 +130,7 @@ export default function TornadoChart({
                     <div
                       className="h-3.5 bg-emerald-500 rounded-l transition-all duration-300 flex items-center justify-end px-1"
                       style={{ width: `${favorableWidth}%` }}
-                      title={`Favorable: -$${Math.round(Math.abs(item.lowDelta)).toLocaleString()} (Total: $${Math.round(item.lowCost || 0).toLocaleString()})`}
+                      title={`${isHi ? 'अनुकूल' : 'Favorable'}: -$${Math.round(Math.abs(item.lowDelta)).toLocaleString()} (${isHi ? 'कुल' : 'Total'}: $${Math.round(item.lowCost || 0).toLocaleString()})`}
                     >
                       <span className="text-[9px] font-mono font-bold text-white whitespace-nowrap">
                         -${Math.round(Math.abs(item.lowDelta) / 1000)}k
@@ -121,7 +143,7 @@ export default function TornadoChart({
                     <div
                       className="h-3.5 bg-rose-500 rounded-r transition-all duration-300 flex items-center justify-start px-1"
                       style={{ width: `${adverseWidth}%` }}
-                      title={`Adverse: +${Math.round(Math.abs(item.highDelta)).toLocaleString()} (Total: $${Math.round(item.highCost || 0).toLocaleString()})`}
+                      title={`${isHi ? 'प्रतिकूल' : 'Adverse'}: +${Math.round(Math.abs(item.highDelta)).toLocaleString()} (${isHi ? 'कुल' : 'Total'}: $${Math.round(item.highCost || 0).toLocaleString()})`}
                     >
                       <span className="text-[9px] font-mono font-bold text-white whitespace-nowrap">
                         +${Math.round(Math.abs(item.highDelta) / 1000)}k
@@ -136,9 +158,11 @@ export default function TornadoChart({
       )}
 
       <div className="pt-2 border-t border-slate-100 text-[10px] text-slate-500 flex flex-col sm:flex-row justify-between gap-1">
-        <span>Authoritative scenario shocks evaluated across complete Monte Carlo digital twin.</span>
+        <span>
+          {isHi ? 'संपूर्ण मोंटे कार्लो डिजिटल ट्विन पर मूल्यांकित प्रामाणिक परिदृश्य झटके।' : 'Authoritative scenario shocks evaluated across complete Monte Carlo digital twin.'}
+        </span>
         <span className="font-mono font-semibold text-slate-700">
-          Baseline Mean: ${Math.round(totalCost || (items[0]?.baselineCost || 0)).toLocaleString()}
+          {isHi ? 'आधारभूत माध्य:' : 'Baseline Mean:'} ${Math.round(totalCost || (items[0]?.baselineCost || 0)).toLocaleString()}
         </span>
       </div>
     </div>

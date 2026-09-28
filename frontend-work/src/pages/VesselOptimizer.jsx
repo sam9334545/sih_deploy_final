@@ -17,28 +17,32 @@ import {
 import ProvenanceBadge from '../components/ProvenanceBadge';
 import DecisionWorkflowBanner from '../components/DecisionWorkflowBanner';
 import { fetchVesselClasses, recommendVessel, ApiError } from '../api';
+import { useLanguage } from '../context/LanguageContext';
 
 const LOAD_PORTS = [
-  { id: 'AUHPT', name: 'Hay Point (Australia)', cargo: 'coking_coal' },
-  { id: 'AUGLT', name: 'Gladstone (Australia)', cargo: 'coking_coal' },
-  { id: 'IDTBA', name: 'Taboneo (Indonesia)', cargo: 'thermal_coal' },
-  { id: 'ZARBY', name: 'Richards Bay (South Africa)', cargo: 'thermal_coal' },
-  { id: 'USHAM', name: 'Hampton Roads (USA)', cargo: 'coking_coal' },
-  { id: 'MZBEW', name: 'Beira (Mozambique)', cargo: 'coking_coal' },
+  { id: 'AUHPT', name: 'Hay Point (Australia)', hiName: 'हे पॉइंट (ऑस्ट्रेलिया)', cargo: 'coking_coal' },
+  { id: 'AUGLT', name: 'Gladstone (Australia)', hiName: 'ग्लैडस्टोन (ऑस्ट्रेलिया)', cargo: 'coking_coal' },
+  { id: 'IDTBA', name: 'Taboneo (Indonesia)', hiName: 'ताबानेओ (इंडोनेशिया)', cargo: 'thermal_coal' },
+  { id: 'ZARBY', name: 'Richards Bay (South Africa)', hiName: 'रिचर्ड्स बे (दक्षिण अफ्रीका)', cargo: 'thermal_coal' },
+  { id: 'USHAM', name: 'Hampton Roads (USA)', hiName: 'हैम्पटन रोड्स (यूएसए)', cargo: 'coking_coal' },
+  { id: 'MZBEW', name: 'Beira (Mozambique)', hiName: 'बेइरा (मोजाम्बिक)', cargo: 'coking_coal' },
 ];
 
 const DISCHARGE_PORTS = [
-  { id: 'INPRT', name: 'Paradip Port (INPRT)', draft: 16.0 },
-  { id: 'INVTZ', name: 'Visakhapatnam (INVTZ)', draft: 18.1 },
-  { id: 'INDHA', name: 'Dhamra Port (INDHA)', draft: 18.5 },
-  { id: 'INGGV', name: 'Gangavaram (INGGV)', draft: 18.5 },
-  { id: 'INHAL', name: 'Haldia Dock Complex (INHAL)', draft: 8.5 },
-  { id: 'INGPR', name: 'Gopalpur Port (INGPR)', draft: 13.5 },
+  { id: 'INPRT', name: 'Paradip Port (INPRT)', hiName: 'पारादीप बंदरगाह (INPRT)', draft: 16.0 },
+  { id: 'INVTZ', name: 'Visakhapatnam (INVTZ)', hiName: 'विशाखापट्टनम बंदरगाह (INVTZ)', draft: 18.1 },
+  { id: 'INDHA', name: 'Dhamra Port (INDHA)', hiName: 'धामरा बंदरगाह (INDHA)', draft: 18.5 },
+  { id: 'INGGV', name: 'Gangavaram (INGGV)', hiName: 'गंगावरम बंदरगाह (INGGV)', draft: 18.5 },
+  { id: 'INHAL', name: 'Haldia Dock Complex (INHAL)', hiName: 'हल्दिया डॉक कॉम्प्लेक्स (INHAL)', draft: 8.5 },
+  { id: 'INGPR', name: 'Gopalpur Port (INGPR)', hiName: 'गोपालपुर बंदरगाह (INGPR)', draft: 13.5 },
 ];
 
 const VESSEL_CLASSES = ['Capesize', 'Panamax', 'Supramax', 'Handysize'];
 
 export default function VesselOptimizer({ onNavigate }) {
+  const { lang } = useLanguage();
+  const isHi = lang === 'hi';
+
   // Input parameters
   const [cargoType, setCargoType] = useState('coking_coal');
   const [quantityT, setQuantityT] = useState(120000);
@@ -97,7 +101,11 @@ export default function VesselOptimizer({ onNavigate }) {
       setRecommendationData(recRes);
     } catch (err) {
       console.error('Failed to load vessel optimization:', err);
-      setError('Unable to evaluate vessel feasibility. Please check selected parameters.');
+      setError(
+        isHi 
+          ? 'पोत व्यवहार्यता का मूल्यांकन करने में असमर्थ। कृपया चयनित पैरामीटर जांचें।' 
+          : 'Unable to evaluate vessel feasibility. Please check selected parameters.'
+      );
     } finally {
       setLoading(false);
     }
@@ -158,17 +166,19 @@ export default function VesselOptimizer({ onNavigate }) {
           <div className="flex items-center space-x-2">
             <Ship className="w-4 h-4 text-govNavy" />
             <h1 className="text-base font-bold text-govNavy font-serif">
-              Standard Bulk Carrier Fleet Optimizer &amp; Feasibility Matrix
+              {isHi ? 'मानक ड्राई-बल्क पोत बेड़ा अनुकूलक एवं व्यवहार्यता मैट्रिक्स' : 'Standard Bulk Carrier Fleet Optimizer & Feasibility Matrix'}
             </h1>
             <span className="bg-blue-100 text-govBlueAccent font-semibold px-2 py-0.5 rounded text-[10px] border border-blue-200">
-              Authoritative Backend Engine
+              {isHi ? 'प्रामाणिक बैकएंड इंजन' : 'Authoritative Backend Engine'}
             </span>
           </div>
           <p className="text-[11px] text-slate-500 mt-0.5">
-            Physical draft, beam, and LOA constraint evaluation across Capesize, Panamax, Supramax, and Handysize standard classes.
+            {isHi 
+              ? 'केपसाइज, पैनामैक्स, सुप्रामाक्स और हैंडीसाइज मानक वर्गों में भौतिक ड्राफ्ट, बीम और LOA प्रतिबंध मूल्यांकन।'
+              : 'Physical draft, beam, and LOA constraint evaluation across Capesize, Panamax, Supramax, and Handysize standard classes.'}
           </p>
         </div>
-        <ProvenanceBadge type="OBSERVED" text="Baltic Standard Vessel Profiles" />
+        <ProvenanceBadge type="OBSERVED" text={isHi ? 'बाल्टिक मानक पोत प्रोफाइल' : 'Baltic Standard Vessel Profiles'} />
       </div>
 
       {/* 3. Parameter Inputs Strip */}
@@ -177,30 +187,36 @@ export default function VesselOptimizer({ onNavigate }) {
           <div className="flex items-center space-x-2">
             <Sliders className="w-3.5 h-3.5 text-govBlueAccent" />
             <span className="text-xs font-bold text-govNavy uppercase tracking-wide">
-              Voyage Requirement Parameters
+              {isHi ? 'यात्रा आवश्यकता पैरामीटर' : 'Voyage Requirement Parameters'}
             </span>
           </div>
           <span className="text-[10px] text-slate-400 font-mono">
-            {loading ? 'Evaluating constraints...' : 'Status: Ready'}
+            {loading 
+              ? (isHi ? 'बाधा मूल्यांकन चल रहा है...' : 'Evaluating constraints...') 
+              : (isHi ? 'स्थिति: तैयार' : 'Status: Ready')}
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
           <div>
-            <label className="text-[10px] font-bold text-slate-600 block mb-1">Cargo Commodity</label>
+            <label className="text-[10px] font-bold text-slate-600 block mb-1">
+              {isHi ? 'कार्गो वस्तु (Commodity)' : 'Cargo Commodity'}
+            </label>
             <select
               value={cargoType}
               onChange={(e) => setCargoType(e.target.value)}
               className="w-full bg-slate-50 border border-slate-300 rounded p-1.5 font-medium text-slate-800 focus:bg-white focus:outline-none"
             >
-              <option value="coking_coal">Coking Coal (AUHPT)</option>
-              <option value="thermal_coal">Thermal Coal (IDTBA)</option>
-              <option value="iron_ore">Iron Ore (Lump / Fines)</option>
+              <option value="coking_coal">{isHi ? 'कोकिंग कोल (हे पॉइंट - AUHPT)' : 'Coking Coal (AUHPT)'}</option>
+              <option value="thermal_coal">{isHi ? 'थर्मल कोल (ताबानेओ - IDTBA)' : 'Thermal Coal (IDTBA)'}</option>
+              <option value="iron_ore">{isHi ? 'लौह अयस्क (Lump / Fines)' : 'Iron Ore (Lump / Fines)'}</option>
             </select>
           </div>
 
           <div>
-            <label className="text-[10px] font-bold text-slate-600 block mb-1">Procurement Tonnage</label>
+            <label className="text-[10px] font-bold text-slate-600 block mb-1">
+              {isHi ? 'अधिप्राप्ति टन भार (टन)' : 'Procurement Tonnage'}
+            </label>
             <input
               type="number"
               value={quantityT}
@@ -211,34 +227,41 @@ export default function VesselOptimizer({ onNavigate }) {
           </div>
 
           <div>
-            <label className="text-[10px] font-bold text-slate-600 block mb-1">Loading Port</label>
+            <label className="text-[10px] font-bold text-slate-600 block mb-1">
+              {isHi ? 'लोडिंग पोर्ट (मूल स्रोत)' : 'Loading Port'}
+            </label>
             <select
               value={originPort}
               onChange={(e) => setOriginPort(e.target.value)}
               className="w-full bg-slate-50 border border-slate-300 rounded p-1.5 font-medium text-slate-800 focus:bg-white focus:outline-none"
             >
               {LOAD_PORTS.map((p) => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="text-[10px] font-bold text-slate-600 block mb-1">Discharge Port</label>
-            <select
-              value={destinationPort}
-              onChange={(e) => setDestinationPort(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-300 rounded p-1.5 font-medium text-slate-800 focus:bg-white focus:outline-none"
-            >
-              {DISCHARGE_PORTS.map((p) => (
-                <option key={p.id} value={p.id}>{p.name} ({p.draft}m)</option>
+                <option key={p.id} value={p.id}>{isHi && p.hiName ? p.hiName : p.name}</option>
               ))}
             </select>
           </div>
 
           <div>
             <label className="text-[10px] font-bold text-slate-600 block mb-1">
-              Laycan Deadline: <strong className="font-mono text-govNavy">{deadlineDays} days</strong>
+              {isHi ? 'डिस्चार्ज पोर्ट (भारत पूर्वी तट)' : 'Discharge Port'}
+            </label>
+            <select
+              value={destinationPort}
+              onChange={(e) => setDestinationPort(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-300 rounded p-1.5 font-medium text-slate-800 focus:bg-white focus:outline-none"
+            >
+              {DISCHARGE_PORTS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {isHi && p.hiName ? `${p.hiName} (${p.draft}मी)` : `${p.name} (${p.draft}m)`}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-slate-600 block mb-1">
+              {isHi ? 'लेकैन समय-सीमा:' : 'Laycan Deadline:'}{' '}
+              <strong className="font-mono text-govNavy">{deadlineDays} {isHi ? 'दिन' : 'days'}</strong>
             </label>
             <input
               type="range"
@@ -250,7 +273,7 @@ export default function VesselOptimizer({ onNavigate }) {
               className="w-full accent-govNavy cursor-pointer mt-1"
             />
             <span className="text-[9px] font-mono text-slate-400 block text-right mt-0.5">
-              By: {computeRequiredBy(deadlineDays)}
+              {isHi ? 'लक्ष्य तिथि:' : 'By:'} {computeRequiredBy(deadlineDays)}
             </span>
           </div>
         </div>
@@ -267,20 +290,22 @@ export default function VesselOptimizer({ onNavigate }) {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-2.5">
           <div>
             <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-              Authoritative Vessel Class Feasibility &amp; Economics Comparison
+              {isHi ? 'प्रामाणिक पोत वर्ग व्यवहार्यता एवं अर्थशास्त्र तुलना' : 'Authoritative Vessel Class Feasibility & Economics Comparison'}
             </h3>
             <p className="text-[11px] text-slate-500 mt-0.5">
-              Comparison across standard Baltic bulker classes for the active voyage corridor ({originPort} → {destinationPort}).
+              {isHi 
+                ? `सक्रिय समुद्री कॉरिडोर (${originPort} → ${destinationPort}) के लिए मानक बाल्टिक बल्कर वर्गों की तुलना।`
+                : `Comparison across standard Baltic bulker classes for the active voyage corridor (${originPort} → ${destinationPort}).`}
             </p>
           </div>
           <div className="flex items-center space-x-2 text-[10px]">
             <span className="flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-              <span>Feasible</span>
+              <span>{isHi ? 'व्यवहार्य' : 'Feasible'}</span>
             </span>
             <span className="flex items-center gap-1">
               <XCircle className="w-3 h-3 text-rose-600" />
-              <span>Infeasible</span>
+              <span>{isHi ? 'अव्यवहार्य' : 'Infeasible'}</span>
             </span>
           </div>
         </div>
@@ -289,7 +314,7 @@ export default function VesselOptimizer({ onNavigate }) {
           <table className="w-full text-xs text-left gov-table border-collapse">
             <thead>
               <tr>
-                <th className="w-44">Parameter / Metric</th>
+                <th className="w-44">{isHi ? 'पैरामीटर / मीट्रिक' : 'Parameter / Metric'}</th>
                 {VESSEL_CLASSES.map((cls) => {
                   const item = classMap[cls];
                   return (
@@ -298,7 +323,7 @@ export default function VesselOptimizer({ onNavigate }) {
                         <span className="text-xs font-bold">{cls}</span>
                         {item.isRecommended && (
                           <span className="bg-amber-400 text-slate-900 font-extrabold px-1.5 py-0.2 rounded text-[8px] uppercase tracking-wider mt-0.5">
-                            Recommended
+                            {isHi ? 'अनुशंसित' : 'Recommended'}
                           </span>
                         )}
                       </div>
@@ -310,7 +335,7 @@ export default function VesselOptimizer({ onNavigate }) {
             <tbody className="divide-y divide-slate-200 font-mono">
               {/* Feasibility Status */}
               <tr className="bg-slate-50/70 font-sans">
-                <td className="font-bold text-slate-800">Feasibility Status</td>
+                <td className="font-bold text-slate-800">{isHi ? 'व्यवहार्यता स्थिति' : 'Feasibility Status'}</td>
                 {VESSEL_CLASSES.map((cls) => {
                   const item = classMap[cls];
                   const opt = item.option;
@@ -321,11 +346,11 @@ export default function VesselOptimizer({ onNavigate }) {
                         <div className="inline-flex flex-col items-center">
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
                             <CheckCircle2 className="w-3 h-3 mr-1" />
-                            Feasible
+                            {isHi ? 'व्यवहार्य' : 'Feasible'}
                           </span>
                           {reqLight && (
                             <span className="text-[9px] text-amber-700 font-semibold mt-0.5">
-                              (Sandheads Lighterage)
+                              {isHi ? '(सैंडहेड्स लाइटरज)' : '(Sandheads Lighterage)'}
                             </span>
                           )}
                         </div>
@@ -333,10 +358,10 @@ export default function VesselOptimizer({ onNavigate }) {
                         <div className="inline-flex flex-col items-center">
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">
                             <XCircle className="w-3 h-3 mr-1" />
-                            Infeasible
+                            {isHi ? 'अव्यवहार्य' : 'Infeasible'}
                           </span>
                           <span className="text-[9px] text-rose-700 mt-0.5 max-w-[130px] truncate" title={item.rejectionDetail || 'Constraint limit'}>
-                            {item.rejectionDetail || 'Draft restriction'}
+                            {item.rejectionDetail || (isHi ? 'ड्राफ्ट प्रतिबंध' : 'Draft restriction')}
                           </span>
                         </div>
                       )}
@@ -347,7 +372,7 @@ export default function VesselOptimizer({ onNavigate }) {
 
               {/* Reference Deadweight */}
               <tr>
-                <td className="font-semibold text-slate-800 font-sans">Reference DWT</td>
+                <td className="font-semibold text-slate-800 font-sans">{isHi ? 'संदर्भ DWT' : 'Reference DWT'}</td>
                 {VESSEL_CLASSES.map(cls => (
                   <td key={cls} className="text-center">
                     {classMap[cls].profile.ref_dwt ? `${classMap[cls].profile.ref_dwt.toLocaleString()} t` : '—'}
@@ -357,7 +382,7 @@ export default function VesselOptimizer({ onNavigate }) {
 
               {/* Scantling Draft */}
               <tr>
-                <td className="font-semibold text-slate-800 font-sans">Design Draft</td>
+                <td className="font-semibold text-slate-800 font-sans">{isHi ? 'डिज़ाइन ड्राफ्ट' : 'Design Draft'}</td>
                 {VESSEL_CLASSES.map(cls => (
                   <td key={cls} className="text-center">
                     {classMap[cls].profile.ref_draft_m ? `${classMap[cls].profile.ref_draft_m} m` : '—'}
@@ -367,7 +392,7 @@ export default function VesselOptimizer({ onNavigate }) {
 
               {/* Dimensions (LOA × Beam) */}
               <tr>
-                <td className="font-semibold text-slate-800 font-sans">Dimensions (LOA × Beam)</td>
+                <td className="font-semibold text-slate-800 font-sans">{isHi ? 'आयाम (LOA × बीम)' : 'Dimensions (LOA × Beam)'}</td>
                 {VESSEL_CLASSES.map(cls => (
                   <td key={cls} className="text-center text-[11px]">
                     {classMap[cls].profile.ref_loa_m ? `${classMap[cls].profile.ref_loa_m}m × ${classMap[cls].profile.ref_beam_m}m` : '—'}
@@ -377,17 +402,19 @@ export default function VesselOptimizer({ onNavigate }) {
 
               {/* Laden Speed & Fuel Consumption */}
               <tr>
-                <td className="font-semibold text-slate-800 font-sans">Laden Speed &amp; Bunker Burn</td>
+                <td className="font-semibold text-slate-800 font-sans">{isHi ? 'भारित गति एवं बंकर खपत' : 'Laden Speed & Bunker Burn'}</td>
                 {VESSEL_CLASSES.map(cls => (
                   <td key={cls} className="text-center text-[11px]">
-                    {classMap[cls].profile.speed_laden_kn ? `${classMap[cls].profile.speed_laden_kn} kn · ${classMap[cls].profile.cons_laden_mt_day} t/d` : '—'}
+                    {classMap[cls].profile.speed_laden_kn 
+                      ? `${classMap[cls].profile.speed_laden_kn} kn · ${classMap[cls].profile.cons_laden_mt_day} t/d` 
+                      : '—'}
                   </td>
                 ))}
               </tr>
 
               {/* Cargo Capacity / Intake */}
               <tr className="bg-slate-50/50">
-                <td className="font-semibold text-slate-800 font-sans">Effective Cargo Intake</td>
+                <td className="font-semibold text-slate-800 font-sans">{isHi ? 'प्रभावी कार्गो क्षमता' : 'Effective Cargo Intake'}</td>
                 {VESSEL_CLASSES.map((cls) => {
                   const opt = classMap[cls].option;
                   return (
@@ -400,12 +427,12 @@ export default function VesselOptimizer({ onNavigate }) {
 
               {/* Voyages Required */}
               <tr>
-                <td className="font-semibold text-slate-800 font-sans">Voyages Required</td>
+                <td className="font-semibold text-slate-800 font-sans">{isHi ? 'आवश्यक यात्राएं' : 'Voyages Required'}</td>
                 {VESSEL_CLASSES.map((cls) => {
                   const opt = classMap[cls].option;
                   return (
                     <td key={cls} className="text-center font-bold">
-                      {opt?.voyages ? `${opt.voyages} voyage${opt.voyages > 1 ? 's' : ''}` : '—'}
+                      {opt?.voyages ? (isHi ? `${opt.voyages} यात्राएं` : `${opt.voyages} voyage${opt.voyages > 1 ? 's' : ''}`) : '—'}
                     </td>
                   );
                 })}
@@ -413,12 +440,12 @@ export default function VesselOptimizer({ onNavigate }) {
 
               {/* Estimated Voyage Duration */}
               <tr>
-                <td className="font-semibold text-slate-800 font-sans">Round-Trip Duration</td>
+                <td className="font-semibold text-slate-800 font-sans">{isHi ? 'राउंड-ट्रिप अवधि' : 'Round-Trip Duration'}</td>
                 {VESSEL_CLASSES.map((cls) => {
                   const opt = classMap[cls].option;
                   return (
                     <td key={cls} className="text-center">
-                      {opt?.estimated_days_per_voyage ? `${opt.estimated_days_per_voyage} days` : '—'}
+                      {opt?.estimated_days_per_voyage ? (isHi ? `${opt.estimated_days_per_voyage} दिन` : `${opt.estimated_days_per_voyage} days`) : '—'}
                     </td>
                   );
                 })}
@@ -426,7 +453,7 @@ export default function VesselOptimizer({ onNavigate }) {
 
               {/* Expected Landed Cost */}
               <tr className="bg-blue-50/40">
-                <td className="font-bold text-govNavy font-sans">Expected Cost (USD)</td>
+                <td className="font-bold text-govNavy font-sans">{isHi ? 'अपेक्षित लागत (USD)' : 'Expected Cost (USD)'}</td>
                 {VESSEL_CLASSES.map((cls) => {
                   const opt = classMap[cls].option;
                   return (
@@ -439,7 +466,7 @@ export default function VesselOptimizer({ onNavigate }) {
 
               {/* Rejection / Infeasibility Reason */}
               <tr className="font-sans text-[11px]">
-                <td className="font-semibold text-slate-800">Binding Constraint / Note</td>
+                <td className="font-semibold text-slate-800">{isHi ? 'बाध्यकारी प्रतिबंध / टिप्पणी' : 'Binding Constraint / Note'}</td>
                 {VESSEL_CLASSES.map((cls) => {
                   const item = classMap[cls];
                   const opt = item.option;
@@ -450,9 +477,9 @@ export default function VesselOptimizer({ onNavigate }) {
                       ) : opt?.note ? (
                         <span className="text-amber-800 font-medium block">{opt.note}</span>
                       ) : opt?.binding_constraint ? (
-                        <span>Binding: {opt.binding_constraint} ({opt.binding_port})</span>
+                        <span>{isHi ? 'बाध्यकारी:' : 'Binding:'} {opt.binding_constraint} ({opt.binding_port})</span>
                       ) : (
-                        <span>Standard permissible</span>
+                        <span>{isHi ? 'मानक अनुमत' : 'Standard permissible'}</span>
                       )}
                     </td>
                   );
@@ -470,7 +497,9 @@ export default function VesselOptimizer({ onNavigate }) {
             <div className="flex items-center space-x-2">
               <Scale className="w-4 h-4 text-govBlueAccent" />
               <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-                Detailed Technical Profile: {inspectProfile.vessel_class} Standard Bulker
+                {isHi 
+                  ? `विस्तृत तकनीकी प्रोफाइल: ${inspectProfile.vessel_class} मानक बल्कर` 
+                  : `Detailed Technical Profile: ${inspectProfile.vessel_class} Standard Bulker`}
               </h3>
             </div>
             <div className="flex items-center space-x-1.5">
@@ -492,32 +521,36 @@ export default function VesselOptimizer({ onNavigate }) {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 text-xs">
             <div className="p-2.5 bg-slate-50 rounded border border-slate-100">
-              <span className="text-[10px] text-slate-500 block">Benchmark Index</span>
+              <span className="text-[10px] text-slate-500 block">{isHi ? 'बेंचमार्क सूचकांक' : 'Benchmark Index'}</span>
               <strong className="text-govNavy font-mono">{inspectProfile.index_code}</strong>
             </div>
 
             <div className="p-2.5 bg-slate-50 rounded border border-slate-100">
-              <span className="text-[10px] text-slate-500 block">TPC Immersion</span>
+              <span className="text-[10px] text-slate-500 block">{isHi ? 'TPC विसर्जन (Immersion)' : 'TPC Immersion'}</span>
               <strong className="text-slate-800 font-mono">{inspectProfile.tpc} t/cm</strong>
             </div>
 
             <div className="p-2.5 bg-slate-50 rounded border border-slate-100">
-              <span className="text-[10px] text-slate-500 block">Standard Demurrage</span>
+              <span className="text-[10px] text-slate-500 block">{isHi ? 'मानक विलंब शुल्क' : 'Standard Demurrage'}</span>
               <strong className="text-slate-800 font-mono">${inspectProfile.demurrage_usd_day ? inspectProfile.demurrage_usd_day.toLocaleString() : '14,000'}/d</strong>
             </div>
 
             <div className="p-2.5 bg-slate-50 rounded border border-slate-100">
-              <span className="text-[10px] text-slate-500 block">Vessel Constants</span>
+              <span className="text-[10px] text-slate-500 block">{isHi ? 'पोत स्थिरांक (Constants)' : 'Vessel Constants'}</span>
               <strong className="text-slate-800 font-mono">{inspectProfile.constants_t ? `${inspectProfile.constants_t} t` : '2,400 t'}</strong>
             </div>
 
             <div className="p-2.5 bg-slate-50 rounded border border-slate-100">
-              <span className="text-[10px] text-slate-500 block">Cargo Gear</span>
-              <strong className="text-slate-800">{inspectProfile.geared ? 'Geared (Cranes/Grabs)' : 'Gearless (Capesize/Panamax)'}</strong>
+              <span className="text-[10px] text-slate-500 block">{isHi ? 'कार्गो गियर' : 'Cargo Gear'}</span>
+              <strong className="text-slate-800">
+                {inspectProfile.geared 
+                  ? (isHi ? 'गियर्ड (क्रेन/ग्रैब्स)' : 'Geared (Cranes/Grabs)') 
+                  : (isHi ? 'गियरलेस (केपसाइज/पैनामैक्स)' : 'Gearless (Capesize/Panamax)')}
+              </strong>
             </div>
 
             <div className="p-2.5 bg-slate-50 rounded border border-slate-100">
-              <span className="text-[10px] text-slate-500 block">Gross Tonnage (GRT)</span>
+              <span className="text-[10px] text-slate-500 block">{isHi ? 'सकल टन भार (GRT)' : 'Gross Tonnage (GRT)'}</span>
               <strong className="text-slate-800 font-mono">{inspectProfile.grt ? inspectProfile.grt.toLocaleString() : '—'}</strong>
             </div>
           </div>
@@ -527,13 +560,15 @@ export default function VesselOptimizer({ onNavigate }) {
       {/* 6. Action Transfer Footer */}
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs">
         <span className="text-slate-600">
-          Ready to simulate multi-voyage contracts and stochastic cost distributions for these vessels?
+          {isHi 
+            ? 'क्या आप इन पोतों के लिए बहु-यात्रा अनुबंधों और स्टोकेस्टिक लागत वितरण का अनुकरण करने के लिए तैयार हैं?' 
+            : 'Ready to simulate multi-voyage contracts and stochastic cost distributions for these vessels?'}
         </span>
         <button
           onClick={() => onNavigate('simulator')}
           className="px-4 py-2 bg-govNavy text-white rounded font-semibold hover:bg-govNavyLight transition flex items-center space-x-1.5 cursor-pointer shadow-xs"
         >
-          <span>Open Strategy Simulator</span>
+          <span>{isHi ? 'रणनीति सिम्युलेटर खोलें' : 'Open Strategy Simulator'}</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>

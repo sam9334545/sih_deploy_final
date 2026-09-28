@@ -1,18 +1,20 @@
 import React from 'react';
-
-const STEPS = [
-  { id: 'cargo', label: 'Cargo Requirement', tab: 'planner' },
-  { id: 'forecast', label: 'Freight Forecast', tab: 'forecast' },
-  { id: 'constraints', label: 'Port Constraints', tab: 'ports' },
-  { id: 'vessels', label: 'Vessel Feasibility', tab: 'vessels' },
-  { id: 'strategies', label: 'Charter Strategies', tab: 'simulator' },
-  { id: 'simulation', label: 'Monte Carlo Sim', tab: 'simulator' },
-  { id: 'risk', label: 'Risk-Adjusted Cost', tab: 'risks' },
-  { id: 'recommendation', label: 'Recommendation', tab: 'planner' },
-  { id: 'explanation', label: 'Why This Decision?', tab: 'planner' },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function DecisionWorkflowBanner({ currentStep = 'cargo', onNavigate }) {
+  const { lang } = useLanguage();
+
+  const STEPS = [
+    { id: 'cargo', label: lang === 'hi' ? 'कार्गो आवश्यकता' : 'Cargo Requirement', tab: 'planner' },
+    { id: 'forecast', label: lang === 'hi' ? 'भाड़ा पूर्वानुमान' : 'Freight Forecast', tab: 'forecast' },
+    { id: 'constraints', label: lang === 'hi' ? 'बंदरगाह सीमाएं' : 'Port Constraints', tab: 'ports' },
+    { id: 'vessels', label: lang === 'hi' ? 'पोत व्यवहार्यता' : 'Vessel Feasibility', tab: 'vessels' },
+    { id: 'strategies', label: lang === 'hi' ? 'चार्टर रणनीतियां' : 'Charter Strategies', tab: 'simulator' },
+    { id: 'simulation', label: lang === 'hi' ? 'मोंटे कार्लो सिमुलेशन' : 'Monte Carlo Sim', tab: 'simulator' },
+    { id: 'risk', label: lang === 'hi' ? 'जोखिम-समायोजित लागत' : 'Risk-Adjusted Cost', tab: 'risks' },
+    { id: 'recommendation', label: lang === 'hi' ? 'अनुशंसा' : 'Recommendation', tab: 'planner' },
+    { id: 'explanation', label: lang === 'hi' ? 'यह निर्णय क्यों?' : 'Why This Decision?', tab: 'planner' },
+  ];
   return (
     <div className="bg-white border border-slate-200 rounded-lg p-2.5 shadow-xs overflow-x-auto select-none">
       <div className="flex items-center justify-between min-w-[760px] text-[10px]">

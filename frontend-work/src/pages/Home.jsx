@@ -20,9 +20,11 @@ import {
   Activity,
   Cpu
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import bulkCarrierImg from '../assets/bulk_carrier_hero.jpg';
 
 export default function Home({ onNavigate }) {
+  const { t, lang } = useLanguage();
   // 6 Authoritative Global Origins supported by SIH26006 registry
   const supportedOrigins = [
     {
@@ -85,62 +87,62 @@ export default function Home({ onNavigate }) {
   const coreServices = [
     {
       id: 'forecast',
-      title: 'Freight Market Forecast',
-      subtitle: 'Probabilistic Baltic dry-bulk freight forecasts with uncertainty intervals.',
-      desc: 'Ensemble forecasting (Ridge + Damped Momentum + LightGBM v2) across 7, 14, 28, 60, 90, 180 day horizons for BCI, BPI, BSI, and BHSI with split-conformal 80% calibration intervals.',
+      title: t('tab_forecast'),
+      subtitle: lang === 'hi' ? 'अनिश्चितता अंतरालों के साथ संभाव्य बाल्टिक ड्राई-थोक भाड़ा पूर्वानुमान।' : 'Probabilistic Baltic dry-bulk freight forecasts with uncertainty intervals.',
+      desc: lang === 'hi' ? 'विभाजित-कॉन्फ़ॉर्मल 80% अंशांकन अंतरालों के साथ BCI, BPI, BSI और BHSI हेतु 7 से 180 दिन के क्षितिजों पर एन्सेम्बल पूर्वानुमान।' : 'Ensemble forecasting (Ridge + Damped Momentum + LightGBM v2) across 7, 14, 28, 60, 90, 180 day horizons for BCI, BPI, BSI, and BHSI with split-conformal 80% calibration intervals.',
       icon: TrendingUp,
-      cta: 'Open Forecast →',
+      cta: lang === 'hi' ? 'पूर्वानुमान खोलें →' : 'Open Forecast →',
       badge: 'ML Engine v2',
       badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     },
     {
       id: 'planner',
-      title: 'Charter Planner',
-      subtitle: 'Translate cargo requirements, port constraints and vessel feasibility into charter options.',
-      desc: 'End-to-end procurement orchestrator matching quantity, commodity, origin and laycan with vessel capacity, lighterage constraints, and landed cost optimization.',
+      title: t('tab_planner'),
+      subtitle: lang === 'hi' ? 'कार्गो आवश्यकताओं, बंदरगाह सीमाओं और पोत व्यवहार्यता को चार्टर विकल्पों में परिवर्तित करें।' : 'Translate cargo requirements, port constraints and vessel feasibility into charter options.',
+      desc: lang === 'hi' ? 'पोत क्षमता, लाइटरिंग सीमाओं और लैंडेड लागत अनुकूलन के साथ मात्रा, वस्तु, स्रोत और लेकैन का मिलान करने वाला एंड-टू-एंड अधिप्राप्ति ऑर्केस्ट्रेटर।' : 'End-to-end procurement orchestrator matching quantity, commodity, origin and laycan with vessel capacity, lighterage constraints, and landed cost optimization.',
       icon: Compass,
-      cta: 'Plan a Charter →',
-      badge: 'Core Workflow',
+      cta: lang === 'hi' ? 'चार्टर योजना बनाएं →' : 'Plan a Charter →',
+      badge: lang === 'hi' ? 'प्रमुख कार्यप्रवाह' : 'Core Workflow',
       badgeColor: 'bg-blue-50 text-blue-700 border-blue-200',
     },
     {
       id: 'ports',
-      title: 'Port Intelligence',
-      subtitle: 'Explore destination-port constraints and operational feasibility.',
-      desc: 'Authoritative terminal constraint registry for 14 reference ports covering channel depths, draft limits, berth dimensions, mechanical handling rates, and waiting telemetry.',
+      title: t('tab_ports'),
+      subtitle: lang === 'hi' ? 'गंतव्य-बंदरगाह सीमाओं और परिचालन व्यवहार्यता का अन्वेषण करें।' : 'Explore destination-port constraints and operational feasibility.',
+      desc: lang === 'hi' ? 'चैनल गहराई, ड्राफ्ट सीमा, बर्थ आयाम, यांत्रिक हैंडलिंग दर और प्रतीक्षा टेलीमेट्री को कवर करने वाली 14 संदर्भ बंदरगाहों की आधिकारिक रजिस्ट्री।' : 'Authoritative terminal constraint registry for 14 reference ports covering channel depths, draft limits, berth dimensions, mechanical handling rates, and waiting telemetry.',
       icon: Anchor,
-      cta: 'Explore Ports →',
-      badge: '14 Reference Ports',
+      cta: lang === 'hi' ? 'बंदरगाह देखें →' : 'Explore Ports →',
+      badge: lang === 'hi' ? '14 संदर्भ बंदरगाह' : '14 Reference Ports',
       badgeColor: 'bg-slate-100 text-slate-700 border-slate-300',
     },
     {
       id: 'vessels',
-      title: 'Vessel Optimizer',
-      subtitle: 'Evaluate vessel-class feasibility against cargo and voyage constraints.',
-      desc: 'Standard Baltic vessel class specifications (Handysize, Supramax, Panamax, Capesize) with laden/ballast bunker consumption profiles, deadweight ranges, and parcel sizing.',
+      title: t('tab_vessels'),
+      subtitle: lang === 'hi' ? 'कार्गो और यात्रा बाधाओं के विरुद्ध पोत-वर्ग व्यवहार्यता का मूल्यांकन करें।' : 'Evaluate vessel-class feasibility against cargo and voyage constraints.',
+      desc: lang === 'hi' ? 'मानक बाल्टिक पोत वर्ग विनिर्देश (Handysize, Supramax, Panamax, Capesize) बंकर ईंधन खपत प्रोफाइल और डेडवेट क्षमता सहित।' : 'Standard Baltic vessel class specifications (Handysize, Supramax, Panamax, Capesize) with laden/ballast bunker consumption profiles, deadweight ranges, and parcel sizing.',
       icon: Ship,
-      cta: 'Evaluate Vessels →',
+      cta: lang === 'hi' ? 'पोत मूल्यांकन करें →' : 'Evaluate Vessels →',
       badge: 'Baltic Profiles',
       badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
     },
     {
       id: 'simulator',
-      title: 'Strategy Simulator',
-      subtitle: 'Compare charter strategies using Monte Carlo simulation and risk-adjusted economics.',
-      desc: 'Simulate Spot vs. COA vs. Time Charter strategies over 200 to 5,000 stochastic draws, computing CVaR-90, expected landed cost, and deadline breach probability under risk aversion.',
+      title: t('tab_simulator'),
+      subtitle: lang === 'hi' ? 'मोंटे कार्लो सिमुलेशन और जोखिम-समायोजित अर्थशास्त्र का उपयोग करके रणनीतियों की तुलना करें।' : 'Compare charter strategies using Monte Carlo simulation and risk-adjusted economics.',
+      desc: lang === 'hi' ? 'स्पॉट बनाम सीओए बनाम टाइम चार्टर रणनीतियों पर 200 से 5,000 संभाव्य ड्रा का अनुकरण, CVaR-90 और डिलीवरी विलंब जोखिम की गणना।' : 'Simulate Spot vs. COA vs. Time Charter strategies over 200 to 5,000 stochastic draws, computing CVaR-90, expected landed cost, and deadline breach probability under risk aversion.',
       icon: Layers,
-      cta: 'Run Simulation →',
+      cta: lang === 'hi' ? 'सिमुलेशन चलाएं →' : 'Run Simulation →',
       badge: 'Monte Carlo N=5000',
       badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
     },
     {
       id: 'risks',
-      title: 'Risk & Alerts',
-      subtitle: 'Review operational and market risks relevant to procurement decisions.',
-      desc: 'Multivariate operational risk scoring covering monsoon weather stoppage climatology, port congestion detention, bunker volatility, and seasonal cyclone factors.',
+      title: t('tab_risks'),
+      subtitle: lang === 'hi' ? 'अधिप्राप्ति निर्णयों से संबंधित परिचालन और बाजार जोखिमों की समीक्षा करें।' : 'Review operational and market risks relevant to procurement decisions.',
+      desc: lang === 'hi' ? 'मानसून मौसम गतिरोध, बंदरगाह संकुलन, बंकर अस्थिरता और मौसमी चक्रवात कारकों को कवर करने वाला बहुभिन्नरूपी परिचालन जोखिम स्कोरिंग।' : 'Multivariate operational risk scoring covering monsoon weather stoppage climatology, port congestion detention, bunker volatility, and seasonal cyclone factors.',
       icon: ShieldAlert,
-      cta: 'View Risks →',
-      badge: 'Explainable Risk',
+      cta: lang === 'hi' ? 'जोखिम देखें →' : 'View Risks →',
+      badge: lang === 'hi' ? 'व्याख्यात्मक जोखिम' : 'Explainable Risk',
       badgeColor: 'bg-rose-50 text-rose-700 border-rose-200',
     },
   ];
@@ -149,44 +151,44 @@ export default function Home({ onNavigate }) {
   const workflowSteps = [
     {
       num: '01',
-      title: 'Cargo Requirement',
-      detail: 'Tonnage, commodity specification & destination laycan arrival window.',
+      title: t('wf_step1_title'),
+      detail: t('wf_step1_desc'),
       tab: 'planner',
     },
     {
       num: '02',
-      title: 'Freight Forecast',
-      detail: 'Baltic forward index projection with conformalized prediction intervals.',
+      title: t('wf_step2_title'),
+      detail: t('wf_step2_desc'),
       tab: 'forecast',
     },
     {
       num: '03',
-      title: 'Port & Vessel Constraints',
-      detail: 'Berth draft, LOA, beam, tidal allowance & handling rate boundaries.',
+      title: t('wf_step3_title'),
+      detail: t('wf_step3_desc'),
       tab: 'ports',
     },
     {
       num: '04',
-      title: 'Feasible Charter Options',
-      detail: 'Class suitability (Handysize, Supramax, Panamax, Capesize) & parcel split.',
+      title: t('wf_step4_title'),
+      detail: t('wf_step4_desc'),
       tab: 'vessels',
     },
     {
       num: '05',
-      title: 'Monte Carlo Simulation',
-      detail: 'Stochastic draws across freight variance, bunker shift & waiting detention.',
+      title: t('wf_step5_title'),
+      detail: t('wf_step5_desc'),
       tab: 'simulator',
     },
     {
       num: '06',
-      title: 'Risk-Adjusted Economics',
-      detail: 'Expected cost, CVaR-90 tail risk, and penalty for arrival delay.',
+      title: t('wf_step6_title'),
+      detail: t('wf_step6_desc'),
       tab: 'simulator',
     },
     {
       num: '07',
-      title: 'Decision Support',
-      detail: 'Authoritative ranking with full explainability & sensitivity analysis.',
+      title: t('wf_step7_title'),
+      detail: t('wf_step7_desc'),
       tab: 'planner',
     },
   ];
@@ -205,15 +207,15 @@ export default function Home({ onNavigate }) {
           <div className="lg:col-span-6 space-y-4">
             <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-[11px] font-semibold text-govBlueAccent">
               <span className="w-1.5 h-1.5 rounded-full bg-govBlueAccent animate-pulse" />
-              <span>SIH26006 · Ministry of Ports, Shipping &amp; Waterways</span>
+              <span>{t('hero_ministry_pill')}</span>
             </div>
 
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-govNavyDark tracking-tight font-serif leading-tight">
-              Smarter Charter Decisions for India's Maritime Trade
+              {t('hero_headline')}
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
-              Forecast freight markets, evaluate routes and vessel feasibility, and compare charter strategies under uncertainty.
+              {t('hero_subtitle')}
             </p>
 
             {/* CTAs */}
@@ -222,7 +224,7 @@ export default function Home({ onNavigate }) {
                 onClick={() => onNavigate('planner')}
                 className="px-5 py-2.5 bg-govNavy hover:bg-govNavyDark text-white text-xs font-semibold rounded shadow-sm hover:shadow transition flex items-center space-x-2 cursor-pointer"
               >
-                <span>Start Charter Planning</span>
+                <span>{t('hero_cta_plan')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -231,7 +233,7 @@ export default function Home({ onNavigate }) {
                 className="px-4 py-2.5 bg-white hover:bg-slate-50 text-govNavy border border-slate-300 hover:border-govNavy text-xs font-semibold rounded transition flex items-center space-x-2 cursor-pointer shadow-2xs"
               >
                 <TrendingUp className="w-4 h-4 text-govBlueAccent" />
-                <span>Explore Freight Forecast</span>
+                <span>{t('hero_cta_forecast')}</span>
               </button>
 
               <button
@@ -239,7 +241,7 @@ export default function Home({ onNavigate }) {
                 className="px-3.5 py-2.5 text-slate-600 hover:text-govNavy text-xs font-medium hover:underline transition flex items-center space-x-1.5 cursor-pointer"
               >
                 <BarChart2 className="w-3.5 h-3.5 text-slate-500" />
-                <span>View Market Intelligence</span>
+                <span>{t('hero_cta_market')}</span>
               </button>
             </div>
 
@@ -247,19 +249,19 @@ export default function Home({ onNavigate }) {
             <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-y-2 gap-x-4 text-[11px] text-slate-500">
               <div className="flex items-center space-x-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>14 Reference Ports</span>
+                <span>{t('hero_feat_ports')}</span>
               </div>
               <div className="flex items-center space-x-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>6 Global Corridors</span>
+                <span>{t('hero_feat_corridors')}</span>
               </div>
               <div className="flex items-center space-x-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>LightGBM v2 ML Forecast</span>
+                <span>{t('hero_feat_forecast')}</span>
               </div>
               <div className="flex items-center space-x-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Conformal 80% Bounds</span>
+                <span>{t('hero_feat_conformal')}</span>
               </div>
             </div>
           </div>
@@ -271,18 +273,18 @@ export default function Home({ onNavigate }) {
               <div className="border-b border-slate-200 pb-2.5 flex items-start justify-between">
                 <div>
                   <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                    Government of India · Ministry of Ports, Shipping &amp; Waterways
+                    {t('card_ministry')}
                   </div>
                   <div className="text-xs font-bold text-govNavy uppercase tracking-wide flex items-center space-x-1.5 mt-0.5">
                     <Anchor className="w-3.5 h-3.5 text-govBlueAccent" />
-                    <span>East Coast Maritime Trade Logistics</span>
+                    <span>{t('card_logistics_title')}</span>
                   </div>
                   <div className="text-[10px] text-slate-500">
-                    Dry Bulk Shipping Network &amp; Port Connectivity — Bay of Bengal Corridor
+                    {t('card_logistics_sub')}
                   </div>
                 </div>
                 <span className="hidden sm:inline-block px-2 py-0.5 bg-blue-100/80 text-govNavy font-mono text-[9px] rounded font-bold uppercase tracking-wider">
-                  Operational Hub
+                  {t('card_operational_hub')}
                 </span>
               </div>
 
@@ -298,10 +300,10 @@ export default function Home({ onNavigate }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
                   <div className="absolute bottom-2 left-2 right-2 text-white">
                     <span className="px-1.5 py-0.5 bg-blue-600/90 text-[9px] font-semibold uppercase tracking-wider rounded">
-                      Commercial Bulk Logistics
+                      {t('card_commercial_tag')}
                     </span>
                     <p className="text-[10px] font-medium text-slate-100 mt-1 leading-tight">
-                      Capesize &amp; Panamax Dry-Bulk Fleet Optimization
+                      {t('card_fleet_opt')}
                     </p>
                   </div>
                 </div>
@@ -311,7 +313,7 @@ export default function Home({ onNavigate }) {
                   <div className="flex items-center justify-between text-[10px] border-b border-slate-800 pb-1.5 z-10">
                     <span className="font-semibold text-cyan-300 flex items-center space-x-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-                      <span>East Coast Nodes</span>
+                      <span>{t('card_east_coast_nodes')}</span>
                     </span>
                     <span className="text-[9px] font-mono text-slate-400">86°E · 20°N</span>
                   </div>
@@ -362,34 +364,48 @@ export default function Home({ onNavigate }) {
                       {/* Port Terminal Nodes */}
                       {/* Haldia / Sandheads */}
                       <circle cx="58" cy="28" r="2.8" fill="#fbbf24" stroke="#78350f" strokeWidth="0.8" />
-                      <text x="63" y="30" fill="#fde68a" fontSize="6.5" fontWeight="bold">Haldia</text>
+                      <text x="63" y="30" fill="#fde68a" fontSize="6.5" fontWeight="bold">
+                        {lang === 'hi' ? 'हल्दिया' : 'Haldia'}
+                      </text>
 
                       {/* Dhamra */}
                       <circle cx="54" cy="42" r="2.5" fill="#38bdf8" stroke="#0369a1" strokeWidth="0.8" />
-                      <text x="60" y="44" fill="#bae6fd" fontSize="6">Dhamra</text>
+                      <text x="60" y="44" fill="#bae6fd" fontSize="6">
+                        {lang === 'hi' ? 'धामरा' : 'Dhamra'}
+                      </text>
 
                       {/* Paradip */}
                       <circle cx="50" cy="55" r="3.5" fill="#22c55e" stroke="#14532d" strokeWidth="1" />
-                      <text x="56" y="57" fill="#86efac" fontSize="7" fontWeight="bold">Paradip</text>
+                      <text x="56" y="57" fill="#86efac" fontSize="7" fontWeight="bold">
+                        {lang === 'hi' ? 'पारादीप' : 'Paradip'}
+                      </text>
 
                       {/* Gopalpur */}
                       <circle cx="45" cy="70" r="2.5" fill="#38bdf8" stroke="#0369a1" strokeWidth="0.8" />
-                      <text x="51" y="72" fill="#bae6fd" fontSize="6">Gopalpur</text>
+                      <text x="51" y="72" fill="#bae6fd" fontSize="6">
+                        {lang === 'hi' ? 'गोपालपुर' : 'Gopalpur'}
+                      </text>
 
                       {/* Visakhapatnam */}
                       <circle cx="40" cy="88" r="3.2" fill="#38bdf8" stroke="#0369a1" strokeWidth="0.8" />
-                      <text x="46" y="90" fill="#93c5fd" fontSize="6.5" fontWeight="bold">Vizag</text>
+                      <text x="46" y="90" fill="#93c5fd" fontSize="6.5" fontWeight="bold">
+                        {lang === 'hi' ? 'विशाखापट्टनम' : 'Vizag'}
+                      </text>
 
                       {/* Bay of Bengal Label */}
                       <text x="110" y="45" fill="#334e68" fontSize="8" fontStyle="italic" letterSpacing="1">
-                        BAY OF BENGAL
+                        {lang === 'hi' ? 'बंगाल की खाड़ी' : 'BAY OF BENGAL'}
                       </text>
                     </svg>
                   </div>
 
                   <div className="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[9px] text-slate-300">
-                    <span className="text-amber-300 font-semibold">Corridor: Bay of Bengal</span>
-                    <span className="text-slate-400">Deepwater Discharge</span>
+                    <span className="text-amber-300 font-semibold">
+                      {lang === 'hi' ? 'गलियारा: बंगाल की खाड़ी' : 'Corridor: Bay of Bengal'}
+                    </span>
+                    <span className="text-slate-400">
+                      {lang === 'hi' ? 'गहरे पानी का डिस्चार्ज' : 'Deepwater Discharge'}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -397,13 +413,17 @@ export default function Home({ onNavigate }) {
               {/* Status footer pill */}
               <div className="bg-white rounded border border-slate-200 px-3 py-1.5 flex items-center justify-between text-[11px] text-slate-600">
                 <span className="font-medium text-govNavy">
-                  Terminal Constraints Active: <strong>Paradip · Vizag · Dhamra · Haldia · Gopalpur</strong>
+                  {lang === 'hi' ? (
+                    <>सक्रिय टर्मिनल सीमाएं: <strong>पारादीप · विशाखापट्टनम · धामरा · हल्दिया · गोपालपुर</strong></>
+                  ) : (
+                    <>Terminal Constraints Active: <strong>Paradip · Vizag · Dhamra · Haldia · Gopalpur</strong></>
+                  )}
                 </span>
                 <button
                   onClick={() => onNavigate('ports')}
                   className="text-govBlueAccent hover:underline font-semibold text-[10px] flex items-center space-x-1 cursor-pointer"
                 >
-                  <span>Constraint Radar</span>
+                  <span>{lang === 'hi' ? 'सीमा रडार' : 'Constraint Radar'}</span>
                   <ArrowRight className="w-3 h-3" />
                 </button>
               </div>
@@ -423,17 +443,19 @@ export default function Home({ onNavigate }) {
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-bold text-govNavyDark">
-                Important Notice: Data Status &amp; Lineage
+                {t('lineage_title')}
               </span>
               <span className="px-2 py-0.5 bg-blue-100 text-govNavy font-semibold text-[10px] rounded border border-blue-200">
-                OBSERVED THROUGH 31 JULY 2019
+                {t('lineage_tag_observed')}
               </span>
               <span className="px-2 py-0.5 bg-amber-100 text-amber-900 font-semibold text-[10px] rounded border border-amber-300">
-                2020–2026: SYNTHETIC EXTENSION
+                {t('lineage_tag_synthetic')}
               </span>
             </div>
             <p className="text-xs text-slate-700 leading-normal">
-              Historical market observations are available through <strong>31 July 2019</strong> (1,749 verified Baltic trading sessions under CC-BY 4.0). Post-2019 forecasting uses an explicitly identified synthetic extension until authorized observations are integrated. Pre-berthing waiting queues represent simulated demo telemetry.
+              {lang === 'hi' 
+                ? 'ऐतिहासिक बाजार अवलोकन 31 जुलाई 2019 (CC-BY 4.0 के तहत 1,749 सत्यापित बाल्टिक ट्रेडिंग सत्र) तक उपलब्ध हैं। 2019 के बाद का पूर्वानुमान अधिकृत अवलोकन एकीकृत होने तक सिंथेटिक विस्तार का उपयोग करता है।' 
+                : 'Historical market observations are available through 31 July 2019 (1,749 verified Baltic trading sessions under CC-BY 4.0). Post-2019 forecasting uses an explicitly identified synthetic extension until authorized observations are integrated. Pre-berthing waiting queues represent simulated demo telemetry.'}
             </p>
           </div>
         </div>
@@ -442,7 +464,7 @@ export default function Home({ onNavigate }) {
           onClick={() => onNavigate('methodology')}
           className="self-end md:self-center px-3 py-1.5 bg-white hover:bg-slate-50 text-govBlueAccent border border-blue-200 hover:border-govNavy text-[11px] font-semibold rounded whitespace-nowrap transition cursor-pointer flex items-center space-x-1 flex-shrink-0"
         >
-          <span>View Data Methodology</span>
+          <span>{lang === 'hi' ? 'डेटा पद्धति देखें' : 'View Data Methodology'}</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </section>
@@ -453,13 +475,13 @@ export default function Home({ onNavigate }) {
       <section className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 sm:p-7 space-y-4">
         <div className="max-w-3xl space-y-2">
           <span className="text-[11px] font-bold text-govBlueAccent uppercase tracking-wider">
-            Architecture &amp; Methodology
+            {lang === 'hi' ? 'संरचना एवं कार्यप्रणाली' : 'Architecture & Methodology'}
           </span>
           <h2 className="text-xl sm:text-2xl font-bold text-govNavyDark tracking-tight font-serif">
-            Decision Support for the Complete Chartering Workflow
+            {t('pillars_heading')}
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            SIH26006 is not a freight price oracle. It is a constrained maritime decision engine designed to support public and private procurement teams chartering dry-bulk carriers into India's East Coast ports. The system treats freight forecasts as an uncertain input, rigorously evaluating physical berth constraints, voyage economics, and tail risk.
+            {t('pillars_subheading')}
           </p>
         </div>
 
@@ -469,9 +491,9 @@ export default function Home({ onNavigate }) {
             <div className="w-8 h-8 rounded bg-blue-100 text-govNavy flex items-center justify-center">
               <TrendingUp className="w-4 h-4 text-govBlueAccent" />
             </div>
-            <h3 className="text-xs font-bold text-govNavyDark">1. Uncertainty-Aware Forecasts</h3>
+            <h3 className="text-xs font-bold text-govNavyDark">1. {t('pillar1_title')}</h3>
             <p className="text-[11px] text-slate-600 leading-relaxed">
-              Baltic dry-bulk indices (BCI, BPI, BSI, BHSI) projected across 7 to 180 days with split-conformal 80% prediction intervals, replacing dangerous single-point estimates.
+              {t('pillar1_desc')}
             </p>
           </div>
 
@@ -479,9 +501,9 @@ export default function Home({ onNavigate }) {
             <div className="w-8 h-8 rounded bg-emerald-100 text-emerald-800 flex items-center justify-center">
               <Anchor className="w-4 h-4 text-emerald-700" />
             </div>
-            <h3 className="text-xs font-bold text-govNavyDark">2. Physical Terminal Feasibility</h3>
+            <h3 className="text-xs font-bold text-govNavyDark">2. {t('pillar2_title')}</h3>
             <p className="text-[11px] text-slate-600 leading-relaxed">
-              Authoritative port constraints: channel depths, maximum permissible drafts, LOA, beam restrictions, tide allowance, and Sandheads lighterage requirements at Haldia.
+              {t('pillar2_desc')}
             </p>
           </div>
 
@@ -489,9 +511,9 @@ export default function Home({ onNavigate }) {
             <div className="w-8 h-8 rounded bg-amber-100 text-amber-800 flex items-center justify-center">
               <Layers className="w-4 h-4 text-amber-700" />
             </div>
-            <h3 className="text-xs font-bold text-govNavyDark">3. Stochastic Tail-Risk Simulation</h3>
+            <h3 className="text-xs font-bold text-govNavyDark">3. {t('pillar3_title')}</h3>
             <p className="text-[11px] text-slate-600 leading-relaxed">
-              Monte Carlo simulation under 200–5,000 draws comparing Spot vs. COA vs. Time Charter strategies, quantifying CVaR-90 extreme exposure and deadline miss penalties.
+              {t('pillar3_desc')}
             </p>
           </div>
         </div>
@@ -504,20 +526,20 @@ export default function Home({ onNavigate }) {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-3">
           <div>
             <span className="text-[11px] font-bold text-govBlueAccent uppercase tracking-wider">
-              Primary Capabilities
+              {lang === 'hi' ? 'प्रमुख मॉड्यूल' : 'Primary Capabilities'}
             </span>
             <h2 className="text-xl sm:text-2xl font-bold text-govNavyDark tracking-tight font-serif">
-              Decision Support Services
+              {t('services_heading')}
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Select any capability to launch the specialized operational workspace.
+              {t('services_subheading')}
             </p>
           </div>
           <button
             onClick={() => onNavigate('dashboard')}
             className="text-xs font-semibold text-govNavy hover:text-govBlueAccent flex items-center space-x-1 cursor-pointer self-start sm:self-auto"
           >
-            <span>Open Executive Dashboard</span>
+            <span>{t('cta_banner_open_dash')}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -578,13 +600,13 @@ export default function Home({ onNavigate }) {
       <section className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 sm:p-7 space-y-5">
         <div className="max-w-3xl space-y-1">
           <span className="text-[11px] font-bold text-govBlueAccent uppercase tracking-wider">
-            Sequential Decision Pipeline
+            {lang === 'hi' ? 'क्रमिक निर्णय पाइपलाइन' : 'Sequential Decision Pipeline'}
           </span>
           <h2 className="text-xl sm:text-2xl font-bold text-govNavyDark tracking-tight font-serif">
-            From Cargo Requirement to Charter Decision
+            {t('workflow_heading')}
           </h2>
           <p className="text-xs text-slate-600 leading-relaxed">
-            The decision engine processes your charter requirement through seven transparent, reproducible stages:
+            {t('workflow_subheading')}
           </p>
         </div>
 
@@ -598,7 +620,7 @@ export default function Home({ onNavigate }) {
             >
               <div>
                 <span className="text-[10px] font-mono font-bold text-govBlueAccent">
-                  STAGE {step.num}
+                  {lang === 'hi' ? `चरण ${step.num}` : `STAGE ${step.num}`}
                 </span>
                 <h4 className="text-xs font-bold text-govNavyDark mt-1 group-hover:text-govBlueAccent transition-colors">
                   {step.title}
@@ -609,7 +631,7 @@ export default function Home({ onNavigate }) {
               </div>
 
               <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-400 group-hover:text-govNavy font-medium">
-                <span>Inspect</span>
+                <span>{lang === 'hi' ? 'जांचें' : 'Inspect'}</span>
                 <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>
@@ -624,20 +646,20 @@ export default function Home({ onNavigate }) {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-3">
           <div>
             <span className="text-[11px] font-bold text-govBlueAccent uppercase tracking-wider">
-              International Corridors
+              {lang === 'hi' ? 'अंतरराष्ट्रीय गलियारे' : 'International Corridors'}
             </span>
             <h2 className="text-xl sm:text-2xl font-bold text-govNavyDark tracking-tight font-serif">
-              Global Bulk-Cargo Origins → East Coast India
+              {t('corridors_heading')}
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Authoritative loading hubs parameterized in the reference registry feeding Indian industrial steel and thermal power clusters.
+              {t('corridors_subheading')}
             </p>
           </div>
           <button
             onClick={() => onNavigate('routes')}
             className="text-xs font-semibold text-govNavy hover:text-govBlueAccent flex items-center space-x-1 cursor-pointer self-start sm:self-auto"
           >
-            <span>Explore All Routes</span>
+            <span>{lang === 'hi' ? 'सभी मार्ग देखें' : 'Explore All Routes'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -670,21 +692,33 @@ export default function Home({ onNavigate }) {
 
               <div className="space-y-1 text-[11px] text-slate-600 pt-1 border-t border-slate-200/60">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Commodity:</span>
-                  <span className="font-medium text-slate-800">{orig.cargos}</span>
+                  <span className="text-slate-500">{lang === 'hi' ? 'वस्तु / कार्गो:' : 'Commodity:'}</span>
+                  <span className="font-medium text-slate-800">
+                    {lang === 'hi' 
+                      ? orig.cargos.replace('Coking Coal, Thermal Coal', 'कोकिंग कोल, थर्मल कोल').replace('Thermal Coal Only', 'केवल थर्मल कोल').replace('Coking Coal Only', 'केवल कोकिंग कोल').replace('Coking Coal', 'कोकिंग कोल')
+                      : orig.cargos}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Typical Vessels:</span>
+                  <span className="text-slate-500">{lang === 'hi' ? 'प्रमुख पोत:' : 'Typical Vessels:'}</span>
                   <span className="font-medium text-slate-800">{orig.primaryVessels}</span>
                 </div>
                 <div className="text-[10px] text-slate-500 italic pt-0.5">
-                  {orig.notes}
+                  {lang === 'hi'
+                    ? orig.notes
+                        .replace('Deepwater offshore terminal, high loading rates', 'गहरे पानी का अपतटीय टर्मिनल, उच्च लोडिंग दर')
+                        .replace('Multi-berth coal export hub, RG Tanna terminal', 'मल्टी-बर्थ कोयला निर्यात केंद्र, आरजी तन्ना टर्मिनल')
+                        .replace('Offshore anchorage transshipment with floating cranes', 'फ्लोटिंग क्रेन के साथ अपतटीय लंगरगाह ट्रांसशिपमेंट')
+                        .replace('RBCT terminal, major source for Indian power & steel', 'आरबीसीटी टर्मिनल, भारतीय बिजली और इस्पात हेतु प्रमुख स्रोत')
+                        .replace('East Coast US coal export piers (Lamberts Point / Pier IX)', 'अमेरिकी पूर्वी तट कोयला निर्यात पियर')
+                        .replace('Draft-constrained channel (max ~50k DWT), tidal entry', 'ड्राफ्ट-बाधित चैनल (अधिकतम ~50k DWT), ज्वारीय प्रवेश')
+                    : orig.notes}
                 </div>
               </div>
 
               <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between">
-                <span className="text-[10px] text-slate-500">Target Discharges:</span>
-                <span className="text-[10px] font-semibold text-govNavy">Paradip · Vizag · Dhamra</span>
+                <span className="text-[10px] text-slate-500">{lang === 'hi' ? 'लक्ष्य डिस्चार्ज:' : 'Target Discharges:'}</span>
+                <span className="text-[10px] font-semibold text-govNavy">{lang === 'hi' ? 'पारादीप · विशाखापट्टनम · धामरा' : 'Paradip · Vizag · Dhamra'}</span>
               </div>
             </div>
           ))}
@@ -697,10 +731,10 @@ export default function Home({ onNavigate }) {
       <section className="space-y-3">
         <div className="border-b border-slate-200 pb-2">
           <span className="text-[11px] font-bold text-govBlueAccent uppercase tracking-wider">
-            Supporting Modules
+            {lang === 'hi' ? 'सहायक मॉड्यूल' : 'Supporting Modules'}
           </span>
           <h3 className="text-base sm:text-lg font-bold text-govNavyDark font-serif">
-            Market Intelligence, Corridors &amp; Transparency
+            {lang === 'hi' ? 'बाजार आसूचना, समुद्री गलियारे एवं पारदर्शिता' : 'Market Intelligence, Corridors & Transparency'}
           </h3>
         </div>
 
@@ -714,10 +748,12 @@ export default function Home({ onNavigate }) {
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
             <h4 className="text-xs font-bold text-govNavyDark group-hover:text-govBlueAccent">
-              Market Intelligence
+              {t('tab_market')}
             </h4>
             <p className="text-[11px] text-slate-500 leading-normal">
-              Baltic macro indices, supply-demand regimes, and Indian Ocean ballast vessel positioning.
+              {lang === 'hi' 
+                ? 'बाल्टिक मैक्रो सूचकांक, मांग-आपूर्ति व्यवस्था, एवं हिंद महासागर बैलास्ट पोत स्थिति।'
+                : 'Baltic macro indices, supply-demand regimes, and Indian Ocean ballast vessel positioning.'}
             </p>
           </div>
 
@@ -730,10 +766,12 @@ export default function Home({ onNavigate }) {
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
             <h4 className="text-xs font-bold text-govNavyDark group-hover:text-govBlueAccent">
-              Route Voyage Analysis
+              {t('tab_routes')}
             </h4>
             <p className="text-[11px] text-slate-500 leading-normal">
-              Nautical distances, bunker fuel consumption, canal transit fees, and round-voyage economics.
+              {lang === 'hi'
+                ? 'समुद्री दूरी, बंकर ईंधन खपत, नहर पारगमन शुल्क, एवं राउंड-यात्रा अर्थशास्त्र।'
+                : 'Nautical distances, bunker fuel consumption, canal transit fees, and round-voyage economics.'}
             </p>
           </div>
 
@@ -746,10 +784,12 @@ export default function Home({ onNavigate }) {
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
             <h4 className="text-xs font-bold text-govNavyDark group-hover:text-govBlueAccent">
-              Data &amp; Methodology
+              {t('tab_methodology')}
             </h4>
             <p className="text-[11px] text-slate-500 leading-normal">
-              Complete data provenance, verified data cutoffs, mathematical definitions, and assumption catalog.
+              {lang === 'hi'
+                ? 'संपूर्ण डेटा वंशावली, सत्यापित डेटा कटऑफ, गणितीय परिभाषाएं, एवं धारणा सूची।'
+                : 'Complete data provenance, verified data cutoffs, mathematical definitions, and assumption catalog.'}
             </p>
           </div>
 
@@ -762,10 +802,12 @@ export default function Home({ onNavigate }) {
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
             <h4 className="text-xs font-bold text-govNavyDark group-hover:text-govBlueAccent">
-              About Project
+              {t('tab_about')}
             </h4>
             <p className="text-[11px] text-slate-500 leading-normal">
-              SIH26006 problem statement context, technical specifications, and system architectural principles.
+              {lang === 'hi'
+                ? 'SIH26006 समस्या संदर्भ, तकनीकी विनिर्देश, एवं प्रणाली संरचना सिद्धांत।'
+                : 'SIH26006 problem statement context, technical specifications, and system architectural principles.'}
             </p>
           </div>
         </div>
@@ -777,13 +819,13 @@ export default function Home({ onNavigate }) {
       <section className="bg-gradient-to-r from-govNavyDark via-govNavy to-govNavyLight text-white rounded-lg p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl text-center md:text-left">
           <span className="text-[10px] font-bold text-cyan-300 uppercase tracking-widest">
-            Institutional Decision Engine · SIH26006
+            {lang === 'hi' ? 'संस्थागत निर्णय इंजन · SIH26006' : 'Institutional Decision Engine · SIH26006'}
           </span>
           <h2 className="text-xl sm:text-2xl font-bold font-serif">
-            Ready to evaluate a charter?
+            {t('cta_banner_title')}
           </h2>
           <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-            Start with your cargo requirement, then move through freight forecasts, operational constraints and strategy simulation.
+            {t('cta_banner_desc')}
           </p>
         </div>
 
@@ -792,14 +834,14 @@ export default function Home({ onNavigate }) {
             onClick={() => onNavigate('planner')}
             className="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs font-bold rounded shadow transition flex items-center space-x-2 cursor-pointer"
           >
-            <span>Open Charter Planner</span>
+            <span>{t('cta_banner_launch_planner')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
           <button
             onClick={() => onNavigate('dashboard')}
             className="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/30 text-xs font-semibold rounded transition cursor-pointer"
           >
-            <span>Executive Dashboard</span>
+            <span>{t('cta_banner_open_dash')}</span>
           </button>
         </div>
       </section>

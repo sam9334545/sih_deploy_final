@@ -7,6 +7,7 @@ import {
   fetchRouteEstimate,
   ApiError 
 } from '../api';
+import { useLanguage } from '../context/LanguageContext';
 
 const VESSEL_SPECS = {
   Panamax: { name: 'Panamax', dwt: 82500, maxDraft: 14.5, speedKn: 12.5, index: 'BPI' },
@@ -16,6 +17,9 @@ const VESSEL_SPECS = {
 };
 
 export default function RouteAnalysis() {
+  const { lang } = useLanguage();
+  const isHi = lang === 'hi';
+
   const [routesList, setRoutesList] = useState(CANONICAL_ROUTES);
   const [selectedRouteId, setSelectedRouteId] = useState(CANONICAL_ROUTES[0].id);
   const [vesselClass, setVesselClass] = useState('Panamax');
@@ -81,7 +85,7 @@ export default function RouteAnalysis() {
       setErrorMessage(
         err instanceof ApiError 
           ? err.message 
-          : 'Failed to calculate voyage economics for the selected route corridor.'
+          : (isHi ? 'चयनित मार्ग कॉरिडोर के लिए यात्रा अर्थशास्त्र की गणना करने में विफल।' : 'Failed to calculate voyage economics for the selected route corridor.')
       );
     }
   }
@@ -98,30 +102,34 @@ export default function RouteAnalysis() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <div className="flex items-center space-x-2">
-              <h1 className="text-base font-bold text-govNavy">Maritime Route Economics &amp; Voyage Analysis</h1>
+              <h1 className="text-base font-bold text-govNavy font-serif">
+                {isHi ? 'समुद्री मार्ग अर्थशास्त्र एवं यात्रा विश्लेषण' : 'Maritime Route Economics & Voyage Analysis'}
+              </h1>
               <span className="bg-blue-100 text-govBlueAccent font-semibold px-2 py-0.5 rounded text-[10px] border border-blue-200">
-                Admiralty Searoute Engine
+                {isHi ? 'एडमिरल्टी सी-रूट इंजन' : 'Admiralty Searoute Engine'}
               </span>
             </div>
             <p className="text-[11px] text-slate-500 mt-0.5">
-              Corridor-specific freight translation, bunker consumption, port turnaround, and draft feasibility for East Coast India.
+              {isHi 
+                ? 'पूर्वी तट भारत के लिए कॉरिडोर-विशिष्ट भाड़ा अनुवाद, बंकर खपत, पोर्ट टर्नअराउंड और ड्राफ्ट व्यवहार्यता।'
+                : 'Corridor-specific freight translation, bunker consumption, port turnaround, and draft feasibility for East Coast India.'}
             </p>
           </div>
-          <ProvenanceBadge type="derived" text="Great Circle + Distance Constraints" />
+          <ProvenanceBadge type="derived" text={isHi ? 'ग्रेट सर्कल + दूरी प्रतिबंध' : 'Great Circle + Distance Constraints'} />
         </div>
       </div>
 
       {/* Control Panel: Route, Vessel, Cargo, Horizon */}
       <div className="bg-white border border-lightBorder rounded p-4 shadow-xs">
         <h2 className="text-xs font-bold text-govNavy mb-3 pb-1 border-b border-slate-100 uppercase tracking-wide">
-          Voyage &amp; Route Corridor Parameters
+          {isHi ? 'यात्रा एवं मार्ग कॉरिडोर पैरामीटर' : 'Voyage & Route Corridor Parameters'}
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {/* 1. Route Selector */}
           <div className="sm:col-span-2">
             <label className="text-[11px] font-semibold text-slate-700 block mb-1">
-              Select Maritime Corridor (Origin → Destination)
+              {isHi ? 'समुद्री कॉरिडोर चुनें (मूल → गंतव्य)' : 'Select Maritime Corridor (Origin → Destination)'}
             </label>
             <select
               value={selectedRouteId}
@@ -135,14 +143,14 @@ export default function RouteAnalysis() {
               ))}
             </select>
             <span className="text-[10px] text-slate-500 mt-1 block">
-              Corridor ID: <strong className="font-mono text-govNavy">{selectedRoute.id}</strong> ({selectedRoute.cargo.replace('_', ' ')})
+              {isHi ? 'कॉरिडोर ID:' : 'Corridor ID:'} <strong className="font-mono text-govNavy">{selectedRoute.id}</strong> ({selectedRoute.cargo.replace('_', ' ')})
             </span>
           </div>
 
           {/* 2. Vessel Class */}
           <div>
             <label className="text-[11px] font-semibold text-slate-700 block mb-1">
-              Vessel Segment
+              {isHi ? 'पोत वर्ग खंड' : 'Vessel Segment'}
             </label>
             <select
               value={vesselClass}
@@ -163,14 +171,14 @@ export default function RouteAnalysis() {
               ))}
             </select>
             <span className="text-[10px] text-slate-500 mt-1 block">
-              Max Draft: <strong className="font-mono text-slate-800">{vesselSpec.maxDraft} m</strong>
+              {isHi ? 'अधिकतम ड्राफ्ट:' : 'Max Draft:'} <strong className="font-mono text-slate-800">{vesselSpec.maxDraft} {isHi ? 'मी' : 'm'}</strong>
             </span>
           </div>
 
           {/* 3. Horizon */}
           <div>
             <label className="text-[11px] font-semibold text-slate-700 block mb-1">
-              Forecast Horizon
+              {isHi ? 'पूर्वानुमान क्षितिज' : 'Forecast Horizon'}
             </label>
             <select
               value={horizon}
@@ -178,11 +186,13 @@ export default function RouteAnalysis() {
               className="w-full text-xs py-1.5 px-2 bg-slate-50 border border-slate-300 rounded focus:border-govBlueAccent focus:outline-none cursor-pointer"
             >
               {VALID_HORIZONS.map(h => (
-                <option key={h} value={h}>{h} Trading Sessions</option>
+                <option key={h} value={h}>
+                  {h} {isHi ? 'ट्रेडिंग सत्र' : 'Trading Sessions'}
+                </option>
               ))}
             </select>
             <span className="text-[10px] text-slate-500 mt-1 block">
-              Target: <strong className="font-mono text-govNavy">{mappedTarget}</strong>
+              {isHi ? 'लक्ष्य:' : 'Target:'} <strong className="font-mono text-govNavy">{mappedTarget}</strong>
             </span>
           </div>
         </div>
@@ -197,15 +207,17 @@ export default function RouteAnalysis() {
             </svg>
             <div>
               <strong className="text-sm font-bold block text-rose-950">
-                Route Infeasible: Physical Port / Navigational Constraint Violated
+                {isHi ? 'मार्ग अव्यवहार्य: भौतिक बंदरगाह / नेविगेशनल प्रतिबंध का उल्लंघन' : 'Route Infeasible: Physical Port / Navigational Constraint Violated'}
               </strong>
               <p className="mt-1 text-rose-800">
                 {estimateResult.compatibility_reasons && estimateResult.compatibility_reasons.length > 0
                   ? estimateResult.compatibility_reasons.join(' • ')
-                  : `Vessel laden draft (${vesselSpec.maxDraft}m) exceeds the permissible draft at the destination port.`}
+                  : (isHi ? `पोत भारित ड्राफ्ट (${vesselSpec.maxDraft}मी) गंतव्य बंदरगाह पर अनुमत ड्राफ्ट से अधिक है।` : `Vessel laden draft (${vesselSpec.maxDraft}m) exceeds the permissible draft at the destination port.`)}
               </p>
               <p className="text-[10px] text-rose-700 mt-1">
-                Zero fake numbers rule: Rates shown below represent mathematical unconstrained shadow costs and must not be chartered without offshore lightering.
+                {isHi 
+                  ? 'शून्य फर्जी संख्या नियम: नीचे दिखाई गई दरें गणितीय अप्रतिबंधित छाया लागत दर्शाती हैं और अपतटीय लाइटरिंग के बिना चार्टर नहीं की जानी चाहिए।'
+                  : 'Zero fake numbers rule: Rates shown below represent mathematical unconstrained shadow costs and must not be chartered without offshore lightering.'}
               </p>
             </div>
           </div>
@@ -217,7 +229,9 @@ export default function RouteAnalysis() {
         <div className="bg-white border border-lightBorder rounded p-12 text-center space-y-2 shadow-xs">
           <div className="w-8 h-8 border-3 border-govNavy/20 border-t-govNavy rounded-full animate-spin mx-auto" />
           <p className="text-xs font-mono text-govNavy font-semibold">
-            Computing Admiralty nautical distances, bunker consumption, and P10/P50/P90 voyage economics...
+            {isHi 
+              ? 'एडमिरल्टी समुद्री दूरी, बंकर खपत और P10/P50/P90 यात्रा अर्थशास्त्र की गणना की जा रही है...'
+              : 'Computing Admiralty nautical distances, bunker consumption, and P10/P50/P90 voyage economics...'}
           </p>
         </div>
       )}
@@ -225,7 +239,7 @@ export default function RouteAnalysis() {
       {/* Error State */}
       {status === 'error' && (
         <div className="bg-rose-50 border border-rose-200 rounded p-4 text-xs text-rose-800">
-          <strong className="font-bold">Voyage Economics Error: </strong>
+          <strong className="font-bold">{isHi ? 'यात्रा अर्थशास्त्र त्रुटि: ' : 'Voyage Economics Error: '}</strong>
           <span>{errorMessage}</span>
         </div>
       )}
@@ -238,16 +252,16 @@ export default function RouteAnalysis() {
             {/* Median Freight $/tonne */}
             <div className="bg-white border border-lightBorder rounded p-3.5 shadow-xs">
               <span className="text-[10px] text-slate-500 font-medium block">
-                Estimated Freight Rate (P50)
+                {isHi ? 'अनुमानित भाड़ा दर (P50)' : 'Estimated Freight Rate (P50)'}
               </span>
               <div className="flex items-baseline space-x-1.5 mt-0.5">
                 <span className="text-2xl font-black text-govNavy font-mono">
                   ${p50Scenario.freight_usd_per_tonne.toFixed(2)}
                 </span>
-                <span className="text-xs text-slate-500 font-semibold">/ tonne</span>
+                <span className="text-xs text-slate-500 font-semibold">/ {isHi ? 'टन' : 'tonne'}</span>
               </div>
               <div className="mt-1 flex items-center justify-between text-[10px] text-slate-600 font-mono">
-                <span>P10–P90 Range:</span>
+                <span>{isHi ? 'P10–P90 सीमा:' : 'P10–P90 Range:'}</span>
                 <strong>${p10Scenario.freight_usd_per_tonne.toFixed(2)} – ${p90Scenario.freight_usd_per_tonne.toFixed(2)}</strong>
               </div>
               <ProvenanceBadge type="derived" text="Voyage Economics P50" className="mt-2" />
@@ -256,27 +270,27 @@ export default function RouteAnalysis() {
             {/* Total Voyage Days */}
             <div className="bg-white border border-lightBorder rounded p-3.5 shadow-xs">
               <span className="text-[10px] text-slate-500 font-medium block">
-                Total Voyage Duration
+                {isHi ? 'कुल यात्रा अवधि' : 'Total Voyage Duration'}
               </span>
               <div className="flex items-baseline space-x-1 mt-0.5">
                 <span className="text-2xl font-black text-slate-900 font-mono">
                   {p50Scenario.voyage_days.toFixed(1)}
                 </span>
-                <span className="text-xs text-slate-500 font-semibold ml-1">days</span>
+                <span className="text-xs text-slate-500 font-semibold ml-1">{isHi ? 'दिन' : 'days'}</span>
               </div>
               <div className="mt-1 flex items-center justify-between text-[10px] text-slate-600">
-                <span>Distance:</span>
+                <span>{isHi ? 'दूरी:' : 'Distance:'}</span>
                 <strong className="font-mono text-slate-800">{selectedRoute.dist.toLocaleString()} nm</strong>
               </div>
               <div className="text-[9px] text-slate-400 mt-1">
-                Speed: {vesselSpec.speedKn} knots laden
+                {isHi ? `गति: ${vesselSpec.speedKn} नॉट भारित` : `Speed: ${vesselSpec.speedKn} knots laden`}
               </div>
             </div>
 
             {/* Total Voyage Cost */}
             <div className="bg-white border border-lightBorder rounded p-3.5 shadow-xs">
               <span className="text-[10px] text-slate-500 font-medium block">
-                Total Voyage Cost (P50)
+                {isHi ? 'कुल यात्रा लागत (P50)' : 'Total Voyage Cost (P50)'}
               </span>
               <div className="flex items-baseline space-x-1 mt-0.5">
                 <span className="text-xl font-extrabold text-govNavy font-mono">
@@ -284,31 +298,31 @@ export default function RouteAnalysis() {
                 </span>
               </div>
               <div className="mt-1 flex items-center justify-between text-[10px] text-slate-600">
-                <span>Bunker Fuel Cost:</span>
+                <span>{isHi ? 'बंकर ईंधन लागत:' : 'Bunker Fuel Cost:'}</span>
                 <strong className="font-mono text-slate-800">${Math.round(p50Scenario.bunker_cost_usd).toLocaleString()}</strong>
               </div>
               <div className="text-[9px] text-slate-400 mt-1">
-                Pricing: Singapore VLSFO
+                {isHi ? 'मूल्य निर्धारण: सिंगापुर VLSFO' : 'Pricing: Singapore VLSFO'}
               </div>
             </div>
 
             {/* Equivalent TCE Rate */}
             <div className="bg-white border border-lightBorder rounded p-3.5 shadow-xs">
               <span className="text-[10px] text-slate-500 font-medium block">
-                Underlying TCE Benchmark
+                {isHi ? 'अंतर्निहित TCE बेंचमार्क' : 'Underlying TCE Benchmark'}
               </span>
               <div className="flex items-baseline space-x-1 mt-0.5">
                 <span className="text-xl font-extrabold text-slate-800 font-mono">
                   ${Math.round(p50Scenario.tce_usd_day).toLocaleString()}
                 </span>
-                <span className="text-xs text-slate-500 font-semibold">/ day</span>
+                <span className="text-xs text-slate-500 font-semibold">/ {isHi ? 'दिन' : 'day'}</span>
               </div>
               <div className="mt-1 flex items-center justify-between text-[10px] text-slate-600">
-                <span>Index Level:</span>
+                <span>{isHi ? 'इंडेक्स स्तर:' : 'Index Level:'}</span>
                 <strong className="font-mono text-govNavy">{Math.round(p50Scenario.index_level).toLocaleString()} pts ({mappedTarget})</strong>
               </div>
               <div className="text-[9px] text-slate-400 mt-1">
-                Risk Aversion (&lambda;): {riskAversion}
+                {isHi ? 'जोखिम प्रतिरोध (λ):' : 'Risk Aversion (λ):'} {riskAversion}
               </div>
             </div>
           </div>
@@ -316,57 +330,57 @@ export default function RouteAnalysis() {
           {/* Scenario Comparison Table */}
           <div className="bg-white border border-lightBorder rounded p-4 shadow-xs space-y-3">
             <h2 className="text-xs font-bold text-govNavy uppercase tracking-wide border-b border-slate-100 pb-2">
-              Probabilistic Voyage Economics Scenarios (P10 / P50 / P90)
+              {isHi ? 'संभाव्यता यात्रा अर्थशास्त्र परिदृश्य (P10 / P50 / P90)' : 'Probabilistic Voyage Economics Scenarios (P10 / P50 / P90)'}
             </h2>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse gov-table text-[11px]">
                 <thead>
                   <tr>
-                    <th>Market Scenario</th>
-                    <th>Index Level ({mappedTarget})</th>
-                    <th>TCE ($/day)</th>
-                    <th>Voyage Duration</th>
-                    <th>Bunker Fuel Cost</th>
-                    <th>Total Voyage Expense</th>
-                    <th>Freight ($/tonne)</th>
+                    <th>{isHi ? 'बाजार परिदृश्य' : 'Market Scenario'}</th>
+                    <th>{isHi ? `इंडेक्स स्तर (${mappedTarget})` : `Index Level (${mappedTarget})`}</th>
+                    <th>{isHi ? 'TCE ($/दिन)' : 'TCE ($/day)'}</th>
+                    <th>{isHi ? 'यात्रा अवधि' : 'Voyage Duration'}</th>
+                    <th>{isHi ? 'बंकर ईंधन लागत' : 'Bunker Fuel Cost'}</th>
+                    <th>{isHi ? 'कुल यात्रा व्यय' : 'Total Voyage Expense'}</th>
+                    <th>{isHi ? 'भाड़ा ($/टन)' : 'Freight ($/tonne)'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   <tr className="bg-blue-50/20">
-                    <td className="font-bold text-blue-900">P10 (Soft Market / Favorable)</td>
+                    <td className="font-bold text-blue-900">{isHi ? 'P10 (सुस्त बाजार / अनुकूल)' : 'P10 (Soft Market / Favorable)'}</td>
                     <td className="font-mono">{Math.round(p10Scenario.index_level).toLocaleString()} pts</td>
-                    <td className="font-mono">${Math.round(p10Scenario.tce_usd_day).toLocaleString()}/day</td>
-                    <td className="font-mono">{p10Scenario.voyage_days.toFixed(1)} days</td>
+                    <td className="font-mono">${Math.round(p10Scenario.tce_usd_day).toLocaleString()}/{isHi ? 'दिन' : 'day'}</td>
+                    <td className="font-mono">{p10Scenario.voyage_days.toFixed(1)} {isHi ? 'दिन' : 'days'}</td>
                     <td className="font-mono">${Math.round(p10Scenario.bunker_cost_usd).toLocaleString()}</td>
                     <td className="font-mono font-semibold">${Math.round(p10Scenario.total_voyage_cost_usd).toLocaleString()}</td>
-                    <td className="font-mono font-bold text-blue-800">${p10Scenario.freight_usd_per_tonne.toFixed(2)}/t</td>
+                    <td className="font-mono font-bold text-blue-800">${p10Scenario.freight_usd_per_tonne.toFixed(2)}/{isHi ? 'टन' : 't'}</td>
                   </tr>
                   <tr className="bg-slate-50 font-semibold">
-                    <td className="font-bold text-govNavy">P50 (Median Baseline Forecast)</td>
+                    <td className="font-bold text-govNavy">{isHi ? 'P50 (माध्यिका आधारभूत पूर्वानुमान)' : 'P50 (Median Baseline Forecast)'}</td>
                     <td className="font-mono text-govNavy">{Math.round(p50Scenario.index_level).toLocaleString()} pts</td>
-                    <td className="font-mono text-govNavy">${Math.round(p50Scenario.tce_usd_day).toLocaleString()}/day</td>
-                    <td className="font-mono">{p50Scenario.voyage_days.toFixed(1)} days</td>
+                    <td className="font-mono text-govNavy">${Math.round(p50Scenario.tce_usd_day).toLocaleString()}/{isHi ? 'दिन' : 'day'}</td>
+                    <td className="font-mono">{p50Scenario.voyage_days.toFixed(1)} {isHi ? 'दिन' : 'days'}</td>
                     <td className="font-mono">${Math.round(p50Scenario.bunker_cost_usd).toLocaleString()}</td>
                     <td className="font-mono font-bold text-govNavy">${Math.round(p50Scenario.total_voyage_cost_usd).toLocaleString()}</td>
-                    <td className="font-mono font-extrabold text-govNavy text-xs">${p50Scenario.freight_usd_per_tonne.toFixed(2)}/t</td>
+                    <td className="font-mono font-extrabold text-govNavy text-xs">${p50Scenario.freight_usd_per_tonne.toFixed(2)}/{isHi ? 'टन' : 't'}</td>
                   </tr>
                   <tr className="bg-amber-50/20">
-                    <td className="font-bold text-amber-900">P90 (Tight Market / Volatile Spike)</td>
+                    <td className="font-bold text-amber-900">{isHi ? 'P90 (तंग बाजार / अस्थिर उछाल)' : 'P90 (Tight Market / Volatile Spike)'}</td>
                     <td className="font-mono">{Math.round(p90Scenario.index_level).toLocaleString()} pts</td>
-                    <td className="font-mono">${Math.round(p90Scenario.tce_usd_day).toLocaleString()}/day</td>
-                    <td className="font-mono">{p90Scenario.voyage_days.toFixed(1)} days</td>
+                    <td className="font-mono">${Math.round(p90Scenario.tce_usd_day).toLocaleString()}/{isHi ? 'दिन' : 'day'}</td>
+                    <td className="font-mono">{p90Scenario.voyage_days.toFixed(1)} {isHi ? 'दिन' : 'days'}</td>
                     <td className="font-mono">${Math.round(p90Scenario.bunker_cost_usd).toLocaleString()}</td>
                     <td className="font-mono font-semibold">${Math.round(p90Scenario.total_voyage_cost_usd).toLocaleString()}</td>
-                    <td className="font-mono font-bold text-amber-800">${p90Scenario.freight_usd_per_tonne.toFixed(2)}/t</td>
+                    <td className="font-mono font-bold text-amber-800">${p90Scenario.freight_usd_per_tonne.toFixed(2)}/{isHi ? 'टन' : 't'}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <div className="flex justify-between items-center text-[10px] text-slate-500 pt-2 border-t border-slate-100">
-              <span>Risk-Adjusted Freight: <strong className="font-mono text-slate-800">${estimateResult.risk_adjusted_freight_usd_t.toFixed(2)} / tonne</strong></span>
-              <span>Lighterage Required: <strong className={estimateResult.requires_lighterage ? "text-amber-700 font-semibold" : "text-slate-600"}>{estimateResult.requires_lighterage ? "Yes (e.g. Sandheads for Haldia)" : "No (Direct Discharge)"}</strong></span>
+              <span>{isHi ? 'जोखिम-समायोजित भाड़ा:' : 'Risk-Adjusted Freight:'} <strong className="font-mono text-slate-800">${estimateResult.risk_adjusted_freight_usd_t.toFixed(2)} / {isHi ? 'टन' : 'tonne'}</strong></span>
+              <span>{isHi ? 'लाइटरज आवश्यक:' : 'Lighterage Required:'} <strong className={estimateResult.requires_lighterage ? "text-amber-700 font-semibold" : "text-slate-600"}>{estimateResult.requires_lighterage ? (isHi ? "हाँ (उदा. हल्दिया हेतु सैंडहेड्स)" : "Yes (e.g. Sandheads for Haldia)") : (isHi ? "नहीं (प्रत्यक्ष डिस्चार्ज)" : "No (Direct Discharge)")}</strong></span>
             </div>
           </div>
         </>

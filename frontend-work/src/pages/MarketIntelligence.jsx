@@ -23,11 +23,15 @@ import {
   fetchBackhaul, 
   ApiError 
 } from '../api';
+import { useLanguage } from '../context/LanguageContext';
 
 const VESSEL_CLASSES = ['Capesize', 'Panamax', 'Supramax', 'Handysize'];
 const INDICES = ['BCI', 'BPI', 'BSI', 'BHSI'];
 
 export default function MarketIntelligence() {
+  const { lang } = useLanguage();
+  const isHi = lang === 'hi';
+
   const [activeTab, setActiveTab] = useState('trends'); // 'trends' | 'employment'
   const [selectedIndex, setSelectedIndex] = useState('BPI');
   const [selectedClass, setSelectedClass] = useState('Panamax');
@@ -67,7 +71,7 @@ export default function MarketIntelligence() {
         setSeriesData(sRes.observations || []);
       } catch (err) {
         console.error('Failed to load market trends:', err);
-        setError('Failed to retrieve market telemetry from backend.');
+        setError(isHi ? 'बैकएंड से बाजार टेलीमेट्री प्राप्त करने में विफल।' : 'Failed to retrieve market telemetry from backend.');
       } finally {
         setLoading(false);
       }
@@ -123,14 +127,16 @@ export default function MarketIntelligence() {
           <div className="flex items-center space-x-2">
             <Compass className="w-4 h-4 text-govNavy" />
             <h1 className="text-base font-bold text-govNavy font-serif">
-              Maritime Market Intelligence &amp; Fleet Employment
+              {isHi ? 'समुद्री बाजार आसूचना एवं पोत बेड़ा नियोजन' : 'Maritime Market Intelligence & Fleet Employment'}
             </h1>
             <span className="bg-blue-100 text-govBlueAccent font-semibold px-2 py-0.5 rounded text-[10px] border border-blue-200">
-              Commercial Analytics
+              {isHi ? 'व्यावसायिक विश्लेषण' : 'Commercial Analytics'}
             </span>
           </div>
           <p className="text-[11px] text-slate-500 mt-0.5">
-            Exploratory dry bulk index dynamics, macro commodities, ballast repositioning costs, and charterer demand-regime windows.
+            {isHi 
+              ? 'ड्राई बल्क सूचकांक गतिकी, मैक्रो कमोडिटीज, बैलास्ट पुनर्संस्थापन लागत और चार्टरर मांग-व्यवस्था खिड़कियां।'
+              : 'Exploratory dry bulk index dynamics, macro commodities, ballast repositioning costs, and charterer demand-regime windows.'}
           </p>
         </div>
 
@@ -144,7 +150,7 @@ export default function MarketIntelligence() {
                 : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-300'
             }`}
           >
-            Market Indicators &amp; Trends
+            {isHi ? 'बाजार संकेतक एवं रुझान' : 'Market Indicators & Trends'}
           </button>
           <button
             onClick={() => setActiveTab('employment')}
@@ -155,7 +161,7 @@ export default function MarketIntelligence() {
             }`}
           >
             <Ship className="w-3.5 h-3.5 mr-1" />
-            <span>Employment &amp; Positioning (Idle/Ballast)</span>
+            <span>{isHi ? 'नियोजन एवं पोजिशनिंग (निष्क्रिय/बैलास्ट)' : 'Employment & Positioning (Idle/Ballast)'}</span>
           </button>
         </div>
       </div>
@@ -173,7 +179,7 @@ export default function MarketIntelligence() {
           <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-xs flex flex-wrap justify-between items-center gap-2">
             <div className="flex items-center space-x-2">
               <span className="text-xs font-bold text-govNavy uppercase tracking-wide text-[10px]">
-                Active Baltic Sub-Index:
+                {isHi ? 'सक्रिय बाल्टिक उप-सूचकांक:' : 'Active Baltic Sub-Index:'}
               </span>
               <div className="flex space-x-1">
                 {INDICES.map(idx => (
@@ -191,41 +197,41 @@ export default function MarketIntelligence() {
                 ))}
               </div>
             </div>
-            <ProvenanceBadge type="OBSERVED" text="Verified Time Series" />
+            <ProvenanceBadge type="OBSERVED" text={isHi ? 'सत्यापित समय श्रृंखला' : 'Verified Time Series'} />
           </div>
 
           {/* Quick Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
             <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-xs">
-              <span className="text-[10px] text-slate-500 block font-sans">Latest Observation</span>
+              <span className="text-[10px] text-slate-500 block font-sans">{isHi ? 'नवीनतम अवलोकन' : 'Latest Observation'}</span>
               <strong className="text-lg font-extrabold text-govNavy block mt-0.5">
                 {latest ? `${Math.round(latest).toLocaleString()} pts` : '—'}
               </strong>
-              <span className="text-[9px] text-slate-400 font-sans">As-Of: {asOfDate}</span>
+              <span className="text-[9px] text-slate-400 font-sans">{isHi ? 'दिनांक:' : 'As-Of:'} {asOfDate}</span>
             </div>
 
             <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-xs">
-              <span className="text-[10px] text-slate-500 block font-sans">Window Average</span>
+              <span className="text-[10px] text-slate-500 block font-sans">{isHi ? 'अवधि औसत' : 'Window Average'}</span>
               <strong className="text-lg font-extrabold text-slate-800 block mt-0.5">
                 {meanVal ? `${meanVal.toLocaleString()} pts` : '—'}
               </strong>
-              <span className="text-[9px] text-slate-400 font-sans">120-session mean</span>
+              <span className="text-[9px] text-slate-400 font-sans">{isHi ? '120-सत्र माध्य' : '120-session mean'}</span>
             </div>
 
             <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-xs">
-              <span className="text-[10px] text-slate-500 block font-sans">Historical Low</span>
+              <span className="text-[10px] text-slate-500 block font-sans">{isHi ? 'ऐतिहासिक न्यूनतम' : 'Historical Low'}</span>
               <strong className="text-lg font-extrabold text-emerald-700 block mt-0.5">
                 {minVal ? `${Math.round(minVal).toLocaleString()} pts` : '—'}
               </strong>
-              <span className="text-[9px] text-slate-400 font-sans">Window Min</span>
+              <span className="text-[9px] text-slate-400 font-sans">{isHi ? 'अवधि न्यूनतम' : 'Window Min'}</span>
             </div>
 
             <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-xs">
-              <span className="text-[10px] text-slate-500 block font-sans">Historical High</span>
+              <span className="text-[10px] text-slate-500 block font-sans">{isHi ? 'ऐतिहासिक उच्चतम' : 'Historical High'}</span>
               <strong className="text-lg font-extrabold text-rose-700 block mt-0.5">
                 {maxVal ? `${Math.round(maxVal).toLocaleString()} pts` : '—'}
               </strong>
-              <span className="text-[9px] text-slate-400 font-sans">Window Max</span>
+              <span className="text-[9px] text-slate-400 font-sans">{isHi ? 'अवधि अधिकतम' : 'Window Max'}</span>
             </div>
           </div>
 
@@ -233,10 +239,10 @@ export default function MarketIntelligence() {
           <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs space-y-3">
             <div className="flex justify-between items-center border-b border-slate-100 pb-2">
               <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-                Recent Daily Baltic Session Log ({selectedIndex})
+                {isHi ? `हालिया दैनिक बाल्टिक सत्र लॉग (${selectedIndex})` : `Recent Daily Baltic Session Log (${selectedIndex})`}
               </h3>
               <span className="text-[10px] font-mono text-slate-400">
-                {seriesData.length} recorded daily sessions
+                {seriesData.length} {isHi ? 'दर्ज दैनिक सत्र' : 'recorded daily sessions'}
               </span>
             </div>
 
@@ -244,11 +250,11 @@ export default function MarketIntelligence() {
               <table className="w-full text-xs text-left gov-table border-collapse">
                 <thead>
                   <tr>
-                    <th>Observation Date</th>
-                    <th>Sub-Index</th>
-                    <th className="text-right">Index Value</th>
-                    <th className="text-right">Daily Change</th>
-                    <th className="text-right">Provenance</th>
+                    <th>{isHi ? 'अवलोकन तिथि' : 'Observation Date'}</th>
+                    <th>{isHi ? 'उप-सूचकांक' : 'Sub-Index'}</th>
+                    <th className="text-right">{isHi ? 'सूचकांक मान' : 'Index Value'}</th>
+                    <th className="text-right">{isHi ? 'दैनिक परिवर्तन' : 'Daily Change'}</th>
+                    <th className="text-right">{isHi ? 'प्रमाणिकता' : 'Provenance'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-mono">
@@ -264,7 +270,7 @@ export default function MarketIntelligence() {
                           {change !== 0 ? `${change > 0 ? '+' : ''}${change.toFixed(1)}` : '—'}
                         </td>
                         <td className="text-right font-sans">
-                          <ProvenanceBadge type="OBSERVED" text="Observed" />
+                          <ProvenanceBadge type="OBSERVED" text={isHi ? 'सत्यापित' : 'Observed'} />
                         </td>
                       </tr>
                     );
@@ -283,7 +289,9 @@ export default function MarketIntelligence() {
           <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-xs flex flex-wrap justify-between items-center gap-3">
             <div className="flex items-center space-x-3">
               <div>
-                <label className="text-[10px] font-bold text-slate-600 block mb-1">Vessel Class</label>
+                <label className="text-[10px] font-bold text-slate-600 block mb-1">
+                  {isHi ? 'पोत वर्ग' : 'Vessel Class'}
+                </label>
                 <div className="flex space-x-1">
                   {VESSEL_CLASSES.map(cls => (
                     <button
@@ -302,27 +310,31 @@ export default function MarketIntelligence() {
               </div>
 
               <div>
-                <label className="text-[10px] font-bold text-slate-600 block mb-1">Ballast Origin Port</label>
+                <label className="text-[10px] font-bold text-slate-600 block mb-1">
+                  {isHi ? 'बैलास्ट मूल बंदरगाह' : 'Ballast Origin Port'}
+                </label>
                 <select
                   value={ballastFromPort}
                   onChange={(e) => setBallastFromPort(e.target.value)}
                   className="text-xs bg-slate-50 border border-slate-300 rounded p-1 font-semibold text-slate-800 focus:outline-none"
                 >
-                  <option value="INPRT">Paradip (INPRT)</option>
-                  <option value="INVTZ">Visakhapatnam (INVTZ)</option>
-                  <option value="INDHA">Dhamra (INDHA)</option>
-                  <option value="INHAL">Haldia (INHAL)</option>
-                  <option value="AUHPT">Hay Point (AUHPT)</option>
+                  <option value="INPRT">{isHi ? 'पारादीप (INPRT)' : 'Paradip (INPRT)'}</option>
+                  <option value="INVTZ">{isHi ? 'विशाखापट्टनम (INVTZ)' : 'Visakhapatnam (INVTZ)'}</option>
+                  <option value="INDHA">{isHi ? 'धामरा (INDHA)' : 'Dhamra (INDHA)'}</option>
+                  <option value="INHAL">{isHi ? 'हल्दिया (INHAL)' : 'Haldia (INHAL)'}</option>
+                  <option value="AUHPT">{isHi ? 'हे पॉइंट (AUHPT)' : 'Hay Point (AUHPT)'}</option>
                 </select>
               </div>
             </div>
 
-            <ProvenanceBadge type="DERIVED" text="Ballast Model" />
+            <ProvenanceBadge type="DERIVED" text={isHi ? 'बैलास्ट मॉडल' : 'Ballast Model'} />
           </div>
 
           {loadingEmployment ? (
             <div className="bg-white border border-slate-200 rounded-lg p-12 text-center text-xs text-slate-400">
-              Loading employment, low-demand regimes, and ballast matrices from backend...
+              {isHi 
+                ? 'बैकएंड से नियोजन, कम-मांग व्यवस्थाएं और बैलास्ट मैट्रिक्स लोड हो रहे हैं...' 
+                : 'Loading employment, low-demand regimes, and ballast matrices from backend...'}
             </div>
           ) : (
             <div className="space-y-4">
@@ -332,14 +344,16 @@ export default function MarketIntelligence() {
                   <div className="flex justify-between items-start border-b border-slate-100 pb-2.5">
                     <div>
                       <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-                        Six-Month Demand-Regime Strip: {selectedClass} Fleet
+                        {isHi 
+                          ? `छह महीने का मांग-व्यवस्था स्ट्रिप: ${selectedClass} बेड़ा` 
+                          : `Six-Month Demand-Regime Strip: ${selectedClass} Fleet`}
                       </h3>
                       <p className="text-[11px] text-slate-600 mt-0.5 font-medium">
                         {lowDemandData.headline}
                       </p>
                     </div>
                     <span className="text-[10px] font-mono text-slate-400">
-                      Method: 5-Year Percentiles (p30/p70)
+                      {isHi ? 'विधि: 5-वर्षीय प्रतिशतक (p30/p70)' : 'Method: 5-Year Percentiles (p30/p70)'}
                     </span>
                   </div>
 
@@ -368,12 +382,16 @@ export default function MarketIntelligence() {
                                 ? 'bg-rose-200 text-rose-900'
                                 : 'bg-slate-200 text-slate-700'
                             }`}>
-                              {s.regime} Demand
+                              {isHi 
+                                ? (isLow ? 'कम मांग' : isHigh ? 'उच्च मांग' : 'सामान्य मांग') 
+                                : `${s.regime} Demand`}
                             </span>
                           </div>
 
                           <div className="text-xs font-mono">
-                            <span className="text-[10px] text-slate-500 block font-sans">Forecast Point:</span>
+                            <span className="text-[10px] text-slate-500 block font-sans">
+                              {isHi ? 'पूर्वानुमान बिंदु:' : 'Forecast Point:'}
+                            </span>
                             <strong className="text-govNavy">{Math.round(s.forecast_point).toLocaleString()} pts</strong>
                           </div>
 
@@ -394,28 +412,35 @@ export default function MarketIntelligence() {
                     <div className="flex items-center space-x-2">
                       <Ship className="w-4 h-4 text-govNavy" />
                       <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-                        Backhaul Opportunity &amp; Ballast Premium Analysis
+                        {isHi ? 'बैकहॉल अवसर एवं बैलास्ट प्रीमियम विश्लेषण' : 'Backhaul Opportunity & Ballast Premium Analysis'}
                       </h3>
                     </div>
-                    <span className="text-[10px] font-mono text-slate-400">Route: AUHPT → INPRT</span>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      {isHi ? 'कॉरिडोर: AUHPT → INPRT' : 'Route: AUHPT → INPRT'}
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                     <div className="p-3 bg-blue-50/60 rounded-lg border border-blue-200 md:col-span-2 space-y-1">
-                      <strong className="text-govNavy block text-xs">Actionable Charterer Insight:</strong>
+                      <strong className="text-govNavy block text-xs">
+                        {isHi ? 'कार्रवाई योग्य चार्टरर अंतर्दृष्टि:' : 'Actionable Charterer Insight:'}
+                      </strong>
                       <p className="text-slate-700 leading-relaxed text-xs">{backhaulData.message}</p>
                       <span className="text-[10px] text-slate-500 block pt-1 font-mono">
-                        Estimated Ballast Premium: <strong>${Math.round(backhaulData.ballast_premium_usd).toLocaleString()}</strong>
+                        {isHi ? 'अनुमानित बैलास्ट प्रीमियम:' : 'Estimated Ballast Premium:'}{' '}
+                        <strong>${Math.round(backhaulData.ballast_premium_usd).toLocaleString()}</strong>
                       </span>
                     </div>
 
                     <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-                      <strong className="text-slate-800 block text-xs">Backhaul Availability Index:</strong>
+                      <strong className="text-slate-800 block text-xs">
+                        {isHi ? 'बैकहॉल उपलब्धता सूचकांक:' : 'Backhaul Availability Index:'}
+                      </strong>
                       <div className="text-xl font-mono font-extrabold text-govNavy">
                         {(backhaulData.backhaul_index * 100).toFixed(0)}%
                       </div>
                       <p className="text-[10px] text-slate-500">
-                        100% = full paying backhaul (zero ballast priced in).
+                        {isHi ? '100% = पूर्ण भुगतान वाला बैकहॉल (शून्य बैलास्ट मूल्य शामिल)।' : '100% = full paying backhaul (zero ballast priced in).'}
                       </p>
                     </div>
                   </div>
@@ -424,14 +449,14 @@ export default function MarketIntelligence() {
                   {backhaulData.better_backhaul_origins && backhaulData.better_backhaul_origins.length > 0 && (
                     <div className="space-y-1.5 pt-2">
                       <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wide block">
-                        Alternative Corridors with Higher Backhaul Utilization:
+                        {isHi ? 'उच्च बैकहॉल उपयोग वाले वैकल्पिक कॉरिडोर:' : 'Alternative Corridors with Higher Backhaul Utilization:'}
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                         {backhaulData.better_backhaul_origins.map((alt, i) => (
                           <div key={i} className="p-2 bg-slate-50 rounded border border-slate-200 text-xs font-mono">
                             <span className="font-sans font-bold text-slate-800 block">{alt.port_name}</span>
                             <span className="text-[10px] text-slate-500">
-                              Backhaul: <strong>{(alt.backhaul_index * 100).toFixed(0)}%</strong> · {alt.distance_nm} nm
+                              {isHi ? 'बैकहॉल:' : 'Backhaul:'} <strong>{(alt.backhaul_index * 100).toFixed(0)}%</strong> · {alt.distance_nm} nm
                             </span>
                           </div>
                         ))}
@@ -447,14 +472,18 @@ export default function MarketIntelligence() {
                   <div className="flex justify-between items-center border-b border-slate-100 pb-2">
                     <div>
                       <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-                        Ballast Repositioning Matrix from {ballastFromPort} ({selectedClass})
+                        {isHi 
+                          ? `${ballastFromPort} से बैलास्ट पुनर्संस्थापन मैट्रिक्स (${selectedClass})` 
+                          : `Ballast Repositioning Matrix from ${ballastFromPort} (${selectedClass})`}
                       </h3>
                       <p className="text-[10px] text-slate-500 mt-0.5">
-                        Distance, sailing transit days, and ballast premium owners price into voyage rates.
+                        {isHi 
+                          ? 'दूरी, नौकायन पारगमन दिन, और पोत मालिक द्वारा यात्रा दरों में जोड़ा जाने वाला बैलास्ट प्रीमियम।'
+                          : 'Distance, sailing transit days, and ballast premium owners price into voyage rates.'}
                       </p>
                     </div>
                     <span className="text-[10px] font-mono text-slate-400">
-                      Bunker VLSFO: ${ballastData.bunker_usd_mt}/mt
+                      {isHi ? 'बंकर VLSFO:' : 'Bunker VLSFO:'} ${ballastData.bunker_usd_mt}/mt
                     </span>
                   </div>
 
@@ -462,13 +491,13 @@ export default function MarketIntelligence() {
                     <table className="w-full text-xs text-left gov-table border-collapse">
                       <thead>
                         <tr>
-                          <th>From Port</th>
-                          <th>To Destination</th>
-                          <th className="text-right">Distance</th>
-                          <th className="text-right">Ballast Days</th>
-                          <th className="text-right">Full Ballast Cost</th>
-                          <th className="text-right">Backhaul Index</th>
-                          <th className="text-right">Priced Into Rate</th>
+                          <th>{isHi ? 'प्रारंभिक पोर्ट' : 'From Port'}</th>
+                          <th>{isHi ? 'गंतव्य पोर्ट' : 'To Destination'}</th>
+                          <th className="text-right">{isHi ? 'दूरी' : 'Distance'}</th>
+                          <th className="text-right">{isHi ? 'बैलास्ट दिन' : 'Ballast Days'}</th>
+                          <th className="text-right">{isHi ? 'कुल बैलास्ट लागत' : 'Full Ballast Cost'}</th>
+                          <th className="text-right">{isHi ? 'बैकहॉल सूचकांक' : 'Backhaul Index'}</th>
+                          <th className="text-right">{isHi ? 'दर में शामिल मूल्य' : 'Priced Into Rate'}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-mono">
@@ -477,7 +506,7 @@ export default function MarketIntelligence() {
                             <td className="font-semibold text-slate-800 font-sans">{r.from_port}</td>
                             <td className="font-semibold text-slate-800 font-sans">{r.to_port}</td>
                             <td className="text-right">{r.distance_nm.toLocaleString()} nm</td>
-                            <td className="text-right">{r.ballast_days} d</td>
+                            <td className="text-right">{r.ballast_days} {isHi ? 'दिन' : 'd'}</td>
                             <td className="text-right">${Math.round(r.ballast_cost_usd).toLocaleString()}</td>
                             <td className="text-right">{(r.backhaul_index * 100).toFixed(0)}%</td>
                             <td className="text-right font-extrabold text-govNavy">

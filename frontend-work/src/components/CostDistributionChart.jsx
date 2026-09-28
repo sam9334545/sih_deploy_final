@@ -1,14 +1,20 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 /**
  * Visualizes the cost distribution of simulated strategies:
  * P10 (optimistic lower bound), P50 (median), Mean, P90 (upper bound), and CVaR-90 (tail risk).
  */
 export default function CostDistributionChart({ results = [], winnerId = null }) {
+  const { lang } = useLanguage();
+  const isHi = lang === 'hi';
+
   if (!results || results.length === 0) {
     return (
       <div className="p-8 text-center text-xs text-slate-400 bg-slate-50/50 rounded border border-dashed border-slate-200">
-        No simulation distribution data available. Run simulation to view cost distributions.
+        {isHi 
+          ? 'कोई सिमुलेशन वितरण डेटा उपलब्ध नहीं है। लागत वितरण देखने के लिए सिमुलेशन चलाएं।' 
+          : 'No simulation distribution data available. Run simulation to view cost distributions.'}
       </div>
     );
   }
@@ -42,32 +48,34 @@ export default function CostDistributionChart({ results = [], winnerId = null })
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-3">
         <div>
           <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-            Simulated Landed Cost Distribution Comparison
+            {isHi ? 'सिम्युलेटेड लैंडेड लागत वितरण तुलना' : 'Simulated Landed Cost Distribution Comparison'}
           </h3>
           <p className="text-[11px] text-slate-500 mt-0.5">
-            Monte Carlo distributions showing P10 (optimistic), Median (P50), Expected (Mean), P90 (pessimistic), and Tail Risk (CVaR-90).
+            {isHi 
+              ? 'मोंटे कार्लो वितरण जो P10 (आशावादी), माध्यिका (P50), अपेक्षित (माध्य), P90 (निराशावादी) और टेल जोखिम (CVaR-90) प्रदर्शित करते हैं।'
+              : 'Monte Carlo distributions showing P10 (optimistic), Median (P50), Expected (Mean), P90 (pessimistic), and Tail Risk (CVaR-90).'}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-[10px] text-slate-600 font-medium">
           <span className="flex items-center gap-1">
             <span className="w-3 h-2 bg-blue-100 border border-blue-400 rounded-xs" />
-            <span>80% Confidence Band (P10–P90)</span>
+            <span>{isHi ? '80% विश्वास अंतराल (P10–P90)' : '80% Confidence Band (P10–P90)'}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 bg-blue-700 rounded-full" />
-            <span>Median (P50)</span>
+            <span>{isHi ? 'माध्यिका (P50)' : 'Median (P50)'}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 bg-emerald-600 rotate-45 transform" />
-            <span>Mean Cost</span>
+            <span>{isHi ? 'माध्य लागत' : 'Mean Cost'}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 bg-rose-600 rounded-xs" />
-            <span>CVaR-90 Tail</span>
+            <span>{isHi ? 'CVaR-90 टेल' : 'CVaR-90 Tail'}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 bg-amber-500 rounded-full" />
-            <span>Risk-Adjusted</span>
+            <span>{isHi ? 'जोखिम-समायोजित' : 'Risk-Adjusted'}</span>
           </span>
         </div>
       </div>
@@ -120,14 +128,14 @@ export default function CostDistributionChart({ results = [], winnerId = null })
                   <span className="font-bold text-slate-800">{r.label}</span>
                   {isWinner && (
                     <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 px-1.5 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider">
-                      Recommended
+                      {isHi ? 'सर्वश्रेष्ठ अनुशंसित' : 'Recommended'}
                     </span>
                   )}
                 </div>
                 <div className="flex items-center space-x-3 text-[11px] text-slate-600 font-mono mt-1 sm:mt-0">
-                  <span>Mean: <strong>${Math.round(mean).toLocaleString()}</strong></span>
-                  <span>Risk-Adj: <strong className="text-govNavy">${Math.round(riskAdj).toLocaleString()}</strong></span>
-                  <span className="text-[10px] text-slate-500">(${r.usd_per_tonne ? r.usd_per_tonne.toFixed(2) : '—'}/t)</span>
+                  <span>{isHi ? 'माध्य:' : 'Mean:'} <strong>${Math.round(mean).toLocaleString()}</strong></span>
+                  <span>{isHi ? 'जोखिम-समायोजित:' : 'Risk-Adj:'} <strong className="text-govNavy">${Math.round(riskAdj).toLocaleString()}</strong></span>
+                  <span className="text-[10px] text-slate-500">(${r.usd_per_tonne ? r.usd_per_tonne.toFixed(2) : '—'}/{isHi ? 'टन' : 't'})</span>
                 </div>
               </div>
 
@@ -137,21 +145,21 @@ export default function CostDistributionChart({ results = [], winnerId = null })
                 <div
                   className="absolute top-1 bottom-1 bg-blue-200/90 rounded border-l-2 border-r-2 border-blue-500"
                   style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
-                  title={`80% Band: $${Math.round(p10).toLocaleString()} – $${Math.round(p90).toLocaleString()}`}
+                  title={`${isHi ? '80% अंतराल' : '80% Band'}: $${Math.round(p10).toLocaleString()} – $${Math.round(p90).toLocaleString()}`}
                 />
 
                 {/* Median P50 Marker */}
                 <div
                   className="absolute w-2 h-4 bg-blue-700 rounded-sm -translate-x-1/2 z-10"
                   style={{ left: `${p50Pct}%` }}
-                  title={`P50 Median: $${Math.round(p50).toLocaleString()}`}
+                  title={`P50 ${isHi ? 'माध्यिका' : 'Median'}: $${Math.round(p50).toLocaleString()}`}
                 />
 
                 {/* Mean Marker */}
                 <div
                   className="absolute w-2.5 h-2.5 bg-emerald-600 rotate-45 -translate-x-1/2 z-10 shadow-xs"
                   style={{ left: `${meanPct}%` }}
-                  title={`Mean: $${Math.round(mean).toLocaleString()}`}
+                  title={`${isHi ? 'माध्य' : 'Mean'}: $${Math.round(mean).toLocaleString()}`}
                 />
 
                 {/* CVaR 90 Marker */}
@@ -165,7 +173,7 @@ export default function CostDistributionChart({ results = [], winnerId = null })
                 <div
                   className="absolute w-3 h-3 bg-amber-500 border border-white rounded-full -translate-x-1/2 z-20 shadow-xs"
                   style={{ left: `${riskAdjPct}%` }}
-                  title={`Risk-Adjusted Cost: $${Math.round(riskAdj).toLocaleString()}`}
+                  title={`${isHi ? 'जोखिम-समायोजित लागत' : 'Risk-Adjusted Cost'}: $${Math.round(riskAdj).toLocaleString()}`}
                 />
               </div>
 
@@ -175,7 +183,7 @@ export default function CostDistributionChart({ results = [], winnerId = null })
                 <span>P50: ${Math.round(p50).toLocaleString()}</span>
                 <span>P90: ${Math.round(p90).toLocaleString()}</span>
                 <span className="text-rose-700">CVaR-90: ${Math.round(cvar90).toLocaleString()}</span>
-                <span>Late Risk: {(r.p_deadline_miss * 100).toFixed(1)}%</span>
+                <span>{isHi ? 'समय-सीमा चूक जोखिम:' : 'Late Risk:'} {(r.p_deadline_miss * 100).toFixed(1)}%</span>
               </div>
             </div>
           );
