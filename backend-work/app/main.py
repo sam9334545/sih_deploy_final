@@ -74,6 +74,9 @@ app.add_exception_handler(ApiError, api_error_handler)
 app.add_exception_handler(RequestValidationError, validation_handler)
 app.add_exception_handler(Exception, unhandled_handler)
 
+# Expose standard production /health, /health/ready, /health/live probes at root
+app.include_router(health.router)
+
 API_V1 = "/api/v1"
 for r in (forecast.router, ports.router, vessels.router, optimize.router,
           market.router, risks.router, sources.router, health.router, historical.router):

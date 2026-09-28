@@ -54,6 +54,7 @@ class SimResult:
     feasible: bool = True
     infeasible_reason: str | None = None
     notes: list[str] = field(default_factory=list)
+    sensitivity: list[dict] = field(default_factory=list)
 
 
 def _sample_lognormal_from_band(rng, point: float, lo: float, hi: float, n: int) -> np.ndarray:
@@ -91,7 +92,9 @@ def enumerate_strategies(ctx: ScenarioContext) -> list[Strategy]:
 def simulate(ctx: ScenarioContext, strategy: Strategy, n: int | None = None,
              seed: int | None = None, freight_shift: float = 1.0,
              wait_shift: float = 1.0, weather_shift: float = 1.0,
-             bunker_shift: float = 1.0) -> SimResult:
+             bunker_shift: float = 1.0, demurrage_shift: float = 1.0,
+             port_cost_shift: float = 1.0, repo_shift: float = 1.0,
+             lighterage_shift: float = 1.0) -> SimResult:
     n = n or settings.n_simulations_default
     rng = np.random.default_rng(settings.simulation_seed if seed is None else seed)
     cc = ctx.classes[strategy.vessel_class]
@@ -111,9 +114,9 @@ def simulate(ctx: ScenarioContext, strategy: Strategy, n: int | None = None,
     # ---- 2. bunker: lognormal, sigma from realised vol scaled to the voyage ----
     horizon_yrs = max(ctx.days_to_deadline, 7) / 365.0
     bsig = max(0.02, ctx.bunker_vol * math.sqrt(horizon_yrs))
-    bunker = ctx.bunker_usd_mt * np.exp(rng.normal(-0.5 * bsig ** 2, bsig, n)) * bunker_shift
+    effective_bunker_price = ctx.bunker_usd_mt * bunker_shift
+    bunker = effective_bunker_price * np.exp(rng.normal(-0.5 * bsig ** 2, bsig, n))
 
-    # ---- 3 & 4. waiting (empirical bootstrap) and weather, per voyage ----
     # ---- 3 & 4. waiting (empirical bootstrap) and weather, per voyage ----
     # Vectorised over paths: this is exactly the arithmetic in cost_model, applied to
     # whole arrays. tests/test_cost_model.py asserts the two agree draw for draw.
@@ -126,8 +129,8 @@ def simulate(ctx: ScenarioContext, strategy: Strategy, n: int | None = None,
 
     laytime = laytime_days_for(cc.intake_t, cc.load_rate_tpd) + \
         laytime_days_for(cc.intake_t, cc.disch_rate_tpd)
-    reposition = repositioning_cost(vc, ctx.route.distance_nm, ctx.bunker_usd_mt,
-                                    ctx.route.backhaul_index, cc.load_charges.port_dues)
+    reposition = repositioning_cost(vc, ctx.route.distance_nm, effective_bunker_price,
+                                    ctx.route.backhaul_index, cc.load_charges.port_dues) * repo_shift
     laden_days = ctx.route.distance_nm / (vc.speed_laden_kn * 24.0)
     ballast_days = ctx.route.distance_nm / (vc.speed_ballast_kn * 24.0)
 
@@ -156,26 +159,36 @@ def simulate(ctx: ScenarioContext, strategy: Strategy, n: int | None = None,
 
         freight_cost = freight * tonnes
         port_hours = (load_cargo_days + disch_cargo_days) * 24.0
-        port_cost = (cc.load_charges.port_dues + cc.load_charges.pilotage
-                     + cc.disch_charges.port_dues + cc.disch_charges.pilotage
-                     + (cc.load_charges.berth_hire_per_hour
-                        + cc.disch_charges.berth_hire_per_hour) * port_hours / 2.0
-                     + cc.disch_charges.wharfage_per_tonne * tonnes)
+        base_port_charges = (cc.load_charges.port_dues + cc.load_charges.pilotage
+                             + cc.disch_charges.port_dues + cc.disch_charges.pilotage
+                             + (cc.load_charges.berth_hire_per_hour
+                                + cc.disch_charges.berth_hire_per_hour) * port_hours / 2.0
+                             + cc.disch_charges.wharfage_per_tonne * tonnes)
+        port_cost = base_port_charges * port_cost_shift
+
         billable = np.maximum(0.0, wait_days - laytime)
-        waiting_cost = (wait_days - billable) * vc.demurrage_usd_day * 0.35
-        demurrage = billable * vc.demurrage_usd_day
-        lighterage_cost = (light_t * cc.disch_charges.lighterage_per_tonne
-                           + light_days * vc.demurrage_usd_day * 0.6
-                           + cc.disch_charges.anchorage_per_hour * light_days * 24.0) \
-            if light_t > 0 else 0.0
+        effective_demurrage_usd_day = vc.demurrage_usd_day * demurrage_shift
+        waiting_cost = (wait_days - billable) * effective_demurrage_usd_day * 0.35
+        demurrage = billable * effective_demurrage_usd_day
+
+        base_lighterage = ((light_t * cc.disch_charges.lighterage_per_tonne
+                            + light_days * effective_demurrage_usd_day * 0.6
+                            + cc.disch_charges.anchorage_per_hour * light_days * 24.0)
+                           if light_t > 0 else 0.0)
+        lighterage_cost = base_lighterage * lighterage_shift
+
         repo = reposition if (v_idx > 0 or strategy.execution == "parallel") else reposition * 0.5
 
+        # Bunker price sensitivity shock for voyage fuel (when bunker_shift != 1.0)
+        voyage_fuel_mt = (laden_days * vc.cons_laden_mt_day + ballast_days * vc.cons_ballast_mt_day * (1.0 - ctx.route.backhaul_index))
+        bunker_fuel_shock = (effective_bunker_price - ctx.bunker_usd_mt) * voyage_fuel_mt
+
         voyage_total = (freight_cost + port_cost + waiting_cost + demurrage
-                        + lighterage_cost + repo)
+                        + lighterage_cost + repo + bunker_fuel_shock)
         totals += voyage_total
         this_idle = wait_days + weather_days
         idle_days += this_idle
-        idle_cost += this_idle * vc.demurrage_usd_day * 0.6
+        idle_cost += this_idle * effective_demurrage_usd_day * 0.6
         if strategy.execution == "sequential":
             durations += total_days
         else:
@@ -224,6 +237,126 @@ def simulate(ctx: ScenarioContext, strategy: Strategy, n: int | None = None,
         usd_per_tonne=round(mean / ctx.quantity_t, 3) if ctx.quantity_t else 0.0,
         notes=notes,
     )
+
+
+DEFAULT_SENSITIVITY_FACTORS = [
+    {
+        "factor": "freight",
+        "name": "Freight Rate (Index Volatility)",
+        "shock_low": -0.20,
+        "shock_high": 0.20,
+        "param": "freight_shift",
+        "component_key": "freight",
+    },
+    {
+        "factor": "bunker",
+        "name": "Bunker Price (VLSFO Singapore)",
+        "shock_low": -0.15,
+        "shock_high": 0.15,
+        "param": "bunker_shift",
+        "component_key": "bunker",
+    },
+    {
+        "factor": "waiting",
+        "name": "Port Pre-Berthing Waiting Time",
+        "shock_low": -0.30,
+        "shock_high": 0.30,
+        "param": "wait_shift",
+        "component_key": "waiting",
+    },
+    {
+        "factor": "expected_demurrage",
+        "name": "Demurrage Claims & Delays",
+        "shock_low": -0.30,
+        "shock_high": 0.30,
+        "param": "demurrage_shift",
+        "component_key": "expected_demurrage",
+    },
+    {
+        "factor": "port_costs",
+        "name": "Port Tariffs & Pilotage",
+        "shock_low": -0.10,
+        "shock_high": 0.10,
+        "param": "port_cost_shift",
+        "component_key": "port_costs",
+    },
+    {
+        "factor": "repositioning",
+        "name": "Ballast & Repositioning Cost",
+        "shock_low": -0.15,
+        "shock_high": 0.15,
+        "param": "repo_shift",
+        "component_key": "repositioning",
+    },
+    {
+        "factor": "lighterage",
+        "name": "Sandheads Lighterage & Barge",
+        "shock_low": -0.20,
+        "shock_high": 0.20,
+        "param": "lighterage_shift",
+        "component_key": "lighterage",
+    },
+]
+
+
+def simulate_sensitivity(
+    ctx: ScenarioContext,
+    strategy: Strategy,
+    n: int = 150,
+    seed: int | None = None,
+    factors: list[dict] | None = None,
+) -> list[dict]:
+    """Backend-authoritative Tornado sensitivity analysis.
+
+    Reruns the stochastic simulation model with calibrated parameter shocks
+    (±20% freight, ±15% bunker, ±30% waiting, ±30% demurrage, ±10% port costs,
+    ±15% repositioning, ±20% lighterage) without frontend approximations.
+    """
+    seed_val = settings.simulation_seed if seed is None else seed
+    base_res = simulate(ctx, strategy, n=n, seed=seed_val)
+    baseline_cost = base_res.mean
+
+    specs = factors or DEFAULT_SENSITIVITY_FACTORS
+    items: list[dict] = []
+
+    for spec in specs:
+        param = spec["param"]
+        low_shift = 1.0 + spec["shock_low"]
+        high_shift = 1.0 + spec["shock_high"]
+
+        # Run simulation with low shock
+        res_low = simulate(ctx, strategy, n=n, seed=seed_val, **{param: low_shift})
+        # Run simulation with high shock
+        res_high = simulate(ctx, strategy, n=n, seed=seed_val, **{param: high_shift})
+
+        low_cost = round(res_low.mean, 2)
+        high_cost = round(res_high.mean, 2)
+        low_delta = round(low_cost - baseline_cost, 2)
+        high_delta = round(high_cost - baseline_cost, 2)
+        total_swing = round(abs(high_cost - low_cost), 2)
+
+        comp_key = spec.get("component_key", spec["factor"])
+        comp_val = base_res.breakdown.get(comp_key, 0.0)
+
+        items.append({
+            "factor": spec["factor"],
+            "name": spec["name"],
+            "label": spec["name"],
+            "param": param,
+            "shock_low": spec["shock_low"],
+            "shock_high": spec["shock_high"],
+            "baseline_cost": round(baseline_cost, 2),
+            "component_baseline": round(comp_val, 2),
+            "low_cost": low_cost,
+            "high_cost": high_cost,
+            "low_delta": low_delta,
+            "high_delta": high_delta,
+            "swing_usd": total_swing,
+        })
+
+    # Sort descending by swing_usd (classical tornado order)
+    items.sort(key=lambda x: x["swing_usd"], reverse=True)
+    return items
 
 
 def _parcels(ctx: ScenarioContext, cc: ClassContext, voyages: int) -> list[float]:

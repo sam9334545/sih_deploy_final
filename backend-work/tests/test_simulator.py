@@ -145,3 +145,25 @@ def test_explanation_names_the_binding_constraint_and_the_deadline(ctx):
     joined = " ".join(lines)
     assert "Paradip" in joined and "deadline" in joined
     assert any("intake" in line for line in lines)
+
+
+def test_simulate_sensitivity_returns_ordered_tornado_factors(ctx):
+    strat = simulator.Strategy("T", "Panamax", 2, "spot", "sequential")
+    items = simulator.simulate_sensitivity(ctx, strat, n=100, seed=42)
+    assert len(items) == 7
+    # Ordered descending by swing_usd (tornado shape)
+    swings = [item["swing_usd"] for item in items]
+    assert swings == sorted(swings, reverse=True)
+    # Check required fields
+    for item in items:
+        assert "factor" in item
+        assert "name" in item
+        assert "baseline_cost" in item
+        assert "low_cost" in item
+        assert "high_cost" in item
+        assert "low_delta" in item
+        assert "high_delta" in item
+        assert "swing_usd" in item
+        assert item["low_delta"] <= 0 or item["low_cost"] <= item["baseline_cost"] + 1e-3
+        assert item["high_delta"] >= 0 or item["high_cost"] >= item["baseline_cost"] - 1e-3
+

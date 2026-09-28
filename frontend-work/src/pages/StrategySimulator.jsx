@@ -459,6 +459,7 @@ export default function StrategySimulator({ onNavigate }) {
           {/* Right: Sensitivity Tornado for Selected Strategy (Col 6) */}
           <div className="lg:col-span-6">
             <TornadoChart
+              sensitivity={(activeStrategy.sensitivity && activeStrategy.sensitivity.length > 0) ? activeStrategy.sensitivity : simResponse?.sensitivity}
               breakdown={activeStrategy.breakdown}
               totalCost={activeStrategy.cost?.mean}
             />

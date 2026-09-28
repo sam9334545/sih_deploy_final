@@ -19,9 +19,13 @@ export default function CostDistributionChart({ results = [], winnerId = null })
 
   results.forEach(r => {
     const c = r.cost || {};
-    const lo = c.p10 || c.mean * 0.9;
-    const hi = Math.max(c.p90 || c.mean * 1.1, c.cvar_90 || c.mean * 1.15, r.risk_adjusted_cost || c.mean);
-    if (lo < globalMin) globalMin = lo;
+    const lo = typeof c.p10 === 'number' ? c.p10 : (typeof c.mean === 'number' ? c.mean : 0);
+    const hi = Math.max(
+      typeof c.p90 === 'number' ? c.p90 : (typeof c.mean === 'number' ? c.mean : 0),
+      typeof c.cvar_90 === 'number' ? c.cvar_90 : (typeof c.mean === 'number' ? c.mean : 0),
+      typeof r.risk_adjusted_cost === 'number' ? r.risk_adjusted_cost : (typeof c.mean === 'number' ? c.mean : 0)
+    );
+    if (lo < globalMin && lo > 0) globalMin = lo;
     if (hi > globalMax) globalMax = hi;
   });
 

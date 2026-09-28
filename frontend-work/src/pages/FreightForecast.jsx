@@ -228,8 +228,18 @@ export default function FreightForecast({ onNavigate }) {
             <h1 className="text-base font-bold text-govNavy font-serif">
               Quantile Freight Forecasting &amp; Conformal Uncertainty Bands
             </h1>
-            <span className="bg-blue-100 text-govBlueAccent font-semibold px-2 py-0.5 rounded text-[10px] border border-blue-200">
-              LightGBM + Conformal
+            <span className={`font-semibold px-2 py-0.5 rounded text-[10px] border ${
+              forecastResult?.modelSource === 'forecast_v2'
+                ? 'bg-blue-100 text-govBlueAccent border-blue-200'
+                : forecastResult?.modelSource === 'fallback_v1'
+                ? 'bg-amber-100 text-amber-800 border-amber-300'
+                : 'bg-slate-100 text-slate-700 border-slate-200'
+            }`}>
+              {forecastResult?.modelSource === 'forecast_v2'
+                ? 'LightGBM v2 + Conformal'
+                : forecastResult?.modelSource === 'fallback_v1'
+                ? 'Fallback Model (v1)'
+                : 'ML Forecast'}
             </span>
           </div>
           <p className="text-[11px] text-slate-500 mt-0.5">
@@ -394,14 +404,14 @@ export default function FreightForecast({ onNavigate }) {
                 <div className="p-2 bg-slate-50 rounded border border-slate-100">
                   <span className="text-[9px] text-slate-500 block font-sans">Validation MASE</span>
                   <strong className="text-govNavy">
-                    {forecastResult?.validationMase ? forecastResult.validationMase.toFixed(3) : '0.880'}
+                    {typeof forecastResult?.validationMase === 'number' ? forecastResult.validationMase.toFixed(3) : 'N/A'}
                   </strong>
                 </div>
 
                 <div className="p-2 bg-slate-50 rounded border border-slate-100">
                   <span className="text-[9px] text-slate-500 block font-sans">Empirical Coverage</span>
                   <strong className="text-emerald-700">
-                    {forecastResult?.empiricalCoverage ? `${(forecastResult.empiricalCoverage * 100).toFixed(1)}%` : '79.2%'}
+                    {typeof forecastResult?.empiricalCoverage === 'number' ? `${(forecastResult.empiricalCoverage * 100).toFixed(1)}%` : '80.0% (Nominal)'}
                   </strong>
                 </div>
 
@@ -422,8 +432,10 @@ export default function FreightForecast({ onNavigate }) {
 
                 <div className="p-2 bg-slate-50 rounded border border-slate-100">
                   <span className="text-[9px] text-slate-500 block font-sans">Model Engine</span>
-                  <strong className="text-slate-700 font-sans text-[10px]">
-                    {forecastResult?.modelSource || 'forecast_v2'}
+                  <strong className={`font-sans text-[10px] px-1 py-0.5 rounded ${
+                    forecastResult?.modelSource === 'forecast_v2' ? 'text-blue-800 bg-blue-50' : 'text-amber-800 bg-amber-50'
+                  }`}>
+                    {forecastResult?.modelSource === 'forecast_v2' ? 'LightGBM v2' : 'Fallback v1'}
                   </strong>
                 </div>
               </div>

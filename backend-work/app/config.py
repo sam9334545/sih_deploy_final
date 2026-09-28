@@ -21,6 +21,46 @@ def _find_default_db_url() -> str:
     return "sqlite:///./charter.db"
 
 
+def _find_default_v2_root() -> str:
+    import os
+    env_val = os.environ.get("FORECAST_V2_ROOT")
+    if env_val and Path(env_val).exists():
+        return env_val
+    cand1 = _REPO_ROOT / "ml-work"
+    if (cand1 / "forecast_v2").exists():
+        return str(cand1)
+    cand2 = Path("/app/ml-work")
+    if (cand2 / "forecast_v2").exists():
+        return str(cand2)
+    cand3 = Path("./ml-work").resolve()
+    if (cand3 / "forecast_v2").exists():
+        return str(cand3)
+    cand4 = Path(__file__).resolve().parent.parent.parent / "ml-work"
+    if (cand4 / "forecast_v2").exists():
+        return str(cand4)
+    return str(_REPO_ROOT / "ml-work")
+
+
+def _find_default_v2_artifacts() -> str:
+    import os
+    env_val = os.environ.get("FORECAST_V2_ARTIFACTS")
+    if env_val and Path(env_val).exists():
+        return env_val
+    cand1 = _REPO_ROOT / "ml-work" / "models" / "saved_models" / "v2"
+    if cand1.exists():
+        return str(cand1)
+    cand2 = Path("/app/ml-work/models/saved_models/v2")
+    if cand2.exists():
+        return str(cand2)
+    cand3 = Path("./ml-work/models/saved_models/v2").resolve()
+    if cand3.exists():
+        return str(cand3)
+    cand4 = Path(__file__).resolve().parent.parent.parent / "ml-work" / "models" / "saved_models" / "v2"
+    if cand4.exists():
+        return str(cand4)
+    return str(_REPO_ROOT / "ml-work" / "models" / "saved_models" / "v2")
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=(".env", "../.env"), extra="ignore")
 
@@ -48,16 +88,12 @@ class Settings(BaseSettings):
     stranded_parcel_ratio: float = 0.60
     max_classes_in_mix: int = 2
 
-    # forecast_v2: trained artifacts from ml-work. If either path is missing, or the
-    # ML dependencies are absent, the API falls back to the built-in numpy model
-    # rather than failing — the service must start on a bare machine.
-    #
-    # Defaults are anchored to this package's location, not the process working
-    # directory: a cwd-relative default made v2 silently unavailable whenever the
-    # suite was run from the repository root instead of backend-work/.
-    forecast_v2_root: str = str(_REPO_ROOT / "ml-work")
-    forecast_v2_artifacts: str = str(_REPO_ROOT / "ml-work" / "models" / "saved_models" / "v2")
+    # forecast_v2: trained artifacts from ml-work. Auto-discovers paths across local dev,
+    # repository root, and container environments.
+    forecast_v2_root: str = Field(default_factory=_find_default_v2_root)
+    forecast_v2_artifacts: str = Field(default_factory=_find_default_v2_artifacts)
     forecast_v2_enabled: bool = True
+    require_v2_forecast: bool = False   # When True in production, fails fast with 503 instead of silent fallback
 
     n_simulations_default: int = 1000
     n_simulations_max: int = 5000

@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sih26006-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEMO_MODE=true
+      - REQUIRE_V2_FORECAST=false
+      - FORECAST_V2_ROOT=/app/ml-work
+      - FORECAST_V2_ARTIFACTS=/app/ml-work/models/saved_models/v2
+      - CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://localhost:80,http://127.0.0.1:80
+      - LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend-work
+      dockerfile: Dockerfile
+    container_name: sih26006-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped

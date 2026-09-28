@@ -491,7 +491,11 @@ export default function CharterPlanner({ onNavigate }) {
 
             {/* Right: Sensitivity Tornado (Col 6) */}
             <div className="lg:col-span-6">
-              <TornadoChart breakdown={breakdown} totalCost={rec.expected_cost_usd} />
+              <TornadoChart
+                sensitivity={rec.sensitivity || optResponse?.sensitivity}
+                breakdown={breakdown}
+                totalCost={rec.expected_cost_usd}
+              />
             </div>
           </div>
 

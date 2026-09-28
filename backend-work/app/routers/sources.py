@@ -43,3 +43,25 @@ def coverage(db: Session = Depends(get_db)):
                  "A change to a port's published limits is an INSERT with a new effective_from, "
                  "never an UPDATE, so past recommendations stay explainable."),
     }
+
+
+@router.get("/sources/model-provenance", summary="ML Forecasting model lineage and artifact status")
+def model_provenance():
+    from app.services import forecast_v2_adapter
+    st = forecast_v2_adapter.status()
+    models_ok = st.get("models_available", False)
+    return {
+        "engine": {
+            "name": "LightGBM v2 + Split-Conformal Quantiles" if models_ok else "Statistical Fallback Engine",
+            "status": "active" if models_ok else ("unavailable" if st.get("reason") else "fallback"),
+            "forecast_engine": st.get("forecast_engine", "unavailable"),
+            "models_available": models_ok,
+            "model_count": st.get("model_count", 0),
+            "artifacts_present": st.get("artifacts_present", 0),
+            "conformal_calibration": st.get("conformal_calibration", False),
+            "training_cutoff": st.get("training_cutoff", "2019-07-31"),
+            "data_provenance": st.get("data_provenance", "verified_real_mendeley_cc_by_4.0"),
+            "artifact_root": st.get("artifact_root"),
+            "reason": st.get("reason"),
+        }
+    }

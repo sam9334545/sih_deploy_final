@@ -104,6 +104,8 @@ def optimize_charter(req: OptimizeCharterRequest, request: Request,
     window_start = as_of
     window_end = as_of + timedelta(days=min(5, max(1, ctx.days_to_deadline - 1)))
 
+    sensitivity = simulator.simulate_sensitivity(ctx, best.strategy, n=min(150, req.n_simulations or 200), seed=req.seed)
+
     recommendation = {
         "vessel_class": best.strategy.vessel_class, "voyages": best.strategy.voyages,
         "execution": best.strategy.execution,
@@ -118,6 +120,7 @@ def optimize_charter(req: OptimizeCharterRequest, request: Request,
         "p_deadline_miss": best.p_deadline_miss,
         "risk_adjusted_cost_usd": best.risk_adjusted,
         "risk": risk.overall, "charter_opportunity_score": cos,
+        "sensitivity": sensitivity,
     }
 
     milp = optimizer.milp_crosscheck(ctx, ranking) if req.include_milp_crosscheck else None
@@ -142,7 +145,8 @@ def optimize_charter(req: OptimizeCharterRequest, request: Request,
                     "waiting": "simulated_demo" if settings.demo_mode else "measured",
                     "constraints": "measured", "weather": "derived"},
         as_of=as_of, runtime_ms=int((time.perf_counter() - t0) * 1000),
-        request_id=request.state.request_id)
+        request_id=request.state.request_id,
+        sensitivity=sensitivity)
 
 
 @router.post("/simulate-strategy", response_model=SimulateResponse,
@@ -162,6 +166,13 @@ def simulate_strategy(req: SimulateStrategyRequest, request: Request,
                    if r.strategy.id.lower() in wanted
                    or r.strategy.vessel_class.lower() in wanted]
 
+    winner_sensitivity = (
+        simulator.simulate_sensitivity(ctx, results[0].strategy, n=min(150, req.n_simulations or 200), seed=req.seed)
+        if results else []
+    )
+    if results and winner_sensitivity:
+        results[0].sensitivity = winner_sensitivity
+
     return SimulateResponse(
         results=[_strategy_dict(r) for r in results],
         infeasible=ranking.infeasible,
@@ -173,7 +184,37 @@ def simulate_strategy(req: SimulateStrategyRequest, request: Request,
         as_of=as_of, assumptions=[a for a in ctx.assumptions if a],
         provenance={"freight": "derived", "waiting": "simulated_demo" if settings.demo_mode
                     else "measured", "port_costs": "measured", "weather": "derived"},
-        request_id=request.state.request_id)
+        request_id=request.state.request_id,
+        sensitivity=winner_sensitivity)
+
+
+@router.post("/simulate-strategy/sensitivity", summary="Authoritative Tornado Sensitivity Analysis")
+def strategy_sensitivity(req: SimulateStrategyRequest, request: Request,
+                         db: Session = Depends(get_db)):
+    as_of = resolve_as_of(req.as_of)
+    _validate_dates(req, as_of)
+    ctx = _context(db, req, as_of)
+
+    ranking = optimizer.rank_strategies(ctx, n_simulations=req.n_simulations or 200, seed=req.seed)
+    if not ranking.winner:
+        raise InfeasibleRequestError("Every strategy misses the deadline", payload={"infeasible": ranking.infeasible})
+
+    target_strat = ranking.winner.strategy
+    if req.strategies and "auto" not in req.strategies:
+        wanted = {s.lower() for s in req.strategies}
+        matched = [r for r in ranking.results if r.strategy.id.lower() in wanted or r.strategy.vessel_class.lower() in wanted]
+        if matched:
+            target_strat = matched[0].strategy
+
+    sens = simulator.simulate_sensitivity(ctx, target_strat, n=min(150, req.n_simulations or 200), seed=req.seed)
+    return {
+        "strategy_id": target_strat.id,
+        "strategy_label": target_strat.label,
+        "vessel_class": target_strat.vessel_class,
+        "sensitivity": sens,
+        "as_of": as_of.isoformat(),
+        "request_id": request.state.request_id,
+    }
 
 
 @router.post("/opportunity-score", summary="Charter Opportunity Score for a requirement")
@@ -231,4 +272,5 @@ def _strategy_dict(r) -> dict:
         "breakdown": r.breakdown,
         "idle_days": r.idle_days_mean, "idle_cost_usd": r.idle_cost_mean,
         "feasible": r.feasible, "notes": r.notes,
+        "sensitivity": getattr(r, "sensitivity", []),
     }
