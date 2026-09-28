@@ -55,7 +55,7 @@ export default function Dashboard({ onNavigate }) {
       setForecastSnapshot(fRes);
     } catch (err) {
       console.error('Failed to load dashboard:', err);
-      setError('Unable to load real-time market data from backend.');
+      setError('Unable to load freight market intelligence from backend.');
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,7 @@ export default function Dashboard({ onNavigate }) {
 
   // Active Opportunity Score for current vessel class
   const oppGeneric = marketData?.charter_opportunity_score_generic?.[selectedClass];
-  const cosScore = oppGeneric?.score ?? 78;
+  const cosScore = oppGeneric?.score != null ? Math.round(oppGeneric.score) : null;
   const oppTrend = oppGeneric?.trend || 'stable';
   const availability = marketData?.availability_signal?.[selectedClass];
 
@@ -85,7 +85,7 @@ export default function Dashboard({ onNavigate }) {
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-            Real-time dry bulk freight intelligence, market opportunity scoring, and constrained charter decision optimization for East Coast India terminals.
+            Dry bulk freight forecasting, market opportunity scoring, and constrained charter decision optimization for East Coast India terminals.
           </p>
         </div>
 
@@ -157,8 +157,8 @@ export default function Dashboard({ onNavigate }) {
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   />
                   <path
-                    className={cosScore >= 70 ? 'text-emerald-500' : cosScore >= 45 ? 'text-amber-500' : 'text-rose-500'}
-                    strokeDasharray={`${cosScore}, 100`}
+                    className={cosScore != null ? (cosScore >= 70 ? 'text-emerald-500' : cosScore >= 45 ? 'text-amber-500' : 'text-rose-500') : 'text-slate-300'}
+                    strokeDasharray={cosScore != null ? `${cosScore}, 100` : '0, 100'}
                     strokeWidth="3.5"
                     strokeLinecap="round"
                     stroke="currentColor"
@@ -167,16 +167,18 @@ export default function Dashboard({ onNavigate }) {
                   />
                 </svg>
                 <div className="absolute flex flex-col items-center">
-                  <span className="text-xl font-extrabold text-govNavy font-mono">{cosScore}</span>
+                  <span className="text-xl font-extrabold text-govNavy font-mono">{cosScore != null ? cosScore : '—'}</span>
                   <span className="text-[8px] text-slate-400 font-bold uppercase">/ 100</span>
                 </div>
               </div>
 
               <div className="space-y-1 text-xs">
                 <div className="flex items-center space-x-1.5">
-                  <span className={`w-2 h-2 rounded-full ${cosScore >= 70 ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                  <span className={`w-2 h-2 rounded-full ${cosScore != null ? (cosScore >= 70 ? 'bg-emerald-500' : 'bg-amber-500') : 'bg-slate-400'}`} />
                   <span className="font-bold text-slate-800">
-                    {cosScore >= 70 ? 'Favorable Window (Fix Now)' : 'Neutral Market Window'}
+                    {cosScore != null
+                      ? (cosScore >= 70 ? 'Favorable Window (Fix Now)' : 'Neutral Market Window')
+                      : 'Market Score Pending'}
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 leading-tight">

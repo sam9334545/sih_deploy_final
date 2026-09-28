@@ -4,7 +4,8 @@ import MainHeader from './components/MainHeader';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Primary 7 Pages
+// Primary Pages
+import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import CharterPlanner from './pages/CharterPlanner';
 import FreightForecast from './pages/FreightForecast';
@@ -20,18 +21,17 @@ import Methodology from './pages/Methodology';
 import AboutProject from './pages/AboutProject';
 
 const VALID_TABS = [
-  'dashboard', 'planner', 'forecast', 'ports', 'vessels', 'simulator',
+  'home', 'dashboard', 'planner', 'forecast', 'ports', 'vessels', 'simulator',
   'risks', 'market', 'routes', 'methodology', 'about'
 ];
 
 function getInitialTab() {
   if (typeof window !== 'undefined' && window.location.hash) {
     const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-    if (raw === 'home') return 'dashboard';
     if (raw === 'optimizer') return 'planner';
     if (VALID_TABS.includes(raw)) return raw;
   }
-  return 'dashboard';
+  return 'home';
 }
 
 export default function App() {
@@ -47,8 +47,7 @@ export default function App() {
 
   const handleNavigate = (tabId) => {
     let target = tabId;
-    if (tabId === 'home') target = 'dashboard';
-    else if (tabId === 'optimizer') target = 'planner';
+    if (tabId === 'optimizer') target = 'planner';
     setActiveTab(target);
     if (typeof window !== 'undefined') {
       window.location.hash = `#/${target}`;
@@ -64,12 +63,15 @@ export default function App() {
       {/* 2. Main Institutional Brand Header */}
       <MainHeader currentTab={activeTab} onNavigate={handleNavigate} />
 
-      {/* 3. Primary Navigation Bar with 7 Primary Pages */}
+      {/* 3. Primary Navigation Bar with Home and 7 Operational Pages */}
       <Navbar currentTab={activeTab} onNavigate={handleNavigate} />
 
       {/* 4. Main Content Area */}
       <main className="flex-grow max-w-7xl w-full mx-auto px-4 py-4 space-y-4" id="main-content">
-        {(activeTab === 'dashboard' || activeTab === 'home') && (
+        {activeTab === 'home' && (
+          <Home onNavigate={handleNavigate} />
+        )}
+        {activeTab === 'dashboard' && (
           <Dashboard onNavigate={handleNavigate} />
         )}
         {(activeTab === 'planner' || activeTab === 'optimizer') && (

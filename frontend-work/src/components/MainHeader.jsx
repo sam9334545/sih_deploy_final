@@ -35,7 +35,7 @@ export default function MainHeader({ onNavigate, currentTab }) {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Brand & Project Identity */}
         <div 
-          onClick={() => onNavigate('dashboard')} 
+          onClick={() => onNavigate('home')} 
           className="flex items-center space-x-3.5 cursor-pointer select-none"
         >
           {/* Marine Ship's Wheel Institutional Icon */}

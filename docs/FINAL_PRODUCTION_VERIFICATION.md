@@ -1,7 +1,7 @@
 # SIH26006 — Final Production Verification Report
 
 **Date of Execution:** 28 September 2026  
-**Target Branch:** `feat/final-integration-frontend-polish`  
+**Target Branch:** `chore/final-production-hardening`  
 **Evaluation Scope:** End-to-end verification of ML forecasting, decision optimization, Monte Carlo simulation, Tornado sensitivity, data provenance, API health probes, and production frontend bundling.
 
 ---
@@ -10,21 +10,23 @@
 
 | Layer | Subsystem / Test Description | Command Executed | Result | Details / Observations |
 |---|---|---|---|---|
-| **Backend Unit & Integration** | 139 Pytest test suite | `pytest -q` | **PASS** | 139 passed in 83.24s (0:01:23) |
-| **System Verification** | 8-phase verification script | `python scripts/verify_production.py` | **PASS** | 8/8 comprehensive test suites passed |
-| **ML Artifacts** | Artifact loading & manifest validation | `verify_production.py` (Phase 1) | **PASS** | 24 artifacts loaded, 72 quantile models, cutoff `2019-07-31` |
-| **ML Inference** | Authoritative LightGBM v2 Forecast | `verify_production.py` (Phase 4) | **PASS** | BPI 4TC $P_{10}=1165.1$, $P_{50}=1322.0$, $P_{90}=1893.1$, conformal interval $[1027.7, 2030.5]$ |
-| **Backend Health** | Standard `/health` probe | `GET /health` | **PASS** | `status: "ok"`, `forecast_engine: "lightgbm_v2"`, `model_count: 24` |
-| **Backend Readiness** | Readiness probe `/health/ready` | `GET /health/ready` | **PASS** | `ready: true`, verified model availability |
-| **Backend Liveness** | Liveness probe `/health/live` | `GET /health/live` | **PASS** | `live: true` |
-| **Decision Optimizer** | Feasibility filter & ranking | `POST /api/v1/optimize-charter` | **PASS** | Winner: Supramax, S8 strategy, Landed cost: $987,628 |
-| **Sensitivity Analysis** | Authoritative Tornado sensitivity | `POST /api/v1/simulate-strategy/sensitivity` | **PASS** | 7 parameters calculated; max swing: Freight Rate ($465,966) |
-| **Monte Carlo Engine** | Digital twin simulation ($N=1000$) | `POST /api/v1/simulate-strategy` | **PASS** | Winner: S8, Mean: $987,628, CVaR-90: $1,208,443 |
-| **Multi-Origin Matrix** | Multi-corridor procurement | `verify_production.py` (Phase 7) | **PASS** | Australia (AUHPT), Indonesia (IDTBA), South Africa (ZARBY) all return feasible solutions |
-| **Commodity Auto-Match** | Origin/commodity compatibility | UI & backend integration | **PASS** | IDTBA auto-switches to `thermal_coal` with explicit user notice banner |
-| **Frontend Production Build** | Vite production compilation | `npm --prefix frontend-work run build` | **PASS** | Built in 9.59s; 0 errors, 0 unresolved imports |
-| **Data Provenance** | Lineage and metadata registry | `GET /api/v1/sources` | **PASS** | 12 lineage sources registered and tracked |
-| **Model Failure Guard** | Missing artifact strictness test | Injected missing path | **PASS** | Reports `available: false`, fails fast without silent mock claim |
+| **Backend Unit & Integration** | 139 Pytest test suite | `pytest -q` | **PASS** | 139 passed in 88.92s (0:01:28) |
+| **System Verification** | 20-gate production verification script | `python scripts/verify_production.py` | **PASS** | 20/20 critical production gates passed |
+| **ML Artifacts** | Artifact loading & manifest validation | `verify_production.py` (Gates 1–2) | **PASS** | 24 artifacts loaded, 72 quantile models, cutoff `2019-07-31` |
+| **ML Inference** | Authoritative LightGBM v2 Forecast | `verify_production.py` (Gate 10) | **PASS** | BPI 4TC $P_{10}=1165.1$, $P_{50}=1322.0$, $P_{90}=1893.1$, conformal interval $[1027.7, 2030.5]$ |
+| **Backend Health** | Standard `/health` probe | `GET /health` (Gate 6) | **PASS** | `status: "ok"`, `forecast_engine: "lightgbm_v2"`, `model_count: 24` |
+| **Backend Readiness** | Readiness probe `/health/ready` | `GET /health/ready` (Gate 7) | **PASS** | `ready: true`, verified model availability; 503 on unready |
+| **Backend Liveness** | Liveness probe `/health/live` | `GET /health/live` (Gate 8) | **PASS** | `live: true` |
+| **Decision Optimizer** | Feasibility filter & ranking | `POST /api/v1/optimize-charter` (Gate 11) | **PASS** | Winner: Supramax, short_term_multi_voyage, Landed cost calculated |
+| **Sensitivity Analysis** | Authoritative Tornado sensitivity | `POST /api/v1/simulate-strategy/sensitivity` (Gate 13) | **PASS** | 7 parameters calculated; max swing: Freight Rate ($465,966) |
+| **Monte Carlo Engine** | Digital twin simulation ($N=200/500/1000$) | `POST /api/v1/simulate-strategy` (Gate 12) | **PASS** | Winner: S5, bounded execution, CVaR and quantiles verified |
+| **Multi-Origin Matrix** | Multi-corridor procurement (6 origins) | `verify_production.py` (Gate 14) | **PASS** | AUHPT, AUGLT, IDTBA, ZARBY, USHAM, MZBEW all return feasible solutions |
+| **Input Validation** | Server-side bounds & date validation | `verify_production.py` (Gate 17) | **PASS** | Rejects negative tonnage, N > 5000, and past deadlines with HTTP 400 |
+| **Strict Fallback Guard** | Non-silent fallback enforcement | `verify_production.py` (Gate 18) | **PASS** | `require_v2_forecast=True` enforces authoritative v2 delivery |
+| **Security Headers** | HTTP hardening headers | `verify_production.py` (Gate 20) | **PASS** | `nosniff`, `SAMEORIGIN`, `X-XSS-Protection`, `Referrer-Policy` verified |
+| **Frontend Production Build** | Vite production compilation | `npm --prefix frontend-work run build` | **PASS** | Built in 24.02s; 0 errors, 0 unresolved imports, dead code stripped |
+| **Data Provenance** | Lineage and metadata registry | `GET /api/v1/sources` (Gate 9) | **PASS** | 12 lineage sources registered and tracked |
+| **CI Automation** | GitHub Actions Workflow | `.github/workflows/ci.yml` | **PASS** | Automated gates for backend, ML, frontend, and Docker config |
 
 ---
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -28,7 +29,7 @@ def health(db: Session = Depends(get_db)):
     if settings.require_v2_forecast and not v2_stat.get("models_available"):
         is_healthy = False
 
-    return {
+    payload = {
         "status": "ok" if is_healthy else "degraded",
         "as_of": as_of.isoformat(),
         "latest_index_obs": latest.isoformat() if latest else None,
@@ -49,6 +50,8 @@ def health(db: Session = Depends(get_db)):
             "cached_forecasts": count(ModelForecast),
         },
     }
+    status_code = 200 if is_healthy else 503
+    return JSONResponse(status_code=status_code, content=payload)
 
 
 @router.get("/health/ready", summary="Readiness probe for container orchestration")
@@ -58,11 +61,11 @@ def readiness(db: Session = Depends(get_db)):
 
     ports_count = count(Port)
     if ports_count == 0:
-        return {"status": "not_ready", "reason": "database not seeded with reference ports"}
+        return JSONResponse(status_code=503, content={"status": "not_ready", "ready": False, "reason": "database not seeded with reference ports"})
     
     v2_stat = forecast_v2_adapter.status()
     if settings.require_v2_forecast and not v2_stat.get("models_available"):
-        return {"status": "not_ready", "reason": "authoritative LightGBM v2 models required but unavailable"}
+        return JSONResponse(status_code=503, content={"status": "not_ready", "ready": False, "reason": "authoritative LightGBM v2 models required but unavailable"})
 
     return {
         "status": "ready",

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { 
+  Home as HomeIcon,
   LayoutDashboard, 
   Compass, 
   TrendingUp, 
@@ -7,17 +8,18 @@ import {
   Ship, 
   Layers, 
   ShieldAlert, 
-  ChevronDown,
-  BarChart2,
-  Navigation,
-  FileText,
-  Info
+  ChevronDown, 
+  BarChart2, 
+  Navigation, 
+  FileText, 
+  Info 
 } from 'lucide-react';
 
 export default function Navbar({ currentTab, onNavigate }) {
   const [secondaryOpen, setSecondaryOpen] = useState(false);
 
   const primaryItems = [
+    { id: 'home', label: 'Home', icon: HomeIcon },
     { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
     { id: 'planner', label: 'Charter Planner', icon: Compass },
     { id: 'forecast', label: 'Freight Forecast', icon: TrendingUp },
