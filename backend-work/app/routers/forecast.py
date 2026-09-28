@@ -76,6 +76,11 @@ def post_forecast(req: ForecastRequest, request: Request, db: Session = Depends(
             "forecast_v2 disabled by configuration" if not settings.forecast_v2_enabled
             else forecast_v2_adapter.status().get("reason")
             or "forecast_v2 did not produce a forecast for this index/horizon")
+        if settings.require_v2_forecast:
+            raise NoModel(
+                f"Production LightGBM v2 models required by configuration but unavailable: {fallback_reason}",
+                field="vessel_class"
+            )
 
     return ForecastResponse(
         vessel_class=req.vessel_class, index=index_code, as_of=as_of,

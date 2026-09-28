@@ -19,15 +19,41 @@ import RouteAnalysis from './pages/RouteAnalysis';
 import Methodology from './pages/Methodology';
 import AboutProject from './pages/AboutProject';
 
+const VALID_TABS = [
+  'dashboard', 'planner', 'forecast', 'ports', 'vessels', 'simulator',
+  'risks', 'market', 'routes', 'methodology', 'about'
+];
+
+function getInitialTab() {
+  if (typeof window !== 'undefined' && window.location.hash) {
+    const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+    if (raw === 'home') return 'dashboard';
+    if (raw === 'optimizer') return 'planner';
+    if (VALID_TABS.includes(raw)) return raw;
+  }
+  return 'dashboard';
+}
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(getInitialTab);
+
+  React.useEffect(() => {
+    const handleHash = () => {
+      setActiveTab(getInitialTab());
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   const handleNavigate = (tabId) => {
-    // Normalise legacy or alias tab IDs
-    if (tabId === 'home') setActiveTab('dashboard');
-    else if (tabId === 'optimizer') setActiveTab('planner');
-    else setActiveTab(tabId);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    let target = tabId;
+    if (tabId === 'home') target = 'dashboard';
+    else if (tabId === 'optimizer') target = 'planner';
+    setActiveTab(target);
+    if (typeof window !== 'undefined') {
+      window.location.hash = `#/${target}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (

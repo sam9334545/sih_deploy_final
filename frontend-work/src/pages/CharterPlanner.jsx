@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Ship, 
   Compass, 
@@ -14,7 +14,8 @@ import {
   Layers,
   Sparkles,
   BarChart3,
-  Sliders
+  Sliders,
+  Check
 } from 'lucide-react';
 import ProvenanceBadge from '../components/ProvenanceBadge';
 import DecisionWorkflowBanner from '../components/DecisionWorkflowBanner';
@@ -54,7 +55,9 @@ export default function CharterPlanner({ onNavigate }) {
   const [result, setResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [infeasiblePayload, setInfeasiblePayload] = useState(null);
+  const [commodityNotice, setCommodityNotice] = useState(null);
 
+  const reqIdRef = useRef(0);
   const asOfDate = '2026-09-15';
 
   const computeRequiredBy = (days) => {
@@ -63,11 +66,36 @@ export default function CharterPlanner({ onNavigate }) {
     return d.toISOString().split('T')[0];
   };
 
+  const handleOriginChange = (newPort) => {
+    setOriginPort(newPort);
+    if (newPort === 'IDTBA' && cargoType !== 'thermal_coal') {
+      setCargoType('thermal_coal');
+      setCommodityNotice('Commodity adjusted to Thermal Coal because the selected loading port supports thermal coal in the reference registry.');
+    } else if (newPort === 'USHAM' && cargoType !== 'coking_coal') {
+      setCargoType('coking_coal');
+      setCommodityNotice('Commodity adjusted to Coking Coal because the selected loading port supports coking coal in the reference registry.');
+    } else {
+      setCommodityNotice(null);
+    }
+  };
+
+  const handleCargoChange = (newCargo) => {
+    setCargoType(newCargo);
+    if (originPort === 'IDTBA' && newCargo !== 'thermal_coal') {
+      setCommodityNotice('Note: Taboneo Anchorage supports Thermal Coal in the port registry.');
+    } else if (originPort === 'USHAM' && newCargo !== 'coking_coal') {
+      setCommodityNotice('Note: Hampton Roads supports Coking Coal in the port registry.');
+    } else {
+      setCommodityNotice(null);
+    }
+  };
+
   useEffect(() => {
     runCharterAnalysis();
   }, []);
 
   async function runCharterAnalysis() {
+    const currentReqId = ++reqIdRef.current;
     setStatus('loading');
     setErrorMessage(null);
     setInfeasiblePayload(null);
@@ -86,9 +114,11 @@ export default function CharterPlanner({ onNavigate }) {
         nSimulations: 500,
       });
 
+      if (currentReqId !== reqIdRef.current) return;
       setResult(data);
       setStatus('success');
     } catch (err) {
+      if (currentReqId !== reqIdRef.current) return;
       console.error('[Charter Planner Error]:', err);
       if (err instanceof ApiError && err.status === 422) {
         setStatus('infeasible');
@@ -151,7 +181,7 @@ export default function CharterPlanner({ onNavigate }) {
             <label className="text-[10px] font-bold text-slate-600 block mb-1">Cargo Commodity</label>
             <select
               value={cargoType}
-              onChange={(e) => setCargoType(e.target.value)}
+              onChange={(e) => handleCargoChange(e.target.value)}
               className="w-full bg-slate-50 border border-slate-300 rounded p-1.5 font-medium text-slate-800 focus:bg-white focus:outline-none"
             >
               <option value="coking_coal">Coking Coal (Met Coal)</option>
@@ -179,7 +209,7 @@ export default function CharterPlanner({ onNavigate }) {
             <label className="text-[10px] font-bold text-slate-600 block mb-1">Origin Loading Port</label>
             <select
               value={originPort}
-              onChange={(e) => setOriginPort(e.target.value)}
+              onChange={(e) => handleOriginChange(e.target.value)}
               className="w-full bg-slate-50 border border-slate-300 rounded p-1.5 font-medium text-slate-800 focus:bg-white focus:outline-none"
             >
               {LOAD_PORTS.map((p) => (
@@ -241,6 +271,21 @@ export default function CharterPlanner({ onNavigate }) {
             </div>
           </div>
         </div>
+
+        {commodityNotice && (
+          <div className="bg-amber-50 border border-amber-300 rounded p-2.5 text-[11px] text-amber-900 flex items-center justify-between gap-2 shadow-xs">
+            <div className="flex items-center space-x-2">
+              <Info className="w-4 h-4 text-amber-600 flex-shrink-0" />
+              <span>{commodityNotice}</span>
+            </div>
+            <button
+              onClick={() => setCommodityNotice(null)}
+              className="text-[10px] text-amber-700 hover:text-amber-900 underline cursor-pointer"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         {/* CTA Button */}
         <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
