@@ -4,6 +4,7 @@ import {
   CheckCircle, ArrowRight, ShieldCheck, HelpCircle, Layers 
 } from 'lucide-react';
 import ProvenanceBadge from '../components/ProvenanceBadge';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   VESSEL_INDEX_MAP, 
   VALID_HORIZONS, 
@@ -15,7 +16,17 @@ import {
 
 const VESSEL_OPTIONS = ['Panamax', 'Capesize', 'Supramax', 'Handysize'];
 
+const VESSEL_HI_NAMES = {
+  Panamax: 'पनामैक्स (Panamax)',
+  Capesize: 'केपसाइज (Capesize)',
+  Supramax: 'सुप्रामैक्स (Supramax)',
+  Handysize: 'हैंडीसाइज़ (Handysize)',
+};
+
 export default function HistoricalForecast({ initialVessel = 'Panamax', onNavigateToRoute }) {
+  const { lang } = useLanguage();
+  const isHi = lang === 'hi';
+
   const [vessel, setVessel] = useState(initialVessel);
   const [originDate, setOriginDate] = useState('2019-06-28');
   const [horizon, setHorizon] = useState(28);
@@ -65,7 +76,13 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
       }
     } catch (err) {
       console.error('[Historical Forecast Error]:', err);
-      setError(err instanceof ApiError ? err.message : 'Inference failed for selected parameters.');
+      setError(
+        err instanceof ApiError 
+          ? err.message 
+          : isHi 
+            ? 'चयनित मापदंडों के लिए पूर्वानुमान निष्पादन विफल रहा।' 
+            : 'Inference failed for selected parameters.'
+      );
       setForecastResult(null);
     } finally {
       setLoading(false);
@@ -85,25 +102,30 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-mono font-bold tracking-wider text-govBlueAccent uppercase">
-                Probabilistic Backtesting Engine
+                {isHi ? 'संभाव्य बैकटेस्टिंग इंजन' : 'Probabilistic Backtesting Engine'}
               </span>
-              <ProvenanceBadge type="model" text="Quantile LightGBM" />
-              <ProvenanceBadge type="conformal" text="80% Conformal Calibrated" />
+              <ProvenanceBadge type="model" text={isHi ? 'क्वांटाइल LightGBM' : 'Quantile LightGBM'} />
+              <ProvenanceBadge type="conformal" text={isHi ? '80% कन्फॉर्मल कैलिब्रेटेड' : '80% Conformal Calibrated'} />
             </div>
             <h2 className="text-xl font-bold text-govNavy tracking-tight">
-              Historical Point &amp; Quantile Forecast Evaluation
+              {isHi ? 'ऐतिहासिक बिंदु एवं क्वांटाइल पूर्वानुमान मूल्यांकन' : 'Historical Point & Quantile Forecast Evaluation'}
             </h2>
             <p className="text-slate-600 text-xs mt-1 max-w-3xl">
-              Strictly leakage-free point (P50) and calibrated prediction intervals (P10–P90) generated using
-              only verified market observations up to the selected forecast origin date T₀.
+              {isHi
+                ? 'चयनित पूर्वानुमान मूल तिथि T₀ तक केवल सत्यापित बाजार अवलोकनों का उपयोग करके उत्पन्न सख्त लीकेज-मुक्त बिंदु (P50) और कैलिब्रेटेड भविष्यवाणी अंतराल (P10–P90)।'
+                : 'Strictly leakage-free point (P50) and calibrated prediction intervals (P10–P90) generated using only verified market observations up to the selected forecast origin date T₀.'}
             </p>
           </div>
 
           <div className="flex items-center gap-3 font-mono text-xs bg-slate-50 p-3 rounded border border-slate-200">
             <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
             <div>
-              <div className="text-govNavy font-bold">Zero-Leakage Anti-Lookahead</div>
-              <div className="text-[10px] text-slate-500">Features built strictly from t &le; T₀</div>
+              <div className="text-govNavy font-bold">
+                {isHi ? 'शून्य-लीकेज एंटी-लुकअहेड' : 'Zero-Leakage Anti-Lookahead'}
+              </div>
+              <div className="text-[10px] text-slate-500">
+                {isHi ? 'विशेषताएं केवल t ≤ T₀ से निर्मित' : 'Features built strictly from t ≤ T₀'}
+              </div>
             </div>
           </div>
         </div>
@@ -114,7 +136,7 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
         {/* Vessel Selector */}
         <div>
           <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-            Vessel Class
+            {isHi ? 'पोत वर्ग' : 'Vessel Class'}
           </label>
           <select
             value={vessel}
@@ -123,7 +145,7 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
           >
             {VESSEL_OPTIONS.map(v => (
               <option key={v} value={v}>
-                {v} ({VESSEL_INDEX_MAP[v]?.index}) • {VESSEL_INDEX_MAP[v]?.deadweight}
+                {isHi ? VESSEL_HI_NAMES[v] : v} ({VESSEL_INDEX_MAP[v]?.index}) • {VESSEL_INDEX_MAP[v]?.deadweight}
               </option>
             ))}
           </select>
@@ -132,18 +154,20 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
         {/* Index Mapped */}
         <div>
           <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-            Mapped Baltic Index
+            {isHi ? 'मैप किया गया बाल्टिक सूचकांक' : 'Mapped Baltic Index'}
           </label>
           <div className="w-full bg-slate-100 border border-slate-200 rounded px-3 py-2 text-xs text-govNavy font-mono font-bold flex items-center justify-between">
             <span>{targetIndex}</span>
-            <span className="text-[10px] font-normal text-slate-500">Mendeley Verified</span>
+            <span className="text-[10px] font-normal text-slate-500">
+              {isHi ? 'मेंडेली सत्यापित' : 'Mendeley Verified'}
+            </span>
           </div>
         </div>
 
         {/* Forecast Origin Date */}
         <div>
           <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-            Forecast Origin (T₀)
+            {isHi ? 'पूर्वानुमान मूल तिथि (T₀)' : 'Forecast Origin (T₀)'}
           </label>
           <input
             type="date"
@@ -158,7 +182,7 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
         {/* Forecast Horizon */}
         <div>
           <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-            Forecast Horizon (h)
+            {isHi ? 'पूर्वानुमान क्षितिज (h)' : 'Forecast Horizon (h)'}
           </label>
           <select
             value={horizon}
@@ -167,7 +191,7 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
           >
             {VALID_HORIZONS.map((h) => (
               <option key={h} value={h}>
-                {h} Trading Sessions
+                {h} {isHi ? 'कारोबारी सत्र (Trading Sessions)' : 'Trading Sessions'}
               </option>
             ))}
           </select>
@@ -179,14 +203,18 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
         <div className="bg-white border border-lightBorder rounded p-12 text-center space-y-3 shadow-xs">
           <div className="w-8 h-8 border-3 border-govNavy/20 border-t-govNavy rounded-full animate-spin mx-auto" />
           <p className="text-xs font-mono text-govNavy font-semibold">
-            Constructing leakage-safe features &amp; running Quantile LightGBM models...
+            {isHi 
+              ? 'लीकेज-सुरक्षित विशेषताएं तैयार की जा रही हैं और क्वांटाइल LightGBM मॉडल निष्पादित हो रहे हैं...' 
+              : 'Constructing leakage-safe features & running Quantile LightGBM models...'}
           </p>
         </div>
       ) : error ? (
         <div className="bg-rose-50 border border-rose-200 rounded p-4 text-rose-800 flex items-start gap-3">
           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-rose-600" />
           <div>
-            <div className="font-bold text-xs">Inference Error</div>
+            <div className="font-bold text-xs">
+              {isHi ? 'अनुमान त्रुटि (Inference Error)' : 'Inference Error'}
+            </div>
             <div className="text-xs text-rose-700 mt-0.5">{error}</div>
           </div>
         </div>
@@ -198,16 +226,16 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
             <div className="bg-white border border-lightBorder rounded p-4 shadow-xs">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[10px] font-mono text-slate-500 uppercase font-semibold">
-                  P10 Lower Bound
+                  {isHi ? 'P10 निचली सीमा' : 'P10 Lower Bound'}
                 </span>
-                <ProvenanceBadge type="conformal" text="Calibrated" />
+                <ProvenanceBadge type="conformal" text={isHi ? 'कैलिब्रेटेड' : 'Calibrated'} />
               </div>
               <div className="text-2xl font-black font-mono text-govNavy">
                 {Math.round(forecastResult.p10).toLocaleString()}
-                <span className="text-xs font-normal text-slate-400 ml-1">pts</span>
+                <span className="text-xs font-normal text-slate-400 ml-1">{isHi ? 'अंक' : 'pts'}</span>
               </div>
               <div className="text-[10px] text-slate-500 font-mono mt-1">
-                Raw P10: {Math.round(forecastResult.p10Raw).toLocaleString()} pts
+                {isHi ? 'कच्चा P10: ' : 'Raw P10: '} {Math.round(forecastResult.p10Raw).toLocaleString()} {isHi ? 'अंक' : 'pts'}
               </div>
             </div>
 
@@ -216,16 +244,16 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[10px] font-mono text-govBlueAccent uppercase font-bold flex items-center gap-1">
                   <Target className="w-3 h-3 text-govBlueAccent" />
-                  P50 Point Forecast
+                  {isHi ? 'P50 बिंदु पूर्वानुमान' : 'P50 Point Forecast'}
                 </span>
-                <ProvenanceBadge type="model" text="Median" />
+                <ProvenanceBadge type="model" text={isHi ? 'मध्यिका' : 'Median'} />
               </div>
               <div className="text-2xl font-black font-mono text-govNavy">
                 {Math.round(forecastResult.p50).toLocaleString()}
-                <span className="text-xs font-normal text-slate-400 ml-1">pts</span>
+                <span className="text-xs font-normal text-slate-400 ml-1">{isHi ? 'अंक' : 'pts'}</span>
               </div>
               <div className="text-[10px] text-slate-500 font-mono mt-1">
-                Quantile LightGBM median
+                {isHi ? 'क्वांटाइल LightGBM मध्यिका' : 'Quantile LightGBM median'}
               </div>
             </div>
 
@@ -233,16 +261,16 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
             <div className="bg-white border border-lightBorder rounded p-4 shadow-xs">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[10px] font-mono text-slate-500 uppercase font-semibold">
-                  P90 Upper Bound
+                  {isHi ? 'P90 ऊपरी सीमा' : 'P90 Upper Bound'}
                 </span>
-                <ProvenanceBadge type="conformal" text="Calibrated" />
+                <ProvenanceBadge type="conformal" text={isHi ? 'कैलिब्रेटेड' : 'Calibrated'} />
               </div>
               <div className="text-2xl font-black font-mono text-govNavy">
                 {Math.round(forecastResult.p90).toLocaleString()}
-                <span className="text-xs font-normal text-slate-400 ml-1">pts</span>
+                <span className="text-xs font-normal text-slate-400 ml-1">{isHi ? 'अंक' : 'pts'}</span>
               </div>
               <div className="text-[10px] text-slate-500 font-mono mt-1">
-                Raw P90: {Math.round(forecastResult.p90Raw).toLocaleString()} pts
+                {isHi ? 'कच्चा P90: ' : 'Raw P90: '} {Math.round(forecastResult.p90Raw).toLocaleString()} {isHi ? 'अंक' : 'pts'}
               </div>
             </div>
 
@@ -254,30 +282,36 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
             }`}>
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[10px] font-mono text-slate-600 uppercase font-semibold">
-                  Observed Actual Y(T₀+h)
+                  {isHi ? 'प्रेक्षित वास्तविक Y(T₀+h)' : 'Observed Actual Y(T₀+h)'}
                 </span>
                 <ProvenanceBadge 
                   type={forecastResult.actualValue !== null ? 'observed' : 'unavailable'} 
-                  text={forecastResult.actualValue !== null ? 'Observed' : 'Unobserved'} 
+                  text={
+                    forecastResult.actualValue !== null 
+                      ? (isHi ? 'प्रेक्षित' : 'Observed') 
+                      : (isHi ? 'अप्रमाणित' : 'Unobserved')
+                  } 
                 />
               </div>
               {forecastResult.actualValue !== null ? (
                 <>
                   <div className="text-2xl font-black font-mono text-emerald-800">
                     {Math.round(forecastResult.actualValue).toLocaleString()}
-                    <span className="text-xs font-normal text-slate-500 ml-1">pts</span>
+                    <span className="text-xs font-normal text-slate-500 ml-1">{isHi ? 'अंक' : 'pts'}</span>
                   </div>
                   <div className="text-[10px] text-emerald-700 font-mono mt-1">
-                    Observed on {forecastResult.targetDate}
+                    {isHi ? `${forecastResult.targetDate} को प्रेक्षित` : `Observed on ${forecastResult.targetDate}`}
                   </div>
                 </>
               ) : (
                 <>
                   <div className="text-lg font-bold font-mono text-slate-500 mt-1">
-                    Post-2019 Unobserved
+                    {isHi ? '2019 उपरांत अप्रशिक्षित' : 'Post-2019 Unobserved'}
                   </div>
                   <div className="text-[10px] text-slate-500 mt-1">
-                    Target date ({forecastResult.targetDate}) is post-2019 cutoff. Zero fabrication enforced.
+                    {isHi 
+                      ? `लक्षित तिथि (${forecastResult.targetDate}) 2019 कटऑफ के बाद है। शून्य फैब्रिकेशन नीति लागू।` 
+                      : `Target date (${forecastResult.targetDate}) is post-2019 cutoff. Zero fabrication enforced.`}
                   </div>
                 </>
               )}
@@ -290,26 +324,28 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
               <div>
                 <h3 className="text-xs font-bold text-govNavy flex items-center gap-1.5 uppercase tracking-wide">
                   <ChartIcon className="w-4 h-4 text-govBlueAccent" />
-                  Calibrated Prediction Interval Fan (P10 – P90)
+                  {isHi ? 'कैलिब्रेटेड भविष्यवाणी अंतराल फैन (P10 – P90)' : 'Calibrated Prediction Interval Fan (P10 – P90)'}
                 </h3>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  Visual representation of the 80% conformal prediction band vs the observed realization.
+                  {isHi 
+                    ? 'प्रेक्षित वास्तविक मूल्य बनाम 80% कन्फॉर्मल भविष्यवाणी बैंड का दृश्य प्रतिनिधित्व।' 
+                    : 'Visual representation of the 80% conformal prediction band vs the observed realization.'}
                 </p>
               </div>
 
               <div className="flex items-center gap-3 text-[11px] font-mono">
                 <span className="flex items-center gap-1.5 text-blue-800">
                   <span className="w-2.5 h-2.5 rounded bg-sky-200 border border-sky-400" />
-                  80% Band (P10–P90)
+                  {isHi ? '80% बैंड (P10–P90)' : '80% Band (P10–P90)'}
                 </span>
                 <span className="flex items-center gap-1.5 text-govNavy font-bold">
                   <span className="w-2 h-2 rounded-full bg-govNavy" />
-                  P50 Forecast
+                  {isHi ? 'P50 पूर्वानुमान' : 'P50 Forecast'}
                 </span>
                 {forecastResult.actualValue !== null && (
                   <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
                     <span className="w-2 h-2 rounded-full bg-emerald-600" />
-                    Actual Observed
+                    {isHi ? 'वास्तविक प्रेक्षित' : 'Actual Observed'}
                   </span>
                 )}
               </div>
@@ -386,7 +422,7 @@ export default function HistoricalForecast({ initialVessel = 'Panamax', onNaviga
                         >
                           <div className="w-3.5 h-3.5 bg-emerald-600 rounded-full border-2 border-white absolute -top-1.5 -left-1.25 shadow-xs" />
                           <span className="absolute -bottom-5 -translate-x-1/2 text-[10px] font-mono font-extrabold text-emerald-800 whitespace-nowrap">
-                            Act ({Math.round(act)})
+                            {isHi ? 'वास्तविक' : 'Act'} ({Math.round(act)})
                           </span>
                         </div>
                       )}

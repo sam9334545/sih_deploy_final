@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function MainHeader({ onNavigate, currentTab }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const { t } = useLanguage();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -9,18 +11,24 @@ export default function MainHeader({ onNavigate, currentTab }) {
     const term = searchTerm.toLowerCase();
     if (term.includes('port') || term.includes('paradip') || term.includes('vizag') || term.includes('haldia')) {
       onNavigate('ports');
+    } else if (term.includes('vessel') || term.includes('capesize') || term.includes('panamax') || term.includes('supramax')) {
+      onNavigate('vessels');
+    } else if (term.includes('simulat') || term.includes('monte') || term.includes('twin')) {
+      onNavigate('simulator');
+    } else if (term.includes('risk') || term.includes('alert')) {
+      onNavigate('risks');
     } else if (term.includes('route') || term.includes('voyage') || term.includes('australia')) {
       onNavigate('routes');
-    } else if (term.includes('charter') || term.includes('optimi') || term.includes('strategy')) {
-      onNavigate('optimizer');
+    } else if (term.includes('charter') || term.includes('plan') || term.includes('optimi')) {
+      onNavigate('planner');
     } else if (term.includes('forecast') || term.includes('bpi') || term.includes('bci') || term.includes('predict')) {
       onNavigate('forecast');
-    } else if (term.includes('market') || term.includes('index') || term.includes('baltic')) {
+    } else if (term.includes('market') || term.includes('index') || term.includes('baltic') || term.includes('ballast')) {
       onNavigate('market');
     } else if (term.includes('data') || term.includes('provenance') || term.includes('method')) {
       onNavigate('methodology');
     } else {
-      onNavigate('market');
+      onNavigate('dashboard');
     }
   };
 
@@ -50,14 +58,14 @@ export default function MainHeader({ onNavigate, currentTab }) {
           <div>
             <div className="flex items-center space-x-2">
               <span className="text-base sm:text-lg font-extrabold text-govNavy tracking-tight leading-tight uppercase font-serif">
-                Charter Intelligence
+                {t('brand_title')}
               </span>
               <span className="bg-blue-100 text-govBlueAccent font-semibold px-1.5 py-0.5 rounded text-[10px] tracking-wide border border-blue-200">
                 SIH26006
               </span>
             </div>
             <p className="text-[11px] text-slate-500 font-medium leading-none mt-0.5">
-              Freight Forecasting &amp; Procurement Decision Support
+              {t('brand_sub')}
             </p>
           </div>
         </div>
@@ -70,7 +78,7 @@ export default function MainHeader({ onNavigate, currentTab }) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full text-[11px] bg-slate-50 border border-slate-300 rounded-md pl-3 pr-8 py-1.5 focus:bg-white focus:outline-none focus:ring-1 focus:ring-govBlueAccent focus:border-govBlueAccent text-slate-700" 
-              placeholder="Search ports, routes, models..." 
+              placeholder={t('search_placeholder')} 
               type="text"
             />
             <button 
@@ -92,8 +100,8 @@ export default function MainHeader({ onNavigate, currentTab }) {
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <div className="leading-none">
-              <span className="text-emerald-950 font-bold block">Data Status</span>
-              <span className="text-emerald-700 font-medium">Historical Development</span>
+              <span className="text-emerald-950 font-bold block">{t('data_status')}</span>
+              <span className="text-emerald-700 font-medium">{t('data_status_val')}</span>
             </div>
           </div>
 
@@ -103,7 +111,7 @@ export default function MainHeader({ onNavigate, currentTab }) {
               onClick={() => onNavigate('about')}
               className={`text-[11px] font-medium transition ${currentTab === 'about' ? 'text-govNavy font-bold' : 'text-slate-600 hover:text-govNavy'}`}
             >
-              About
+              {t('about')}
             </button>
             <button 
               onClick={() => onNavigate('home')}

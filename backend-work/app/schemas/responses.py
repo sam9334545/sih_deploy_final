@@ -140,6 +140,7 @@ class Recommendation(BaseModel):
     risk_adjusted_cost_usd: float
     risk: str
     charter_opportunity_score: float | None = None
+    sensitivity: list[dict[str, Any]] = []
 
 
 class OptimizeResponse(BaseModel):
@@ -157,6 +158,7 @@ class OptimizeResponse(BaseModel):
     as_of: date
     runtime_ms: int
     request_id: str
+    sensitivity: list[dict[str, Any]] = []
 
 
 # ───────────────────────── simulation ─────────────────────────
@@ -178,6 +180,7 @@ class StrategyResult(BaseModel):
     idle_cost_usd: float
     feasible: bool = True
     notes: list[str] = []
+    sensitivity: list[dict[str, Any]] = []
 
 
 class SimulateResponse(BaseModel):
@@ -192,6 +195,7 @@ class SimulateResponse(BaseModel):
     assumptions: list[str]
     provenance: dict[str, Provenance]
     request_id: str
+    sensitivity: list[dict[str, Any]] = []
 
 
 # ───────────────────────── reference ─────────────────────────

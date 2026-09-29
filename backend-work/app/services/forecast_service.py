@@ -68,7 +68,9 @@ def get_or_build(db: Session, index_code: str, horizon_days: int, as_of: date,
                 _V2_DETAIL.clear()
             return _build_v2(db, index_code, horizon_days, as_of)
         except forecast_v2_adapter.V2Unavailable as e:
-            # Not an error: the service is designed to run without the ML stack.
+            if settings.require_v2_forecast:
+                raise NoModelError(f"Production LightGBM v2 models required by configuration but unavailable: {e}") from e
+            # In development/demo, graceful fallback to built-in model is permitted:
             logger.info("forecast_v2 unavailable for %s h=%s (%s); using built-in model",
                         index_code, horizon_days, e)
 

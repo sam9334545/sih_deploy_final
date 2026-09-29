@@ -434,9 +434,9 @@ To adjust for empirical under-coverage and calibrate prediction intervals:
 
 ## 7. Calibration Diagnostics (Validation Set Summary)
 
-The table below reports the validation-derived conformal adjustment factor $\\hat{{q}}$, raw coverage, and calibrated coverage across all 24 tasks:
+The table below reports the validation-derived conformal adjustment factor $\\\\hat{{q}}$, raw coverage, and calibrated coverage across all 24 tasks:
 
-| Target | Horizon | Valid Origins ($n$) | Conformal Adj $\\hat{{q}}$ | Raw Val Coverage (%) | Calibrated Val Coverage (%) | Raw Mean Width | Calibrated Mean Width |
+| Target | Horizon | Valid Origins ($n$) | Conformal Adj $\\\\hat{{q}}$ | Raw Val Coverage (%) | Calibrated Val Coverage (%) | Raw Mean Width | Calibrated Mean Width |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 """
     for _, r in calib_df.iterrows():
@@ -495,7 +495,7 @@ Based on empirical validation:
    - Allow downstream chartering optimization to parameterize risk tolerance rather than assuming static, unconditional coverage.
 2. **Production Service Contract:**
    - Expose point forecasts ($P_{50}$), interval widths, and baseline persistence comparisons in future `/forecast` API responses.
-""""""
+"""
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(report_md)
 

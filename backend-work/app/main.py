@@ -31,6 +31,12 @@ seeded demo series standing in for a feed that needs credentials).
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    # Enforce production environment safety and fail fast on invalid combinations
+    if not settings.demo_mode or settings.require_v2_forecast:
+        if "*" in settings.cors_list:
+            raise RuntimeError(
+                "CRITICAL PRODUCTION CONFIGURATION ERROR: Wildcard CORS ('*') is forbidden when running in production mode."
+            )
     Base.metadata.create_all(engine)
     yield
 
@@ -52,27 +58,38 @@ app = FastAPI(
     ],
 )
 
+cors_list = settings.cors_list
+allow_wildcard = "*" in cors_list
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_list,
-    allow_credentials=True,
+    allow_origins=cors_list,
+    allow_credentials=not allow_wildcard,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
 @app.middleware("http")
-async def attach_request_id(request: Request, call_next):
+async def attach_request_id_and_security_headers(request: Request, call_next):
     rid = request.headers.get("x-request-id") or str(uuid.uuid4())
     request.state.request_id = rid
     response = await call_next(request)
     response.headers["x-request-id"] = rid
+    # Production security headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     return response
 
 
 app.add_exception_handler(ApiError, api_error_handler)
 app.add_exception_handler(RequestValidationError, validation_handler)
 app.add_exception_handler(Exception, unhandled_handler)
+
+# Expose standard production /health, /health/ready, /health/live probes at root
+app.include_router(health.router)
 
 API_V1 = "/api/v1"
 for r in (forecast.router, ports.router, vessels.router, optimize.router,

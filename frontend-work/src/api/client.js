@@ -38,7 +38,7 @@ export async function apiFetch(endpoint, options = {}) {
   } catch (netErr) {
     console.error(`[API Network Error] ${options.method || 'GET'} ${url}:`, netErr);
     throw new ApiError(
-      'Network connection to backend server failed. Please ensure the backend is running on http://127.0.0.1:8000.',
+      'Network connection to backend server failed. Please ensure the backend server is reachable.',
       0,
       netErr.message
     );

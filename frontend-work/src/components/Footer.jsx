@@ -1,6 +1,9 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Footer({ onNavigate }) {
+  const { t } = useLanguage();
+
   return (
     <footer aria-label="Portal Footer" className="bg-govNavyDark text-slate-300 text-[11px] border-t-4 border-amber-400 mt-8">
       {/* Top Footer Columns */}
@@ -20,45 +23,55 @@ export default function Footer({ onNavigate }) {
             </div>
             <div>
               <span className="text-white font-bold tracking-wide block">SIH26006</span>
-              <span className="text-slate-300 text-[11px] font-medium">Charter Intelligence</span>
+              <span className="text-slate-300 text-[11px] font-medium">{t('brand_title')}</span>
             </div>
           </div>
           <p className="text-slate-400 text-[10px] leading-relaxed max-w-sm">
-            Intelligent Freight Forecasting &amp; Charter Decision Support for India's maritime supply chains, raw material bulk logistics, and sovereign trade resilience.
+            {t('footer_tagline')}
           </p>
           <div className="text-[10px] text-slate-400 pt-1">
-            <span>Primary Focus Ports: </span>
+            <span>{t('footer_focus_ports')} </span>
             <span className="text-slate-300 font-medium">Paradip, Visakhapatnam, Dhamra, Haldia, Gangavaram, Gopalpur</span>
           </div>
         </div>
 
         {/* Footer Nav 1: Platform */}
         <div>
-          <h3 className="text-white font-bold text-xs mb-2">Platform</h3>
+          <h3 className="text-white font-bold text-xs mb-2">{t('footer_workflows')}</h3>
           <ul className="space-y-1.5 text-slate-400 text-[10px]">
             <li>
-              <button onClick={() => onNavigate('market')} className="hover:text-white transition text-left">
-                Market Intelligence
+              <button onClick={() => onNavigate('dashboard')} className="hover:text-white transition text-left cursor-pointer">
+                {t('tab_dashboard')}
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate('forecast')} className="hover:text-white transition text-left">
-                Forecasting Engine
+              <button onClick={() => onNavigate('planner')} className="hover:text-white transition text-left cursor-pointer">
+                {t('tab_planner')}
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate('routes')} className="hover:text-white transition text-left">
-                Route Analysis
+              <button onClick={() => onNavigate('forecast')} className="hover:text-white transition text-left cursor-pointer">
+                {t('tab_forecast')}
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate('optimizer')} className="hover:text-white transition text-left">
-                Charter Optimization
+              <button onClick={() => onNavigate('ports')} className="hover:text-white transition text-left cursor-pointer">
+                {t('tab_ports')}
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate('ports')} className="hover:text-white transition text-left">
-                Port Intelligence
+              <button onClick={() => onNavigate('vessels')} className="hover:text-white transition text-left cursor-pointer">
+                {t('tab_vessels')}
+              </button>
+            </li>
+            <li>
+              <button onClick={() => onNavigate('simulator')} className="hover:text-white transition text-left cursor-pointer">
+                {t('tab_simulator')}
+              </button>
+            </li>
+            <li>
+              <button onClick={() => onNavigate('risks')} className="hover:text-white transition text-left cursor-pointer">
+                {t('tab_risks')}
               </button>
             </li>
           </ul>
