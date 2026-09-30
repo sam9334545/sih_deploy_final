@@ -205,18 +205,46 @@ The operational freight desk workflow translating corporate orders into optimize
 
 ---
 
-### 6. Port Intelligence Dossier & Berth Registry
-Terminal constraint database and operational radar for India's Eastern seaboard.
+### 6. Interactive Maritime Terminal Radar & Navigational Corridors
+The geographic intelligence and route-planning simulation engine mapping international bulk supply chains into India's maritime gateways.
 
-![Port Intelligence Dossier](docs/screenshots/port_intelligence.png)
+![Maritime Terminal Radar & Navigational Corridors](docs/screenshots/maritime_radar_corridors.png)
 
-#### Terminal Coverage:
-- **Major Receiving Ports:** Dhamra (17.5m draft), Paradip (14.5m), Haldia (7.5m–8.5m), Visakhapatnam (14.5m–18.0m), Gangavaram (18.5m), Gopalpur (12.5m), Ennore (15.0m), and Krishnapatnam (17.0m).
-- **Technical Specifications:** Berth draft, tidal window rules, under-keel clearance (UKC $\ge 10\%$), discharge rates (TPD), and Sandheads lighterage transshipment models.
+#### Operational Capabilities & Navigational Rationale:
+- **9-Stage End-to-End Decision Workflow Banner:** A structured, guided procurement sequence across the top of the interface:
+  $$\text{Cargo Requirement} \to \text{Freight Forecast} \to \mathbf{Port\ Constraints} \to \text{Vessel Feasibility} \to \text{Charter Strategies} \to \text{Monte Carlo Sim} \to \text{Risk-Adjusted Cost} \to \text{Recommendation} \to \text{Why This Decision?}$$
+- **Dynamic Maritime Corridors:** Interactive geodesic route simulator dynamically rendering Great Circle sailing tracks from primary overseas loading origins to Indian receiving terminals (e.g. **Richards Bay, South Africa $\to$ Dhamra Port, India** shown above with active green dotted corridor line).
+- **6 Global Loading Origins Supported:**
+  - **AUHPT:** Hay Point (Australia) — Premium Hard Coking Coal.
+  - **AUGLT:** Gladstone (Australia) — Coking & Thermal Coal.
+  - **IDTBA:** Taboneo (Indonesia) — High-Moisture Sub-Bituminous Thermal Coal.
+  - **ZARBY:** Richards Bay (South Africa) — High-CV RB1/RB2 Thermal Coal.
+  - **USHAM:** Hampton Roads / Norfolk (USA) — Low-Vol Coking Coal.
+  - **MZBEW:** Beira (Mozambique) — Hard Coking Coal.
+- **7 Major East Coast Receiving Terminals & Anchorages:**
+  - **Dhamra (INDHA):** 17.5m draft deep-water private terminal accommodating fully-laden Capesize bulkers.
+  - **Gangavaram (INGGV):** 18.0m draft deep-water terminal with rapid conveyor discharge.
+  - **Paradip (INPRT):** 16.5m draft major port with mechanized and semi-mechanized coal berths.
+  - **Visakhapatnam (INVTZ):** 14.5m inner / 18.0m outer harbor berths handling Panamax/Capesize.
+  - **Haldia (INHAL):** Riverine port restricted to 9.0m draft requiring Sandheads transshipment.
+  - **Gopalpur (INGPR):** 9.2m draft commercial facility suited for Supramax parcels.
+  - **Sagar / Sandheads Anchorage (INSGD):** 18.0m draft deep-water lighterage zone for ocean bulk transshipment.
 
 ---
 
-### 7. Vessel Fleet Optimizer Matrix
+### 7. Port Technical Constraints & Berth Intelligence Dossier
+Detailed technical engineering specifications for all registered East Coast berths.
+
+![Port Intelligence Dossier](docs/screenshots/port_intelligence.png)
+
+#### Terminal Technical Dossier:
+- **Berth-Level Engineering Specs:** Verified maximum permissible draft, under-keel clearance (UKC $\ge 10\%$), maximum LOA, beam restrictions, and seasonal monsoonal weather stoppages.
+- **Discharge Rates & Demurrage Exposure:** Sourced from official Port Gazette schedules (TAMP) to compute accurate demurrage exposure and berth turn-around times.
+- **Sandheads Lighterage Calculator:** Evaluates double-banking and barge transfer costs for Haldia-bound parcels.
+
+---
+
+### 8. Vessel Fleet Optimizer Matrix
 Engineering evaluation across standard bulk carrier classes against active trade corridors.
 
 ![Vessel Fleet Optimizer](docs/screenshots/vessel_optimizer.png)
@@ -229,7 +257,7 @@ Engineering evaluation across standard bulk carrier classes against active trade
 
 ---
 
-### 8. Operational Risk Engine & Maritime Alerts
+### 9. Operational Risk Engine & Maritime Alerts
 Multi-factor risk scorecard tracking threats to shipping schedule integrity.
 
 ![Operational Risk Engine](docs/screenshots/risk_alerts.png)
