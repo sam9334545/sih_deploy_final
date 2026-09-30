@@ -8,7 +8,7 @@ from pathlib import Path
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 from pathlib import Path
-from pydantic import Field
+from pydantic import Field, AliasChoices
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -65,8 +65,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=(".env", "../.env"), extra="ignore")
 
     database_url: str = Field(default_factory=_find_default_db_url)
-    api_host: str = "0.0.0.0"
-    api_port: int = 8000
+    api_host: str = Field(default="0.0.0.0", validation_alias=AliasChoices("API_HOST", "HOST", "api_host"))
+    api_port: int = Field(default=8000, validation_alias=AliasChoices("PORT", "API_PORT", "api_port"))
     cors_origins: str = "http://localhost:5173,http://localhost:3000"
 
     demo_mode: bool = True

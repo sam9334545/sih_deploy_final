@@ -12,6 +12,7 @@ STRICT INTEGRITY:
 from __future__ import annotations
 
 import sys
+import os
 from datetime import date
 from pathlib import Path
 from typing import Optional, List, Dict, Any
@@ -19,8 +20,30 @@ from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
-# Ensure ml-work is on Python path
-ML_WORK_DIR = Path(__file__).resolve().parent.parent.parent.parent / "ml-work"
+# Ensure ml-work is on Python path across local dev, repository root, and container environments
+def _find_ml_work_dir() -> Path:
+    env_root = os.environ.get("FORECAST_V2_ROOT") or os.environ.get("ML_WORK_DIR")
+    if env_root and Path(env_root).exists():
+        return Path(env_root).resolve()
+
+    curr = Path(__file__).resolve()
+    candidates = [
+        curr.parents[3] / "ml-work" if len(curr.parents) > 3 else None,  # local dev: backend-work/app/routers -> repo/ml-work
+        curr.parents[2] / "ml-work" if len(curr.parents) > 2 else None,  # container: /app/app/routers -> /app/ml-work
+        curr.parents[1] / "ml-work" if len(curr.parents) > 1 else None,  # alternate: /app/routers -> /app/ml-work
+        Path("/app/ml-work"),                                             # standard Docker container path
+        Path("./ml-work").resolve(),                                      # repo root / cwd
+        Path("../ml-work").resolve(),
+    ]
+    for cand in candidates:
+        if cand is not None and cand.exists() and (cand / "models").exists():
+            return cand.resolve()
+    fallback = Path("/app/ml-work")
+    if fallback.exists():
+        return fallback
+    return curr.parents[3] / "ml-work" if len(curr.parents) > 3 else Path("ml-work").resolve()
+
+ML_WORK_DIR = _find_ml_work_dir()
 if str(ML_WORK_DIR) not in sys.path:
     sys.path.insert(0, str(ML_WORK_DIR))
 

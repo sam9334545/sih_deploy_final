@@ -20,7 +20,7 @@ from datetime import date
 
 import numpy as np
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "backend"))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from app.db import SessionLocal                                   # noqa: E402
 from app.repositories import reference as ref_repo                # noqa: E402

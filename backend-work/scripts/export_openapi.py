@@ -9,12 +9,14 @@ import json
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "backend"))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from app.main import app                                          # noqa: E402
 
 if __name__ == "__main__":
-    out = os.path.join(os.path.dirname(__file__), "..", "docs", "openapi.json")
+    out = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "docs", "openapi.json"))
+    if not os.path.exists(os.path.dirname(out)):
+        out = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "docs", "openapi.json"))
     with open(out, "w") as f:
         json.dump(app.openapi(), f, indent=2, sort_keys=True)
         f.write("\n")

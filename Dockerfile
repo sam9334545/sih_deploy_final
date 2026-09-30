@@ -20,26 +20,24 @@ COPY backend-work/app /app/app
 COPY backend-work/data /app/data
 COPY backend-work/scripts /app/scripts
 
-# 3. Copy authoritative ML v2 forecasting pipeline & LightGBM model artifacts
-# (72 LightGBM quantile regression models + split-conformal calibrators)
-COPY ml-work/forecast_v2 /app/ml-work/forecast_v2
-COPY ml-work/models/saved_models/v2 /app/ml-work/models/saved_models/v2
-COPY ml-work/route /app/ml-work/route
-COPY ml-work/data/processed/baltic_real_plus_postcovid.csv /app/ml-work/data/processed/baltic_real_plus_postcovid.csv
+# 3. Copy authoritative ML workspace (models, features, routes, pipeline, datasets, and artifacts)
+COPY ml-work /app/ml-work
 
 # 4. Configure serving environment
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app \
+    PYTHONPATH=/app:/app/ml-work \
     FORECAST_V2_ROOT=/app/ml-work \
     FORECAST_V2_ARTIFACTS=/app/ml-work/models/saved_models/v2 \
     REQUIRE_V2_FORECAST=false \
-    DEMO_MODE=true
+    DEMO_MODE=true \
+    API_HOST=0.0.0.0 \
+    PORT=8000
 
 EXPOSE 8000
 
 # Explicit container healthcheck probing the ML-aware readiness endpoint
 HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8000/health/ready || exit 1
+    CMD curl -f http://127.0.0.1:${PORT:-8000}/health/ready || exit 1
 
-# Seed reference data and start production ASGI server
-CMD ["sh", "-c", "python -m app.seed && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Seed reference data and start production ASGI server with dynamic Render port support
+CMD ["sh", "-c", "python -m app.seed && exec python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
