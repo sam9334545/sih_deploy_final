@@ -143,7 +143,7 @@ export default function ActiveAlertsBanner({ onNavigate, compact = false, showCo
 
             <div className="flex items-center space-x-2 text-[10px]">
               <ProvenanceBadge type="OBSERVED" text={isHi ? 'स्वचालित चेतावनी नियम' : 'Automated Decision Rules'} />
-              {onNavigate && (
+              {onNavigate && typeof window !== 'undefined' && !window.location.hash.includes('risks') && (
                 <button
                   onClick={() => onNavigate('risks')}
                   className="text-govBlueAccent hover:underline font-semibold flex items-center space-x-1 cursor-pointer"
