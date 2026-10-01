@@ -257,14 +257,31 @@ Engineering evaluation across standard bulk carrier classes against active trade
 
 ---
 
-### 9. Operational Risk Engine & Maritime Alerts
-Multi-factor risk scorecard tracking threats to shipping schedule integrity.
+### 9. Operational Risk Engine & Active Maritime Alert Simulator
+Multi-factor risk scorecard tracking threats to shipping schedule integrity with live crisis scenario injection and mathematical component sensitivity decomposition.
 
-![Operational Risk Engine](docs/screenshots/risk_alerts.png)
+![Operational Risk Engine & Active Maritime Alert Simulator](docs/screenshots/risk_alerts.png)
 
-#### Composite Risk Evaluation:
-- 6 risk pillars: Market Volatility, Port Congestion, Bay of Bengal Cyclone/Monsoon Hazard, Fleet Tonnage Supply, Bunker Fuel Escalation, and Chokepoint Geopolitics.
-- Actionable operational alerts with severity tags (*Critical*, *Moderate*, *Normal*) and mitigation protocols.
+#### Operational Crisis & Scenario Control:
+- **Interactive Crisis Simulator:** Test system resilience and procurement reactions across 5 live operational scenarios:
+  1. **Baseline / Normal Operations:** Standard seasonal conditions with baseline tariffs.
+  2. **Bay of Bengal Cyclone Warning (Category 4):** Simulates terminal shutdown at Paradip/Dhamra, pre-berthing wait spikes (+7.5 days), and storm demurrage.
+  3. **Bunker Fuel Shock (+35%):** VLSFO price spike to $820/MT, re-evaluating time charter hire economics.
+  4. **Port Congestion Crisis:** Severe vessel bunching at East Coast coal berths with 12-day pre-berthing queues.
+  5. **Red Sea / Chokepoint Escalation:** Cape of Good Hope diversion (+14 sailing days), shifting optimal contract choice toward COA structures.
+- **Live Active Alerts Banner:** Dynamic contextual alert stream with automated decision rules and direct in-page anchor navigation to the Risk Registry.
+
+#### Component Risk Decomposition & Perturbation Contribution:
+- **Mathematical Sensitivity Methodology ($\pm 1\sigma$):** Component-level risk attributions are computed strictly from partial derivatives of risk-adjusted landed cost under $\pm 1\sigma$ simulation perturbations — **zero hand-tuned or arbitrary weights**.
+- **6 Orthogonal Monitored Risk Vectors:**
+  1. **Market Freight Risk ($38\%$ typical contribution):** Evaluated from 20-day realized volatility annualized against its 7-year historical distribution.
+  2. **Port Congestion Risk:** Monitored against historical P90 pre-berthing waiting telemetry at East Coast receiving terminals (Paradip, Dhamra, Haldia, Visakhapatnam).
+  3. **Weather & Cyclone Hazard:** Based on Bay of Bengal IMD cyclone track records and seasonal monsoon stoppage climatology (June–September monsoon and October–November cyclone transition).
+  4. **Vessel Availability Risk:** Tonnage supply tightness across Capesize, Panamax, and Supramax vessel classes.
+  5. **Route & Corridor Economics:** Bunkering hub spreads (Singapore / Fujairah) and canal detour penalties.
+  6. **Demand Volatility:** Macro raw material import velocity and plant inventory depletion rates.
+- **Explainable Decision Rules ("What Conditions Would Change This Risk Verdict?"):**
+  - Identifies transparent operational triggers required to lower the composite risk score (e.g., market volatility reverting to 12-month median, expected port wait dropping below 2.8 days, or shifting laycan outside the October–December cyclone window).
 
 ---
 
