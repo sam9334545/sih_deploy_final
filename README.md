@@ -12,7 +12,6 @@ An end-to-end maritime intelligence and charter decision-support platform design
 
 Developed for **Smart India Hackathon (SIH 2026)** — Problem Statement **SIH26006**.
 
-- **Authoritative Blueprint:** [`SIH26006_Blueprint.md`](file:///SIH26006_Blueprint.md)
 - **Live Production Platform:** [https://sih-deploy-final-1.onrender.com/](https://sih-deploy-final-1.onrender.com/)
 - **Video Demonstration:** [https://youtu.be/KJXbaAhKiio](https://youtu.be/KJXbaAhKiio)
 
@@ -333,8 +332,7 @@ SIH26006/
 │
 ├── Dockerfile                        # Production-hardened container image for Render deployment
 ├── docker-compose.yml                # Full-stack local orchestration (backend + frontend)
-├── .dockerignore                     # Build context optimization
-└── SIH26006_Blueprint.md             # Master problem specification & requirements
+└── .dockerignore                     # Build context optimization
 ```
 
 ---
