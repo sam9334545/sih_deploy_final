@@ -47,26 +47,26 @@ export default function ActiveAlertsBanner({ onNavigate, compact = false, showCo
 
   return (
     <div className="space-y-2.5">
-      {/* 1. Video Showcase / Scenario Switcher Bar */}
+      {/* 1. Operational Scenario & Crisis Switcher Bar */}
       {showControls && (
         <div className="bg-gradient-to-r from-slate-900 via-govNavy to-blue-950 text-white rounded-lg p-3 shadow-md border border-blue-900/60 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div className="flex items-center space-x-2.5">
             <div className="w-7 h-7 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/40 flex items-center justify-center flex-shrink-0">
-              <Video className="w-4 h-4 text-amber-300 animate-pulse" />
+              <Sliders className="w-4 h-4 text-amber-300 animate-pulse" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
                 <span className="text-xs font-bold text-white tracking-wide uppercase font-serif">
-                  {isHi ? 'वीडियो शोकेस एवं निर्णय चेतावनी सिम्युलेटर' : 'Video Showcase & Maritime Alert Simulator'}
+                  {isHi ? 'परिचालन समुद्री संकट एवं निर्णय चेतावनी सिम्युलेटर' : 'Operational Crisis & Maritime Alert Simulator'}
                 </span>
                 <span className="bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[9px] font-mono font-bold px-1.5 py-0.2 rounded">
-                  {isHi ? 'लाइव डेमो मोड' : 'LIVE DEMO MODE'}
+                  {isHi ? 'सक्रिय परिदृश्य नियंत्रण' : 'SCENARIO CONTROL'}
                 </span>
               </div>
               <p className="text-[11px] text-slate-300 mt-0.5">
                 {isHi 
-                  ? 'वीडियो रिकॉर्डिंग हेतु तात्कालिक समुद्री संकट एवं अलर्ट परिदृश्य चुनें:' 
-                  : 'Select active maritime crisis scenarios to showcase real-time alerts across the dashboard:'}
+                  ? 'मौसम, बंदरगाह भीड़भाड़ एवं बाजार परिस्थितियों हेतु वास्तविक समय परिदृश्य चुनें:' 
+                  : 'Select real-time operational weather, port congestion, or market volatility scenarios:'}
               </p>
             </div>
           </div>
@@ -287,7 +287,7 @@ export default function ActiveAlertsBanner({ onNavigate, compact = false, showCo
             className="text-[10px] font-bold bg-amber-400 hover:bg-amber-500 text-slate-950 px-2.5 py-1 rounded shadow-xs transition flex items-center space-x-1 cursor-pointer self-end sm:self-center"
           >
             <Sparkles className="w-3 h-3" />
-            <span>{isHi ? 'डेमो अलर्ट परिदृश्य सक्रिय करें' : 'Simulate Alerts for Video Demo'}</span>
+            <span>{isHi ? 'सक्रिय अलर्ट परिदृश्य लोड करें' : 'Simulate Operational Alert Scenario'}</span>
           </button>
         </div>
       )}

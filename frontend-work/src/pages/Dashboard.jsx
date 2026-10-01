@@ -409,7 +409,7 @@ export default function Dashboard({ onNavigate }) {
                     onClick={() => setScenario('cyclone')}
                     className="w-full text-center py-1 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-[9px] rounded transition shadow-2xs cursor-pointer"
                   >
-                    {isHi ? '⚡ डेमो हेतु अलर्ट परिदृश्य लोड करें' : '⚡ Simulate Live Alerts for Demo Video'}
+                    {isHi ? '⚡ सक्रिय अलर्ट परिदृश्य लोड करें' : '⚡ Simulate Live Maritime Alerts'}
                   </button>
                 </div>
               )}

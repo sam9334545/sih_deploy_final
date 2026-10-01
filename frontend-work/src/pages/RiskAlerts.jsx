@@ -494,8 +494,8 @@ export default function RiskAlerts({ onNavigate }) {
               </h4>
               <p className="text-[11px] text-slate-500 mt-0.5 max-w-md mx-auto">
                 {isHi 
-                  ? 'वर्तमान विन्यास के लिए कोई सक्रिय आपातकालीन चेतावनी नहीं है। वीडियो प्रेजेंटेशन हेतु नीचे दिए गए परिदृश्य का चयन करें:' 
-                  : 'Zero critical disruptions detected for current scope. Select a live scenario preset below to demonstrate real-time alerts in your showcase video:'}
+                  ? 'वर्तमान विन्यास के लिए कोई सक्रिय आपातकालीन चेतावनी नहीं है। विभिन्न परिचालन परिस्थितियों के लिए नीचे दिए गए परिदृश्य का चयन करें:' 
+                  : 'Zero critical disruptions detected for current scope. Select an operational scenario preset below to evaluate real-time decision rules:'}
               </p>
             </div>
 
