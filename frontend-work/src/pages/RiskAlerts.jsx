@@ -17,8 +17,10 @@ import {
 } from 'lucide-react';
 import ProvenanceBadge from '../components/ProvenanceBadge';
 import DecisionWorkflowBanner from '../components/DecisionWorkflowBanner';
+import ActiveAlertsBanner from '../components/ActiveAlertsBanner';
 import { fetchRisks, ApiError } from '../api';
 import { useLanguage } from '../context/LanguageContext';
+import { useAlerts } from '../context/AlertContext';
 
 const DISCHARGE_PORTS = [
   { id: 'INPRT', name: 'Paradip Port (INPRT)', hiName: 'पारादीप बंदरगाह (INPRT)' },
@@ -43,6 +45,16 @@ const COMPONENT_ICONS = {
 export default function RiskAlerts({ onNavigate }) {
   const { lang } = useLanguage();
   const isHi = lang === 'hi';
+  const { 
+    alerts: activeAlertsList, 
+    alertCount, 
+    activeScenario, 
+    selectedScenarioKey, 
+    setScenario,
+    dismissAlert,
+    resetAlerts,
+    scenarios
+  } = useAlerts();
 
   const [selectedPortId, setSelectedPortId] = useState('INPRT');
   const [selectedClass, setSelectedClass] = useState('Panamax');
@@ -77,15 +89,19 @@ export default function RiskAlerts({ onNavigate }) {
   }
 
   const components = riskData?.components || [];
-  const alerts = riskData?.alerts || [];
-  const overall = riskData?.overall || 'MEDIUM';
+  // Use activeAlertsList from AlertContext when present, or fallback to API alerts
+  const displayAlerts = activeAlertsList.length > 0 ? activeAlertsList : (riskData?.alerts || []);
+  const overall = activeAlertsList.length > 0 ? (activeScenario?.overallRisk || 'HIGH') : (riskData?.overall || 'MEDIUM');
 
   return (
     <div className="space-y-4">
       {/* 1. Decision Workflow Banner */}
       <DecisionWorkflowBanner currentStep="risk" onNavigate={onNavigate} />
 
-      {/* 2. Top Header Banner */}
+      {/* 2. Video Showcase & Maritime Decision Alert Simulator Bar */}
+      <ActiveAlertsBanner onNavigate={onNavigate} showControls={true} />
+
+      {/* 3. Top Header Banner */}
       <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <div>
           <div className="flex items-center space-x-2">
@@ -352,63 +368,167 @@ export default function RiskAlerts({ onNavigate }) {
       </div>
 
       {/* 6. Active Live Alert Feed */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs space-y-3">
-        <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+      <div className="bg-white border-2 border-slate-200 rounded-lg p-4 shadow-xs space-y-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-2.5">
           <div className="flex items-center space-x-2">
-            <AlertTriangle className="w-4 h-4 text-amber-600" />
-            <h3 className="text-xs font-bold text-govNavy uppercase tracking-wide">
-              {isHi 
-                ? `सक्रिय समुद्री निर्णय चेतावनियां (${alerts.length})` 
-                : `Active Maritime Decision Alerts (${alerts.length})`}
+            <span className="relative flex h-3 w-3">
+              {displayAlerts.length > 0 && (
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              )}
+              <span className={`relative inline-flex rounded-full h-3 w-3 ${displayAlerts.length > 0 ? 'bg-rose-600' : 'bg-emerald-500'}`}></span>
+            </span>
+            <h3 className="text-xs sm:text-sm font-bold text-govNavy uppercase tracking-wide flex items-center space-x-1.5">
+              <ShieldAlert className={`w-4 h-4 ${displayAlerts.length > 0 ? 'text-rose-600' : 'text-emerald-600'}`} />
+              <span>
+                {isHi 
+                  ? `सक्रिय समुद्री निर्णय चेतावनियां (${displayAlerts.length})` 
+                  : `Active Maritime Decision Alerts (${displayAlerts.length})`}
+              </span>
             </h3>
+            {displayAlerts.length > 0 && (
+              <span className="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded border border-rose-200 uppercase">
+                {isHi ? 'प्रणाली चेतावनी सक्रिय' : 'Active Registry Stream'}
+              </span>
+            )}
           </div>
-          <ProvenanceBadge type="OBSERVED" text={isHi ? 'प्रणाली चेतावनी नियम' : 'System Alert Rules'} />
+          <div className="flex items-center space-x-2 text-[10px]">
+            <ProvenanceBadge type="OBSERVED" text={isHi ? 'प्रणाली चेतावनी नियम' : 'System Alert Rules'} />
+            {displayAlerts.length > 0 && (
+              <button
+                onClick={resetAlerts}
+                className="text-govBlueAccent hover:underline text-[10px] font-medium cursor-pointer"
+              >
+                {isHi ? 'रीसेट' : 'Reset Alerts'}
+              </button>
+            )}
+          </div>
         </div>
 
-        {alerts.length > 0 ? (
-          <div className="space-y-2">
-            {alerts.map((alert, idx) => {
+        {displayAlerts.length > 0 ? (
+          <div className="space-y-2.5">
+            {displayAlerts.map((alert, idx) => {
               const isHigh = alert.severity === 'high';
               const isMed = alert.severity === 'medium';
 
               return (
                 <div
-                  key={idx}
-                  className={`p-3 rounded-lg border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 ${
+                  key={alert.id || idx}
+                  className={`p-3.5 rounded-lg border transition duration-150 flex flex-col justify-between gap-2.5 ${
                     isHigh
-                      ? 'bg-rose-50/70 border-rose-300'
+                      ? 'bg-rose-50/80 border-rose-300'
                       : isMed
-                      ? 'bg-amber-50/70 border-amber-300'
-                      : 'bg-blue-50/70 border-blue-200'
+                      ? 'bg-amber-50/80 border-amber-300'
+                      : 'bg-blue-50/80 border-blue-200'
                   }`}
                 >
-                  <div className="space-y-0.5">
-                    <div className="flex items-center space-x-2">
-                      <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider ${
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
                         isHigh ? 'bg-rose-600 text-white' : isMed ? 'bg-amber-600 text-white' : 'bg-blue-600 text-white'
                       }`}>
-                        {isHi ? (isHigh ? 'उच्च' : isMed ? 'मध्यम' : 'निम्न') : alert.severity}
+                        {isHi ? (isHigh ? 'गंभीर / उच्च' : isMed ? 'मध्यम' : 'निम्न') : alert.severity}
                       </span>
-                      <span className="font-mono text-[10px] text-slate-500 font-bold">{alert.code}</span>
-                      <span className="text-[10px] text-slate-400">
-                        · {isHi ? 'लक्ष्य:' : 'Target:'} {selectedPortId} / {selectedClass}
+                      <span className="font-mono text-[10px] text-slate-700 font-bold bg-white/80 px-1.5 py-0.5 rounded border border-slate-200">
+                        {alert.code}
+                      </span>
+                      {alert.category && (
+                        <span className="text-[10px] text-slate-500 font-medium">
+                          · {isHi && alert.hiCategory ? alert.hiCategory : alert.category}
+                        </span>
+                      )}
+                      <span className="text-[10px] text-slate-500 font-mono">
+                        · {isHi ? 'लक्ष्य:' : 'Target:'} {alert.portId || selectedPortId} / {alert.vesselClass || selectedClass}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-800 font-medium">{alert.message}</p>
+
+                    <span className="text-[9px] font-mono text-slate-400 whitespace-nowrap self-end sm:self-center">
+                      {alert.timestamp || `${isHi ? 'तिथि:' : 'As-Of:'} ${asOfDate}`}
+                    </span>
                   </div>
 
-                  <span className="text-[9px] font-mono text-slate-400 whitespace-nowrap">
-                    {isHi ? 'तिथि:' : 'As-Of:'} {asOfDate}
-                  </span>
+                  {/* Title & Message */}
+                  <div className="space-y-1">
+                    {alert.title && (
+                      <h4 className="text-xs font-bold text-slate-900">
+                        {isHi && alert.hiTitle ? alert.hiTitle : alert.title}
+                      </h4>
+                    )}
+                    <p className="text-xs text-slate-800 leading-relaxed font-normal">
+                      {isHi && alert.hiMessage ? alert.hiMessage : alert.message}
+                    </p>
+                  </div>
+
+                  {/* Mitigation & Operational Impact */}
+                  {(alert.impact || alert.mitigation) && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200/70 text-[11px] bg-white/70 p-2 rounded">
+                      {alert.impact && (
+                        <div className="text-rose-900">
+                          <strong className="text-rose-950 font-semibold block text-[10px] uppercase tracking-wider">
+                            {isHi ? 'वित्तीय / परिचालन प्रभाव:' : 'Operational Impact:'}
+                          </strong>
+                          <span>{isHi && alert.hiImpact ? alert.hiImpact : alert.impact}</span>
+                        </div>
+                      )}
+                      {alert.mitigation && (
+                        <div className="text-slate-800">
+                          <strong className="text-govNavy font-semibold block text-[10px] uppercase tracking-wider">
+                            {isHi ? 'एआई शमन प्रोटोकॉल:' : 'AI Mitigation Protocol:'}
+                          </strong>
+                          <span>{isHi && alert.hiMitigation ? alert.hiMitigation : alert.mitigation}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
         ) : (
-          <div className="p-6 text-center text-xs text-slate-400">
-            {isHi 
-              ? 'इस विन्यास के लिए कोई सक्रिय उच्च-तीव्रता चेतावनी नहीं मिली।' 
-              : 'No active high-severity alerts detected for this configuration.'}
+          <div className="p-6 bg-slate-50 rounded-lg border border-dashed border-slate-300 text-center space-y-3">
+            <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-slate-800">
+                {isHi ? 'सक्रिय समुद्री निर्णय चेतावनियां (0) — सामान्य परिचालन' : 'Active Maritime Decision Alerts (0) — Normal Operations'}
+              </h4>
+              <p className="text-[11px] text-slate-500 mt-0.5 max-w-md mx-auto">
+                {isHi 
+                  ? 'वर्तमान विन्यास के लिए कोई सक्रिय आपातकालीन चेतावनी नहीं है। वीडियो प्रेजेंटेशन हेतु नीचे दिए गए परिदृश्य का चयन करें:' 
+                  : 'Zero critical disruptions detected for current scope. Select a live scenario preset below to demonstrate real-time alerts in your showcase video:'}
+              </p>
+            </div>
+
+            {/* Quick Scenario Preset Buttons */}
+            <div className="flex flex-wrap justify-center gap-2 pt-1">
+              <button
+                onClick={() => setScenario('cyclone')}
+                className="text-[10px] font-semibold bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200 px-3 py-1.5 rounded transition cursor-pointer flex items-center space-x-1"
+              >
+                <span>🌪️ {isHi ? 'बंगाल चक्रवात चेतावनी (3 अलर्ट)' : 'Bay of Bengal Cyclone (3 Alerts)'}</span>
+              </button>
+
+              <button
+                onClick={() => setScenario('congestion')}
+                className="text-[10px] font-semibold bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200 px-3 py-1.5 rounded transition cursor-pointer flex items-center space-x-1"
+              >
+                <span>⏳ {isHi ? 'बंदरगाह प्रतीक्षा कतार संकट (3 अलर्ट)' : 'Port Waiting Queue Spike (3 Alerts)'}</span>
+              </button>
+
+              <button
+                onClick={() => setScenario('volatility')}
+                className="text-[10px] font-semibold bg-purple-50 text-purple-800 hover:bg-purple-100 border border-purple-200 px-3 py-1.5 rounded transition cursor-pointer flex items-center space-x-1"
+              >
+                <span>📈 {isHi ? 'बाल्टिक भाड़ा दर झटका (3 अलर्ट)' : 'Baltic Freight Market Shock (3 Alerts)'}</span>
+              </button>
+
+              <button
+                onClick={() => setScenario('multi_crisis')}
+                className="text-[10px] font-semibold bg-govNavy text-white hover:bg-govNavyLight px-3 py-1.5 rounded transition cursor-pointer flex items-center space-x-1"
+              >
+                <span>🚨 {isHi ? 'बहु-संकट आपातकालीन संयोजन (5 अलर्ट)' : 'Multi-Crisis Ensemble (5 Alerts)'}</span>
+              </button>
+            </div>
           </div>
         )}
       </div>

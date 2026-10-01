@@ -17,12 +17,22 @@ import {
 import ProvenanceBadge from '../components/ProvenanceBadge';
 import DataCutoffNotice from '../components/DataCutoffNotice';
 import DecisionWorkflowBanner from '../components/DecisionWorkflowBanner';
+import ActiveAlertsBanner from '../components/ActiveAlertsBanner';
 import { fetchMarketData, fetchRisks, executeLiveForecast, ApiError } from '../api';
 import { useLanguage } from '../context/LanguageContext';
+import { useAlerts } from '../context/AlertContext';
 
 export default function Dashboard({ onNavigate }) {
   const { lang } = useLanguage();
   const isHi = lang === 'hi';
+  const { 
+    alerts: activeDecisionAlerts, 
+    alertCount, 
+    activeScenario, 
+    selectedScenarioKey, 
+    setScenario 
+  } = useAlerts();
+
   const [marketData, setMarketData] = useState(null);
   const [riskData, setRiskData] = useState(null);
   const [forecastSnapshot, setForecastSnapshot] = useState(null);
@@ -70,12 +80,22 @@ export default function Dashboard({ onNavigate }) {
   const oppTrend = oppGeneric?.trend || 'stable';
   const availability = marketData?.availability_signal?.[selectedClass];
 
+  const effectiveRisk = alertCount > 0 
+    ? (activeScenario?.overallRisk || 'HIGH') 
+    : (riskData?.overall || 'LOW');
+
+  const effectiveDriver = (isHi ? activeScenario?.hiMainDriver : activeScenario?.mainDriver) 
+    || (riskData?.main_driver ? (isHi ? 'बाजार दर में अस्थिरता एवं मौसमी मानसून प्रतीक्षा कतारें।' : riskData.main_driver) : (isHi ? 'सामान्य मौसमी परिचालन स्थितियां।' : 'Normal operational maritime conditions.'));
+
   return (
     <div className="space-y-4">
       {/* 1. Core Decision Workflow Banner */}
       <DecisionWorkflowBanner currentStep="cargo" onNavigate={onNavigate} />
 
-      {/* 2. Top Executive Header & Primary CTA */}
+      {/* 2. Active Decision Alerts Stream & Showcase Selector */}
+      <ActiveAlertsBanner onNavigate={onNavigate} />
+
+      {/* 3. Top Executive Header & Primary CTA */}
       <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="flex items-center space-x-2">
@@ -312,32 +332,85 @@ export default function Dashboard({ onNavigate }) {
 
             <div className="my-3 space-y-2 text-xs">
               <div className="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
-                <span className="text-slate-600">{isHi ? 'समग्र जोखिम स्तर' : 'Overall Level'}</span>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                  riskData?.overall === 'HIGH' ? 'bg-rose-100 text-rose-800' :
-                  riskData?.overall === 'MEDIUM' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
+                <span className="text-slate-600 font-medium">{isHi ? 'समग्र जोखिम स्तर' : 'Overall Risk Level'}</span>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase flex items-center space-x-1 ${
+                  effectiveRisk === 'HIGH' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
+                  effectiveRisk === 'MEDIUM' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                 }`}>
-                  {isHi 
-                    ? (riskData?.overall === 'HIGH' ? 'उच्च (HIGH)' : riskData?.overall === 'LOW' ? 'निम्न (LOW)' : 'मध्यम (MEDIUM)') 
-                    : (riskData?.overall || 'MEDIUM')}
+                  <span className={`w-1.5 h-1.5 rounded-full ${effectiveRisk === 'HIGH' ? 'bg-rose-600 animate-pulse' : effectiveRisk === 'MEDIUM' ? 'bg-amber-600' : 'bg-emerald-600'}`} />
+                  <span>
+                    {isHi 
+                      ? (effectiveRisk === 'HIGH' ? 'उच्च (HIGH)' : effectiveRisk === 'LOW' ? 'निम्न (LOW)' : 'मध्यम (MEDIUM)') 
+                      : effectiveRisk}
+                  </span>
                 </span>
               </div>
 
               <div className="text-[11px] text-slate-600 leading-snug">
-                <strong>{isHi ? 'प्रमुख चालक कारक: ' : 'Primary Driver: '}</strong>
-                <span>
-                  {riskData?.main_driver 
-                    ? (isHi ? 'बाजार दर में अस्थिरता एवं मौसमी मानसून प्रतीक्षा कतारें।' : riskData.main_driver)
-                    : (isHi ? 'बाजार दर में अस्थिरता एवं मौसमी मानसून प्रतीक्षा कतारें।' : 'Market rate volatility and seasonal monsoon waiting queues.')}
-                </span>
+                <strong>{isHi ? 'प्रमुख चालक: ' : 'Primary Driver: '}</strong>
+                <span>{effectiveDriver}</span>
               </div>
 
-              {riskData?.alerts && riskData.alerts.length > 0 && (
-                <div className="p-2 bg-amber-50 rounded border border-amber-200 text-[10px] text-amber-900 flex items-start space-x-1.5">
-                  <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 text-amber-600 mt-0.5" />
-                  <span>
-                    {isHi ? 'पारादीप CB-01 बर्थ पर भीड़भाड़ एवं प्रतीक्षा कतार दर्ज।' : (riskData.alerts[0].message || 'Congestion queue detected at Paradip CB-01.')}
-                  </span>
+              {/* Active Alerts List in Card */}
+              {alertCount > 0 ? (
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex justify-between items-center text-[10px] font-bold text-govNavy uppercase tracking-wide">
+                    <span className="flex items-center space-x-1 text-rose-700">
+                      <AlertTriangle className="w-3 h-3 text-rose-600" />
+                      <span>{isHi ? `सक्रिय निर्णय चेतावनियां (${alertCount})` : `Active Decision Alerts (${alertCount})`}</span>
+                    </span>
+                    <span className="text-[9px] font-mono text-slate-400 font-normal">
+                      {isHi ? 'लाइव मॉनिटरिंग' : 'Live Feeds'}
+                    </span>
+                  </div>
+
+                  {activeDecisionAlerts.slice(0, 2).map((alt) => (
+                    <div 
+                      key={alt.id}
+                      className={`p-2 rounded border text-[10px] space-y-0.5 transition ${
+                        alt.severity === 'high' 
+                          ? 'bg-rose-50/80 border-rose-200 text-rose-950' 
+                          : 'bg-amber-50/80 border-amber-200 text-amber-950'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className={`px-1 py-0.2 rounded text-[8px] font-bold uppercase ${
+                          alt.severity === 'high' ? 'bg-rose-600 text-white' : 'bg-amber-600 text-white'
+                        }`}>
+                          {alt.severity}
+                        </span>
+                        <span className="font-mono text-[9px] text-slate-500 font-bold">{alt.code}</span>
+                      </div>
+                      <p className="font-medium text-[10px] line-clamp-2 leading-tight">
+                        {isHi && alt.hiTitle ? alt.hiTitle : alt.title}
+                      </p>
+                    </div>
+                  ))}
+
+                  {alertCount > 2 && (
+                    <div className="text-center text-[9px] font-mono text-slate-500">
+                      +{alertCount - 2} {isHi ? 'और चेतावनियां सक्रिय' : 'more alerts active in registry'}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="p-2.5 bg-emerald-50/60 rounded border border-emerald-200/80 text-[10px] text-emerald-900 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold flex items-center gap-1 text-emerald-950">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>{isHi ? 'सक्रिय चेतावनियां (0)' : 'Active Alerts (0)'}</span>
+                    </span>
+                    <span className="text-[9px] bg-emerald-100 text-emerald-800 px-1 rounded font-mono">NORMAL</span>
+                  </div>
+                  <p className="text-[10px] text-emerald-800 leading-tight">
+                    {isHi ? 'वर्तमान में कोई गंभीर परिचालन व्यवधान नहीं।' : 'Zero severe operational disruptions on East Coast.'}
+                  </p>
+                  <button
+                    onClick={() => setScenario('cyclone')}
+                    className="w-full text-center py-1 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-[9px] rounded transition shadow-2xs cursor-pointer"
+                  >
+                    {isHi ? '⚡ डेमो हेतु अलर्ट परिदृश्य लोड करें' : '⚡ Simulate Live Alerts for Demo Video'}
+                  </button>
                 </div>
               )}
             </div>
@@ -349,7 +422,7 @@ export default function Dashboard({ onNavigate }) {
               onClick={() => onNavigate('risks')}
               className="text-govBlueAccent hover:underline font-semibold flex items-center space-x-1 cursor-pointer"
             >
-              <span>{isHi ? 'जोखिम एवं अलर्ट देखें' : 'View Risk & Alerts'}</span>
+              <span>{isHi ? 'जोखिम एवं अलर्ट रजिस्ट्री देखें' : 'View Risk & Alerts'}</span>
               <ArrowRight className="w-3 h-3" />
             </button>
           </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
+import { AlertProvider } from './context/AlertContext';
 import TopUtilityBar from './components/TopUtilityBar';
 import MainHeader from './components/MainHeader';
 import Navbar from './components/Navbar';
@@ -58,59 +59,61 @@ export default function App() {
 
   return (
     <LanguageProvider>
-      <div className="min-h-screen flex flex-col bg-portalBg text-slate-800 font-sans text-xs antialiased">
-        {/* 1. Official Government Header Bar */}
-        <TopUtilityBar />
+      <AlertProvider>
+        <div className="min-h-screen flex flex-col bg-portalBg text-slate-800 font-sans text-xs antialiased">
+          {/* 1. Official Government Header Bar */}
+          <TopUtilityBar />
 
-      {/* 2. Main Institutional Brand Header */}
-      <MainHeader currentTab={activeTab} onNavigate={handleNavigate} />
+        {/* 2. Main Institutional Brand Header */}
+        <MainHeader currentTab={activeTab} onNavigate={handleNavigate} />
 
-      {/* 3. Primary Navigation Bar with Home and 7 Operational Pages */}
-      <Navbar currentTab={activeTab} onNavigate={handleNavigate} />
+        {/* 3. Primary Navigation Bar with Home and 7 Operational Pages */}
+        <Navbar currentTab={activeTab} onNavigate={handleNavigate} />
 
-      {/* 4. Main Content Area */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 py-4 space-y-4" id="main-content">
-        {activeTab === 'home' && (
-          <Home onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'dashboard' && (
-          <Dashboard onNavigate={handleNavigate} />
-        )}
-        {(activeTab === 'planner' || activeTab === 'optimizer') && (
-          <CharterPlanner onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'forecast' && (
-          <FreightForecast onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'ports' && (
-          <PortIntelligence onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'vessels' && (
-          <VesselOptimizer onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'simulator' && (
-          <StrategySimulator onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'risks' && (
-          <RiskAlerts onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'market' && (
-          <MarketIntelligence onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'routes' && (
-          <RouteAnalysis onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'methodology' && (
-          <Methodology onNavigate={handleNavigate} />
-        )}
-        {activeTab === 'about' && (
-          <AboutProject onNavigate={handleNavigate} />
-        )}
-      </main>
+        {/* 4. Main Content Area */}
+        <main className="flex-grow max-w-7xl w-full mx-auto px-4 py-4 space-y-4" id="main-content">
+          {activeTab === 'home' && (
+            <Home onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'dashboard' && (
+            <Dashboard onNavigate={handleNavigate} />
+          )}
+          {(activeTab === 'planner' || activeTab === 'optimizer') && (
+            <CharterPlanner onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'forecast' && (
+            <FreightForecast onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'ports' && (
+            <PortIntelligence onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'vessels' && (
+            <VesselOptimizer onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'simulator' && (
+            <StrategySimulator onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'risks' && (
+            <RiskAlerts onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'market' && (
+            <MarketIntelligence onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'routes' && (
+            <RouteAnalysis onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'methodology' && (
+            <Methodology onNavigate={handleNavigate} />
+          )}
+          {activeTab === 'about' && (
+            <AboutProject onNavigate={handleNavigate} />
+          )}
+        </main>
 
-        {/* 5. Institutional Footer */}
-        <Footer onNavigate={handleNavigate} />
-      </div>
+          {/* 5. Institutional Footer */}
+          <Footer onNavigate={handleNavigate} />
+        </div>
+      </AlertProvider>
     </LanguageProvider>
   );
 }

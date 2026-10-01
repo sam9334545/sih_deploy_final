@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAlerts } from '../context/AlertContext';
 import { 
   Home as HomeIcon,
   LayoutDashboard, 
@@ -19,6 +20,7 @@ import {
 export default function Navbar({ currentTab, onNavigate }) {
   const [secondaryOpen, setSecondaryOpen] = useState(false);
   const { t } = useLanguage();
+  const { alertCount } = useAlerts();
 
   const primaryItems = [
     { id: 'home', label: t('tab_home'), icon: HomeIcon },
@@ -28,7 +30,7 @@ export default function Navbar({ currentTab, onNavigate }) {
     { id: 'ports', label: t('tab_ports'), icon: Anchor },
     { id: 'vessels', label: t('tab_vessels'), icon: Ship },
     { id: 'simulator', label: t('tab_simulator'), icon: Layers },
-    { id: 'risks', label: t('tab_risks'), icon: ShieldAlert },
+    { id: 'risks', label: t('tab_risks'), icon: ShieldAlert, badge: alertCount },
   ];
 
   const secondaryItems = [
@@ -63,6 +65,11 @@ export default function Navbar({ currentTab, onNavigate }) {
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-amber-400' : 'text-slate-300'}`} />
                 <span>{item.label}</span>
+                {item.badge > 0 && (
+                  <span className="ml-1 px-1.5 py-0.2 bg-rose-600 text-white font-mono text-[9px] font-bold rounded-full animate-pulse">
+                    {item.badge}
+                  </span>
+                )}
               </button>
             );
           })}
