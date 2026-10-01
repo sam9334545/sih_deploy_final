@@ -14,6 +14,7 @@ Developed for **Smart India Hackathon (SIH 2026)** — Problem Statement **SIH26
 
 - **Authoritative Blueprint:** [`SIH26006_Blueprint.md`](file:///SIH26006_Blueprint.md)
 - **Live Production Platform:** [https://sih-deploy-final-1.onrender.com/](https://sih-deploy-final-1.onrender.com/)
+- **Video Demonstration:** [https://youtu.be/KJXbaAhKiio](https://youtu.be/KJXbaAhKiio)
 
 ---
 
@@ -24,6 +25,7 @@ The complete system is containerized with multi-stage Docker builds and deployed
 | Service Component | Endpoint / URL | Operational Status | Description |
 | :--- | :--- | :---: | :--- |
 | **Interactive Web Application** | **[https://sih-deploy-final-1.onrender.com/](https://sih-deploy-final-1.onrender.com/)** | `200 OK (Active)` | Production React 18 client with bilingual English/Hindi localization and accessibility |
+| **Video Demonstration** | **[https://youtu.be/KJXbaAhKiio](https://youtu.be/KJXbaAhKiio)** | `Available (YouTube)` | Complete end-to-end video walkthrough of the operational platform and decision engine |
 | **Container Readiness Probe** | [`/health/ready`](https://sih-deploy-final-1.onrender.com/health/ready) | `200 OK` | Orchestration probe validating database seed (14 ports, 22 berths) and 24 LightGBM models |
 | **Liveness & Lineage Probe** | [`/health`](https://sih-deploy-final-1.onrender.com/health) | `200 OK` | Detailed health report with table row counts, model training cutoff, and memory cache diagnostics |
 | **Interactive API Documentation**| [`/docs`](https://sih-deploy-final-1.onrender.com/docs) | `200 OK` | Swagger UI documentation with executable schemas, request validators, and model payload inspectors |
