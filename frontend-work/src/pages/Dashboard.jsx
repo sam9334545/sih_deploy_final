@@ -17,7 +17,6 @@ import {
 import ProvenanceBadge from '../components/ProvenanceBadge';
 import DataCutoffNotice from '../components/DataCutoffNotice';
 import DecisionWorkflowBanner from '../components/DecisionWorkflowBanner';
-import ActiveAlertsBanner from '../components/ActiveAlertsBanner';
 import { fetchMarketData, fetchRisks, executeLiveForecast, ApiError } from '../api';
 import { useLanguage } from '../context/LanguageContext';
 import { useAlerts } from '../context/AlertContext';
@@ -28,9 +27,7 @@ export default function Dashboard({ onNavigate }) {
   const { 
     alerts: activeDecisionAlerts, 
     alertCount, 
-    activeScenario, 
-    selectedScenarioKey, 
-    setScenario 
+    activeScenario 
   } = useAlerts();
 
   const [marketData, setMarketData] = useState(null);
@@ -92,10 +89,7 @@ export default function Dashboard({ onNavigate }) {
       {/* 1. Core Decision Workflow Banner */}
       <DecisionWorkflowBanner currentStep="cargo" onNavigate={onNavigate} />
 
-      {/* 2. Active Decision Alerts Stream & Showcase Selector */}
-      <ActiveAlertsBanner onNavigate={onNavigate} />
-
-      {/* 3. Top Executive Header & Primary CTA */}
+      {/* 2. Top Executive Header & Primary CTA */}
       <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="flex items-center space-x-2">
@@ -405,12 +399,6 @@ export default function Dashboard({ onNavigate }) {
                   <p className="text-[10px] text-emerald-800 leading-tight">
                     {isHi ? 'वर्तमान में कोई गंभीर परिचालन व्यवधान नहीं।' : 'Zero severe operational disruptions on East Coast.'}
                   </p>
-                  <button
-                    onClick={() => setScenario('cyclone')}
-                    className="w-full text-center py-1 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-[9px] rounded transition shadow-2xs cursor-pointer"
-                  >
-                    {isHi ? '⚡ सक्रिय अलर्ट परिदृश्य लोड करें' : '⚡ Simulate Live Maritime Alerts'}
-                  </button>
                 </div>
               )}
             </div>
